@@ -9,6 +9,7 @@ body {
   height: 100vh;
   height: -webkit-fill-available;
   height: fill-available;
+  font-size: 15px;
 }
 
 main {
@@ -17,6 +18,7 @@ main {
   justify-content: center;
   align-items: center;
   position: fixed;
+  /* 모바일 사파리에서도 화면 전체가 꽉 차게 하기 */
   height: 100vh;
   height: -webkit-fill-available;
   width: 100vw;
@@ -28,7 +30,7 @@ main p {
   padding: 10px;
 }
 
-.file-upload {
+.file-label {
   display: flex;
   align-items: center;
   padding: 7px 15px 7px 15px;
@@ -37,15 +39,16 @@ main p {
   color: white;
 }
 
-.file-upload label {
+.file-label label {
   font-size: 1.5rem;
+  cursor: pointer;
 }
 
-.file-upload label i {
+.file-label label i {
   padding-right: 5px;
 }
 
-.file-upload input[type="file"] {
+.file-label input[type="file"] {
   position: absolute;
   width: 0;
   height: 0;
@@ -54,14 +57,50 @@ main p {
   border: 0;
 }
 
+.file-type {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(185, 185, 185);
+  border-radius: 5px;
+  margin: 20px;
+  font-size: 1.4rem;
+  opacity: 0;
+  transform: translateY(-20px);
+  box-shadow: 0px 0px 5px 2px rgba(0, 0, 0, 0.11);
+  transition: opacity 0.8s, transform 0.8s cubic-bezier(0, 0, 0, 1);
+}
+
+.hide {
+  display: none;
+}
+
+.show {
+  opacity: 100%;
+  transform: translateY(0px);
+}
+
+.file-type li {
+  position: relative;
+  left: 35px;
+  max-width: 100vw;
+  margin: 10px 0 10px 0;
+  padding-right: 50px;
+  font-size: 1rem;
+}
+
 select {
   -o-appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
+  background: url("./chevron-up-solid.svg") calc(100% - 10px) center no-repeat;
+  background-size: 10px;
   background-color: white;
   font-size: 1rem;
   padding: 10px 50px 10px 15px;
+  margin: 0 10px 10px 10px;
   outline: none;
   border-radius: 5px;
   color: black;

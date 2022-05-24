@@ -22,7 +22,7 @@
   <body>
     <main>
       <p>일반 파일이나 텍스트 파일을 선택하세요</p>
-      <div class="file-upload">
+      <div class="file-label">
         <label for="file-input">
           <i
             class="fa-solid fa-file-arrow-up"
@@ -33,14 +33,27 @@
         </label>
         <input type="file" name="select-file" id="file-input" />
       </div>
-      <!-- <div class="file-type">
+
+      <div class="file-type hide">
         <p>파일의 종류를 선택해주세요</p>
         <select name="file-type" id="file-type-option">
+          <option disabled selected>파일 종류</option>
           <option value="text">텍스트 파일</option>
           <option value="unicode">텍스트 파일(유니코드)</option>
           <option value="file">일반 파일</option>
         </select>
-      </div> -->
+        <ul>
+          <li>
+            텍스트 파일<br />아스키코드(영어 대소문자, 숫자, 키보드에 있는
+            특수문자)로 쓰여진 텍스트 파일입니다.
+          </li>
+          <li>
+            텍스트 파일(유니코드)<br />한국어나 일본어, 특수기호와 같이
+            아스키코드가 아닌 유니코드로 쓰여진 텍스트 파일입니다.
+          </li>
+          <li>일반 파일<br />텍스트 파일을 제외한 일반적인 파일입니다.</li>
+        </ul>
+      </div>
     </main>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="./script.js"></script>

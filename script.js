@@ -9,9 +9,20 @@ function showFile(e) {
   const fileList = e.target.files;
   const file = fileList[0];
 
+  const fileType = document.querySelector(".file-type");
+
   let p = document.createElement("p");
   p.innerHTML = `${file.name}가 업로드 되었습니다.`;
-  main.append(p);
+  p.style = "padding-bottom: 0px;";
+  fileType.prepend(p);
+
+  fileType.classList.toggle("hide");
+  // 그대로 class를 붙이면 transition이 적용되지 않아 시간 간격을 둠
+  setTimeout(() => {
+    fileType.classList.toggle("show");
+  }, 2);
+
+  fileInput.removeEventListener("change", showFile);
 
   // const fileReader = new FileReader();
   // 후에 텍스트로 읽기도 추가하기
