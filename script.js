@@ -3,16 +3,16 @@ window.jsPDF = window.jspdf.jsPDF;
 const fileInput = document.getElementById("file-input");
 fileInput.addEventListener("change", showFile);
 
+// 파일 업로드하기
 function showFile(e) {
-  const fileList = e.target.files;
-  const file = fileList[0];
+  return new Promise((resolve, reject) => {
+    const fileList = e.target.files;
+    const file = fileList[0];
+    const fileReader = new FileReader();
+    // 후에 텍스트로 읽기도 추가하기
+    fileReader.readAsArrayBuffer(file);
 
-  console.log(file.name);
-
-  const fileReader = new FileReader();
-  fileReader.readAsArrayBuffer(file);
-
-  fileReader.onload = function () {
+    //   console.log(file.name);
     const buffer = fileReader.result;
     console.log(buffer);
 
@@ -26,20 +26,28 @@ function showFile(e) {
     console.log(arrayHex);
 
     convertTextToPDF(arrayHex);
-  };
+  });
 }
 
 function convertTextToPDF(arrayHex) {
+  //ttf파일을 읽어서 base64 문자열 형태로 바꿔줌
+  ttf2base64().then((blob) => {
+    let fileReader = new FileReader();
+    fileReader.readAsDataURL(blob);
+    fileReader.onload = function (event) {
+      let result = event.target.result;
+      console.log(result);
+    };
+  });
+
   let doc = new jsPDF("p", "mm", "a4");
   doc.text(15, 40, arrayHex); // 글씨입력(시작x, 시작y, 내용)
-  doc.save("web.pdf"); //결과 출력
+  //   doc.save("web.pdf");
 }
 
 async function ttf2base64() {
   let response = await fetch("./UbuntuMono-R.ttf");
   let blob = await response.blob();
-
-  console.log(blob);
 
   return blob;
 
@@ -52,12 +60,3 @@ async function ttf2base64() {
 
   // fReader.readAsDataURL(blob);
 }
-
-ttf2base64().then((blob) => {
-  let fileReader = new FileReader();
-  fileReader.onload = function (event) {
-    let result = event.target.result;
-    // console.log(result);
-  };
-  fileReader.readAsDataURL(blob);
-});
