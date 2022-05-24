@@ -1,2 +1,12 @@
-# file-to-pdf
-Make file's context to pdf.
+# File to PDF converter
+
+일반 파일이나 텍스트 파일을 pdf로 변환합니다.
+
+일반 파일의 경우에는 각 byte를 hex형태로, 텍스트 파일의 경우에는 아스키코드의 경우에는 그대로, 유니코드의 경우에는 유니코드 기호로 변환해줍니다.
+
+# TODO
+
+- [ ] pyodide를 사용해서 랜덤한 텍스트 생성
+- [ ] `<select>`로 선택지 추가하기
+- [ ] 랜덤한 텍스트로 pdf파일 생성하기
+- [ ] pdf파일에 가이드라인 및 추가 정보추가
