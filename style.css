@@ -1,0 +1,70 @@
+* {
+  padding: 0;
+  margin: 0;
+  font-family: Pretendard;
+  font-weight: 700;
+}
+
+body {
+  height: 100vh;
+  height: -webkit-fill-available;
+  height: fill-available;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  height: 100vh;
+  height: -webkit-fill-available;
+  width: 100vw;
+  background-color: rgb(230, 230, 230);
+  font-size: 2rem;
+}
+
+main p {
+  padding: 10px;
+}
+
+.file-upload {
+  display: flex;
+  align-items: center;
+  padding: 7px 15px 7px 15px;
+  border-radius: 5px;
+  background-color: rgb(51, 124, 255);
+  color: white;
+}
+
+.file-upload label {
+  font-size: 1.5rem;
+}
+
+.file-upload label i {
+  padding-right: 5px;
+}
+
+.file-upload input[type="file"] {
+  position: absolute;
+  width: 0;
+  height: 0;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+}
+
+select {
+  -o-appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-color: white;
+  font-size: 1rem;
+  padding: 10px 50px 10px 15px;
+  outline: none;
+  border-radius: 5px;
+  color: black;
+  box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.11);
+  width: auto;
+}

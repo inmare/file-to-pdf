@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>File to PDF converter</title>
+    <link rel="stylesheet" href="style.css" />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard-dynamic-subset.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+      integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+  </head>
+  <body>
+    <main>
+      <p>일반 파일이나 텍스트 파일을 선택하세요</p>
+      <div class="file-upload">
+        <label for="file-input">
+          <i
+            class="fa-solid fa-file-arrow-up"
+            id="left-arrow"
+            class="arrow"
+          ></i>
+          파일 업로드
+        </label>
+        <input type="file" name="select-file" id="file-input" />
+      </div>
+      <!-- <p>파일의 종류를 선택해주세요</p> -->
+      <!-- <select name="file-type" id="file-type-option">
+        <option value="text">텍스트 파일</option>
+        <option value="unicode">텍스트 파일(유니코드)</option>
+        <option value="file">일반 파일</option>
+      </select> -->
+    </main>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="./script.js"></script>
+  </body>
+</html>
