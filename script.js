@@ -1,32 +1,36 @@
 window.jsPDF = window.jspdf.jsPDF;
 
+const main = document.querySelector("main");
 const fileInput = document.getElementById("file-input");
 fileInput.addEventListener("change", showFile);
 
 // 파일 업로드하기
 function showFile(e) {
-  return new Promise((resolve, reject) => {
-    const fileList = e.target.files;
-    const file = fileList[0];
-    const fileReader = new FileReader();
-    // 후에 텍스트로 읽기도 추가하기
-    fileReader.readAsArrayBuffer(file);
+  const fileList = e.target.files;
+  const file = fileList[0];
 
-    //   console.log(file.name);
-    const buffer = fileReader.result;
-    console.log(buffer);
+  let p = document.createElement("p");
+  p.innerHTML = `${file.name}가 업로드 되었습니다.`;
+  main.append(p);
 
-    const view = new Uint8Array(buffer);
+  // const fileReader = new FileReader();
+  // 후에 텍스트로 읽기도 추가하기
+  // fileReader.readAsArrayBuffer(file);
 
-    let arrayHex = "";
-    for (let num in view) {
-      arrayHex = arrayHex + view[num].toString(16);
-    }
+  //   console.log(file.name);
+  // const buffer = fileReader.result;
+  // console.log(buffer);
 
-    console.log(arrayHex);
+  // const view = new Uint8Array(buffer);
 
-    convertTextToPDF(arrayHex);
-  });
+  // let arrayHex = "";
+  // for (let num in view) {
+  //   arrayHex = arrayHex + view[num].toString(16);
+  // }
+
+  // console.log(arrayHex);
+
+  // convertTextToPDF(arrayHex);
 }
 
 function convertTextToPDF(arrayHex) {
