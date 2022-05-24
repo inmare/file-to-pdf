@@ -2,6 +2,7 @@ window.jsPDF = window.jspdf.jsPDF;
 
 const main = document.querySelector("main");
 const fileInput = document.getElementById("file-input");
+const convertButton = document.getElementById("convert-button");
 fileInput.addEventListener("change", showFile);
 
 // 파일 업로드하기
@@ -23,40 +24,56 @@ function showFile(e) {
   }, 2);
 
   fileInput.removeEventListener("change", showFile);
-
-  // const fileReader = new FileReader();
-  // 후에 텍스트로 읽기도 추가하기
-  // fileReader.readAsArrayBuffer(file);
-
-  //   console.log(file.name);
-  // const buffer = fileReader.result;
-  // console.log(buffer);
-
-  // const view = new Uint8Array(buffer);
-
-  // let arrayHex = "";
-  // for (let num in view) {
-  //   arrayHex = arrayHex + view[num].toString(16);
-  // }
-
-  // console.log(arrayHex);
-
+  convertButton.addEventListener("click", (event) =>
+    convertFileToPDF(event, file)
+  );
   // convertTextToPDF(arrayHex);
 }
 
-function convertTextToPDF(arrayHex) {
+function convertFileToPDF(event, file) {
   //ttf파일을 읽어서 base64 문자열 형태로 바꿔줌
-  ttf2base64().then((blob) => {
-    let fileReader = new FileReader();
-    fileReader.readAsDataURL(blob);
-    fileReader.onload = function (event) {
-      let result = event.target.result;
-      console.log(result);
-    };
-  });
+  // ttf2base64().then((blob) => {
+  //   let fileReader = new FileReader();
+  //   fileReader.readAsDataURL(blob);
+  //   fileReader.onload = function (event) {
+  //     let result = event.target.result;
+  //     console.log(result);
+  //   };
+  // });
+  const fileReader = new FileReader();
+  // 후에 텍스트로 읽기도 추가하기
+  const fileTypeOption = document.getElementById("file-type-option");
+  const optionIdx = fileTypeOption.selectedIndex;
 
-  let doc = new jsPDF("p", "mm", "a4");
-  doc.text(15, 40, arrayHex); // 글씨입력(시작x, 시작y, 내용)
+  switch (optionIdx) {
+    case 0: // 파일 종류
+      return console.log("파일 종류를 선택해주세요");
+    case 1: // 텍스트 파일
+      console.log(fileTypeOption.value);
+    case 2: // 텍스트 파일(유니코드)
+      console.log(fileTypeOption.value);
+    case 3: // 일반 파일
+      console.log(fileTypeOption.value);
+  }
+
+  fileReader.readAsArrayBuffer(file);
+
+  fileReader.onload = () => {
+    const buffer = fileReader.result;
+    console.log(buffer);
+
+    const view = new Uint8Array(buffer);
+
+    let arrayHex = "";
+    for (let num in view) {
+      arrayHex = arrayHex + view[num].toString(16);
+    }
+
+    console.log(arrayHex);
+  };
+
+  // let doc = new jsPDF("p", "mm", "a4");
+  // doc.text(15, 40, arrayHex);
   //   doc.save("web.pdf");
 }
 
