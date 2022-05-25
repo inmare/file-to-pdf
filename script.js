@@ -71,22 +71,41 @@ function convertFileToText(file, optionIdx) {
 
       let arrayHex = "";
       for (let num in view) {
-        arrayHex = arrayHex + view[num].toString(16);
+        arrayHex += view[num].toString(16);
       }
 
       console.log(arrayHex);
     };
   } else {
-    // 텍스트 파일
+    // 텍스트 파일, 텍스트 파일(유니코드)
     fileReader.readAsText(file);
     fileReader.onload = () => {
-      const text = fileReader.result;
+      let text = fileReader.result;
 
       // 줄 바꿈 문자를 \n으로 통일시킴
       const lineBreak = detectLineBreakChar(text);
       const regexp = new RegExp(lineBreak, "g");
-      const textNoLineBreak = text.replace(regexp, "\\n");
-      console.log(textNoLineBreak);
+      text = text.replace(regexp, "\\n");
+
+      if (optionIdx == 1) {
+        // 텍스트 파일
+        console.log(text);
+      } else if (optionIdx == 2) {
+        // 텍스트 파일(유니코드)
+        let unicodeText = "";
+        for (let i = 0; i < text.length; i++) {
+          let unicodeChar = text.charCodeAt(i).toString(16);
+
+          // 유니코드 문자의 길이를 4글자로 통일하기
+          if (unicodeChar.length < 4) {
+            let zeroLength = 4 - unicodeChar.length;
+            unicodeChar = "0".repeat(zeroLength) + unicodeChar;
+          }
+
+          unicodeText += unicodeChar;
+        }
+        console.log(unicodeText);
+      }
     };
   }
 }
