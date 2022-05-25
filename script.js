@@ -25,12 +25,12 @@ function showFile(e) {
 
   fileInput.removeEventListener("change", showFile);
   convertButton.addEventListener("click", (event) =>
-    convertFileToPDF(event, file)
+    detectFileType(event, file)
   );
   // convertTextToPDF(arrayHex);
 }
 
-function convertFileToPDF(event, file) {
+function detectFileType(event, file) {
   //ttf파일을 읽어서 base64 문자열 형태로 바꿔줌
   // ttf2base64().then((blob) => {
   //   let fileReader = new FileReader();
@@ -40,41 +40,70 @@ function convertFileToPDF(event, file) {
   //     console.log(result);
   //   };
   // });
-  const fileReader = new FileReader();
   // 후에 텍스트로 읽기도 추가하기
   const fileTypeOption = document.getElementById("file-type-option");
   const optionIdx = fileTypeOption.selectedIndex;
 
+  let fileText = null;
+
+  console.log(fileTypeOption.value);
   switch (optionIdx) {
     case 0: // 파일 종류
       return console.log("파일 종류를 선택해주세요");
-    case 1: // 텍스트 파일
-      console.log(fileTypeOption.value);
-    case 2: // 텍스트 파일(유니코드)
-      console.log(fileTypeOption.value);
-    case 3: // 일반 파일
-      console.log(fileTypeOption.value);
+    default: // 그 외 나머지
+      fileText = convertFileToText(file, optionIdx);
   }
-
-  fileReader.readAsArrayBuffer(file);
-
-  fileReader.onload = () => {
-    const buffer = fileReader.result;
-    console.log(buffer);
-
-    const view = new Uint8Array(buffer);
-
-    let arrayHex = "";
-    for (let num in view) {
-      arrayHex = arrayHex + view[num].toString(16);
-    }
-
-    console.log(arrayHex);
-  };
 
   // let doc = new jsPDF("p", "mm", "a4");
   // doc.text(15, 40, arrayHex);
   //   doc.save("web.pdf");
+}
+
+function convertFileToText(file, optionIdx) {
+  const fileReader = new FileReader();
+
+  if (optionIdx == 3) {
+    // 일반 파일
+    fileReader.readAsArrayBuffer(file);
+    fileReader.onload = () => {
+      const buffer = fileReader.result;
+      const view = new Uint8Array(buffer);
+
+      let arrayHex = "";
+      for (let num in view) {
+        arrayHex = arrayHex + view[num].toString(16);
+      }
+
+      console.log(arrayHex);
+    };
+  } else {
+    // 텍스트 파일
+    fileReader.readAsText(file);
+    fileReader.onload = () => {
+      const text = fileReader.result;
+
+      // 줄 바꿈 문자를 \n으로 통일시킴
+      const lineBreak = detectLineBreakChar(text);
+      const regexp = new RegExp(lineBreak, "g");
+      const textNoLineBreak = text.replace(regexp, "\\n");
+      console.log(textNoLineBreak);
+    };
+  }
+}
+
+// 줄 바꿈 문자가 어떤 os의 것인지 판단
+function detectLineBreakChar(text) {
+  const indexOfLF = text.indexOf("\n", 1);
+
+  if (indexOfLF === -1) {
+    if (text.indexOf("\r") !== -1) return "\r";
+
+    return "\n";
+  }
+
+  if (text[indexOfLF - 1] === "\r") return "\r\n";
+
+  return "\n";
 }
 
 async function ttf2base64() {
