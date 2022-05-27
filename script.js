@@ -1,4 +1,8 @@
 window.jsPDF = window.jspdf.jsPDF;
+// 특수문자의 경우 자동으로 \를 앞에 붙여줌
+RegExp.escape = function (s) {
+  return s.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&");
+};
 
 const main = document.querySelector("main");
 const fileInput = document.getElementById("file-input");
@@ -49,7 +53,7 @@ function detectFileType(event, file) {
   console.log(fileTypeOption.value);
   switch (optionIdx) {
     case 0: // 파일 종류
-      return console.log("파일 종류를 선택해주세요");
+      return alert("파일 종류를 선택해주세요");
     default: // 그 외 나머지
       fileText = convertFileToText(file, optionIdx);
   }
@@ -90,6 +94,8 @@ function convertFileToText(file, optionIdx) {
       if (optionIdx == 1) {
         // 텍스트 파일
         console.log(text);
+        let replacedText = replaceSpace(text);
+        console.log(replacedText);
       } else if (optionIdx == 2) {
         // 텍스트 파일(유니코드)
         let unicodeText = "";
@@ -123,6 +129,87 @@ function detectLineBreakChar(text) {
   if (text[indexOfLF - 1] === "\r") return "\r\n";
 
   return "\n";
+}
+
+function replaceSpace(text) {
+  let asciiInfoArr = makeAsciiInfoArray(text);
+
+  // 글자들 중 빈도수가 작은 것부터 우선적으로 분류
+  asciiInfoArr = sortAsciiInfoArray(asciiInfoArr);
+
+  console.log(asciiInfoArr);
+
+  let spaceChar = detectAvailSpaceChar(asciiInfoArr);
+  const replacedText = text.replace(/ /g, spaceChar);
+
+  return replacedText;
+}
+
+function makeAsciiInfoArray(text) {
+  let asciiInfoArr = [];
+
+  for (let i = 0x21; i < 0x7f; i++) {
+    const ascii = RegExp.escape(String.fromCharCode(i));
+    const regexp = new RegExp(ascii, "g");
+
+    // 일치하는 문자열이 없을 경우 match가 null을 반환
+    const charCount = text.match(regexp) ? text.match(regexp).length : 0;
+    const asciiInfo = {
+      num: i,
+      char: String.fromCharCode(i),
+      regChar: ascii,
+      count: charCount,
+    };
+
+    asciiInfoArr.push(asciiInfo);
+  }
+
+  return asciiInfoArr;
+}
+
+function sortAsciiInfoArray(asciiInfoArr) {
+  return asciiInfoArr.sort(function (a, b) {
+    return a.count < b.count ? -1 : a.num > b.num ? 1 : 0;
+  });
+}
+
+function detectAvailSpaceChar(asciiInfoArr) {
+  // 혼동이 가능한 글자의 리스트
+  // 후에 추가 가능
+  let charChecklist = RegExp.escape("'`,.~-08BOD");
+
+  for (let i = 0; i < asciiInfoArr.length; i++) {
+    const asciiInfo = asciiInfoArr[i];
+    const regexp = new RegExp(asciiInfo.regChar, "g");
+
+    if (charChecklist.match(regexp)) {
+      continue;
+    }
+
+    // 텍스트에 해당 글자가 없을 때
+    if (asciiInfo.count == 0) {
+      return asciiInfo.char;
+    } else {
+      // 해당 글자가 있을 때
+      const nextAsciiInfo = asciiInfoArr[i + 1];
+      const nextRegexp = new RegExp(nextAsciiInfo.regChar, "g");
+
+      if (charChecklist.match(nextRegexp)) {
+        continue;
+      } else {
+        // 그 다음으로 빈도수가 적은 글자와 합친 후
+        // 텍스트 안에 해당 글자가 있는지 테스트
+        const tempSpaceChar = asciiInfo.regChar + nextAsciiInfo.regChar;
+        const tempRegexp = new RegExp(tempSpaceChar, "g");
+
+        if (!text.match(tempRegexp)) {
+          return asciiInfo.char + nextAsciiInfo.char;
+        } else {
+          continue;
+        }
+      }
+    }
+  }
 }
 
 async function ttf2base64() {
