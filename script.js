@@ -48,14 +48,12 @@ function detectFileType(event, file) {
   const fileTypeOption = document.getElementById("file-type-option");
   const optionIdx = fileTypeOption.selectedIndex;
 
-  let fileText = null;
-
   console.log(fileTypeOption.value);
   switch (optionIdx) {
     case 0: // 파일 종류
       return alert("파일 종류를 선택해주세요");
     default: // 그 외 나머지
-      fileText = convertFileToText(file, optionIdx);
+      convertFileToText(file, optionIdx);
   }
 
   // let doc = new jsPDF("p", "mm", "a4");
@@ -65,55 +63,40 @@ function detectFileType(event, file) {
 
 function convertFileToText(file, optionIdx) {
   const fileReader = new FileReader();
+  const promise = new Promise((resolve, reject) => {
+    if (optionIdx == 3) {
+      fileReader.readAsArrayBuffer(file);
+    } else {
+      fileReader.readAsText(file);
+    }
 
-  if (optionIdx == 3) {
-    // 일반 파일
-    fileReader.readAsArrayBuffer(file);
     fileReader.onload = () => {
-      const buffer = fileReader.result;
-      const view = new Uint8Array(buffer);
-
-      let arrayHex = "";
-      for (let num in view) {
-        arrayHex += view[num].toString(16);
-      }
-
-      console.log(arrayHex);
+      resolve(fileReader.result);
     };
-  } else {
-    // 텍스트 파일, 텍스트 파일(유니코드)
-    fileReader.readAsText(file);
-    fileReader.onload = () => {
-      let text = fileReader.result;
+  });
 
-      // 줄 바꿈 문자를 \n으로 통일시킴
-      const lineBreak = detectLineBreakChar(text);
-      const regexp = new RegExp(lineBreak, "g");
-      text = text.replace(regexp, "\\n");
+  promise
+    .then((result) => {
+      if (optionIdx == 3) {
+        // 일반 파일
+        return convertFileToHex(result);
+      } else {
+        // 텍스트 파일, 텍스트 파일(유니코드)
+        // 줄 바꿈 문자를 \n으로 통일시킴
+        const lineBreak = detectLineBreakChar(result);
+        const regexp = new RegExp(lineBreak, "g");
+        const text = result.replace(regexp, "\\n");
 
-      if (optionIdx == 1) {
-        // 텍스트 파일
-        console.log(text);
-        let replacedText = replaceSpace(text);
-        console.log(replacedText);
-      } else if (optionIdx == 2) {
-        // 텍스트 파일(유니코드)
-        let unicodeText = "";
-        for (let i = 0; i < text.length; i++) {
-          let unicodeChar = text.charCodeAt(i).toString(16);
-
-          // 유니코드 문자의 길이를 4글자로 통일하기
-          if (unicodeChar.length < 4) {
-            let zeroLength = 4 - unicodeChar.length;
-            unicodeChar = "0".repeat(zeroLength) + unicodeChar;
-          }
-
-          unicodeText += unicodeChar;
+        if (optionIdx == 1) {
+          // 텍스트 파일
+          return replaceSpace(text);
+        } else if (optionIdx == 2) {
+          // 텍스트 파일(유니코드)
+          return convertTextToUnicode(text);
         }
-        console.log(unicodeText);
       }
-    };
-  }
+    })
+    .then((fileText) => console.log(fileText));
 }
 
 // 줄 바꿈 문자가 어떤 os의 것인지 판단
@@ -122,13 +105,47 @@ function detectLineBreakChar(text) {
 
   if (indexOfLF === -1) {
     if (text.indexOf("\r") !== -1) return "\r";
-
     return "\n";
   }
 
   if (text[indexOfLF - 1] === "\r") return "\r\n";
-
   return "\n";
+}
+
+function convertFileToHex(buffer) {
+  const view = new Uint8Array(buffer);
+
+  let hexText = "";
+  for (let num in view) {
+    hexText += convertZeroToO(view[num].toString(16));
+  }
+
+  return hexText;
+}
+
+function convertTextToUnicode(text) {
+  let unicodeText = "";
+  for (let i = 0; i < text.length; i++) {
+    let unicodeChar = text.charCodeAt(i).toString(16);
+    unicodeChar = convertZeroToO(unicodeChar);
+
+    // 유니코드 문자의 길이를 4글자로 통일하기
+    // 아래 if문에서 0 대신 대문자 O를 사용하는 것에 유의하기
+    if (unicodeChar.length < 4) {
+      let zeroLength = 4 - unicodeChar.length;
+      unicodeChar = "O".repeat(zeroLength) + unicodeChar;
+    }
+
+    unicodeText += unicodeChar;
+  }
+
+  return unicodeText;
+}
+
+// 유니코드와 일반파일의 경우, 머신러닝 프로그램이 구분을 더 쉽게 할 수 있도록
+// 숫자 0을 알파벳 대문자 O로 바꿔준다
+function convertZeroToO(text) {
+  return text.replace(/0/g, "O");
 }
 
 function replaceSpace(text) {
@@ -174,9 +191,8 @@ function sortAsciiInfoArray(asciiInfoArr) {
 }
 
 function detectAvailSpaceChar(asciiInfoArr) {
-  // 혼동이 가능한 글자의 리스트
-  // 후에 추가 가능
-  let charChecklist = RegExp.escape("'`,.~-08BOD");
+  // 혼동이 가능한 글자의 리스트, 후에 추가 가능
+  let charChecklist = RegExp.escape("'`,.~-08BOD5S$");
 
   for (let i = 0; i < asciiInfoArr.length; i++) {
     const asciiInfo = asciiInfoArr[i];
@@ -197,8 +213,7 @@ function detectAvailSpaceChar(asciiInfoArr) {
       if (charChecklist.match(nextRegexp)) {
         continue;
       } else {
-        // 그 다음으로 빈도수가 적은 글자와 합친 후
-        // 텍스트 안에 해당 글자가 있는지 테스트
+        // 그 다음으로 빈도수가 적은 글자와 합친 후 텍스트 안에 해당 글자가 있는지 테스트
         const tempSpaceChar = asciiInfo.regChar + nextAsciiInfo.regChar;
         const tempRegexp = new RegExp(tempSpaceChar, "g");
 
