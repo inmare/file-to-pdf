@@ -35,16 +35,6 @@ function showFile(e) {
 }
 
 function detectFileType(event, file) {
-  //ttf파일을 읽어서 base64 문자열 형태로 바꿔줌
-  // ttf2base64().then((blob) => {
-  //   let fileReader = new FileReader();
-  //   fileReader.readAsDataURL(blob);
-  //   fileReader.onload = function (event) {
-  //     let result = event.target.result;
-  //     console.log(result);
-  //   };
-  // });
-  // 후에 텍스트로 읽기도 추가하기
   const fileTypeOption = document.getElementById("file-type-option");
   const optionIdx = fileTypeOption.selectedIndex;
 
@@ -70,9 +60,7 @@ function convertFileToText(file, optionIdx) {
       fileReader.readAsText(file);
     }
 
-    fileReader.onload = () => {
-      resolve(fileReader.result);
-    };
+    fileReader.onload = () => resolve(fileReader.result);
   });
 
   promise
@@ -96,7 +84,7 @@ function convertFileToText(file, optionIdx) {
         }
       }
     })
-    .then((fileText) => console.log(fileText));
+    .then((fileText) => convertTextToPDF(fileText));
 }
 
 // 줄 바꿈 문자가 어떤 os의 것인지 판단
@@ -153,8 +141,6 @@ function replaceSpace(text) {
 
   // 글자들 중 빈도수가 작은 것부터 우선적으로 분류
   asciiInfoArr = sortAsciiInfoArray(asciiInfoArr);
-
-  console.log(asciiInfoArr);
 
   let spaceChar = detectAvailSpaceChar(asciiInfoArr);
   const replacedText = text.replace(/ /g, spaceChar);
@@ -227,18 +213,21 @@ function detectAvailSpaceChar(asciiInfoArr) {
   }
 }
 
+function convertTextToPDF(text) {
+  ttf2base64().then((result) => {
+    console.log(result);
+  });
+}
+
 async function ttf2base64() {
-  let response = await fetch("./UbuntuMono-R.ttf");
-  let blob = await response.blob();
+  const response = await fetch("./UbuntuMono-R.ttf");
+  const blob = await response.blob();
+  const fileReader = new FileReader();
+  const promise = new Promise((resolve, reject) => {
+    fileReader.readAsDataURL(blob);
+    fileReader.onload = () => resolve(fileReader.result);
+  });
+  const result = await promise;
 
-  return blob;
-
-  // let fReader = new FileReader();
-  // fReader.onload = function (event) {
-  //   let result = event.target.result;
-  //   // console.log(result);
-  //   return result;
-  // };
-
-  // fReader.readAsDataURL(blob);
+  return result;
 }
