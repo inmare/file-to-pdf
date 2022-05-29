@@ -225,9 +225,51 @@ function convertTextToPDF(text) {
     pdf.addFont("UbuntuMono-R.ttf", "UbuntuMono-R", "normal");
     pdf.setFont("UbuntuMono-R");
 
-    pdf.text(15, 40, text);
-    console.log("file conversion finished");
-    // pdf.save("test.pdf");
+    const marginTop = cm2point(2);
+    const marginSide = cm2point(1);
+    const pageWidth = pdf.internal.pageSize.getWidth();
+    const pageHeight = pdf.internal.pageSize.getHeight();
+
+    pdf.setFontSize(4);
+    pdf.setTextColor(1);
+
+    const fontInfo = {
+      fontWidth: pdf.getTextDimensions("A").w,
+      fontHeight: pdf.getTextDimensions("A").h,
+      get intervalH() {
+        return this.fontWidth + 0.5;
+      },
+      get intervalV() {
+        return this.fontHeight * 1.15;
+      },
+    };
+
+    let pos = {
+      x: marginSide,
+      y: marginTop,
+    };
+
+    for (const c of text) {
+      pdf.text(pos.x, pos.y, c);
+      pos.x += fontInfo.intervalH;
+
+      if (pos.y > pageHeight - marginSide) {
+        pdf.addPage();
+        pos.x = marginSide;
+        pos.y = marginTop;
+        continue;
+      }
+
+      if (pos.x > pageWidth - marginSide) {
+        // console.log(pos.y);
+        pos.x = marginSide;
+        // console.log(pos.y);
+        pos.y += fontInfo.intervalV;
+        pos.y = roundDecimalPlace(pos.y);
+      }
+    }
+
+    pdf.save("test.pdf");
   });
 }
 
@@ -244,4 +286,13 @@ async function ttf2base64() {
   // jspdf는 앞부분에 메타 데이터가 없는 base64문자열을 읽어들이기 때문에
   // , 뒷부분을 없애줌
   return result.split(",")[1];
+}
+
+// cm 단위를 pdf에서 쓰이는 point로 바꿔줌
+function cm2point(cm) {
+  return cm * 28.346;
+}
+
+function roundDecimalPlace(float, place = 3) {
+  return Math.round(float * Math.pow(10, place)) / Math.pow(10, place);
 }
