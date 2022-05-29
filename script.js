@@ -144,8 +144,10 @@ function replaceSpace(text) {
 
   // 글자들 중 빈도수가 작은 것부터 우선적으로 분류
   asciiInfoArr = sortAsciiInfoArray(asciiInfoArr);
+  console.log(asciiInfoArr);
 
-  let spaceChar = detectAvailSpaceChar(asciiInfoArr);
+  let spaceChar = detectAvailSpaceChar(asciiInfoArr, text);
+  console.log(`space converted to ${spaceChar}`);
   const replacedText = text.replace(/ /g, spaceChar);
 
   return replacedText;
@@ -179,9 +181,15 @@ function sortAsciiInfoArray(asciiInfoArr) {
   });
 }
 
-function detectAvailSpaceChar(asciiInfoArr) {
+/*
+현재 알고리즘이 만들어내는 공백 대체 문자는 각 아스키코드를 최대 한번 이용한다
+아스키코드를 2번 이상 이용해야 될 문자열이 입력으로 들어올 가능성은 거의 없기 때문에
+아래와 같은 방식을 이용했다
+*/
+function detectAvailSpaceChar(asciiInfoArr, text) {
   // 혼동이 가능한 글자의 리스트, 후에 추가 가능
   let charChecklist = RegExp.escape("'`,.~-08BOD5S$");
+  let spaceCharArr = [];
 
   for (let i = 0; i < asciiInfoArr.length; i++) {
     const asciiInfo = asciiInfoArr[i];
@@ -196,18 +204,18 @@ function detectAvailSpaceChar(asciiInfoArr) {
       return asciiInfo.char;
     } else {
       // 해당 글자가 있을 때
-      const nextAsciiInfo = asciiInfoArr[i + 1];
-      const nextRegexp = new RegExp(nextAsciiInfo.regChar, "g");
-
-      if (charChecklist.match(nextRegexp)) {
+      if (!spaceCharArr.length) {
+        spaceCharArr.push(asciiInfo);
         continue;
       } else {
-        // 그 다음으로 빈도수가 적은 글자와 합친 후 텍스트 안에 해당 글자가 있는지 테스트
-        const tempSpaceChar = asciiInfo.regChar + nextAsciiInfo.regChar;
+        let tempSpaceChar = "";
+        for (const charInfo of spaceCharArr) {
+          tempSpaceChar += charInfo.regchar;
+        }
+        tempSpaceChar += asciiInfo.regchar;
         const tempRegexp = new RegExp(tempSpaceChar, "g");
-
         if (!text.match(tempRegexp)) {
-          return asciiInfo.char + nextAsciiInfo.char;
+          return spaceCharArr[0].char + asciiInfo.char;
         } else {
           continue;
         }
@@ -232,33 +240,42 @@ function convertTextToPDF(text) {
     const marginSide = cm2point(1);
     const pageWidth = pdf.internal.pageSize.getWidth();
     const pageHeight = pdf.internal.pageSize.getHeight();
-    const charWidth = pdf.getTextDimensions("A").w + 0.5;
-    const charHeight = pdf.getTextDimensions("A").h * 1.15;
+    const charWidth = pdf.getTextDimensions("A").w + 0.45;
+    const charHeight = pdf.getTextDimensions("A").h * 1.1;
 
     let pos = {
       x: marginSide,
       y: marginTop,
     };
 
-    for (const c of text) {
-      pdf.text(pos.x, pos.y, c);
-      pos.x += charWidth;
+    let line = 1;
+    let char = 1;
 
+    // char: 221, line: 174
+    for (const c of text) {
       if (pos.y > pageHeight - marginSide) {
+        console.log(line);
         pdf.addPage();
         pos.x = marginSide;
         pos.y = marginTop;
-        continue;
+        line = 1;
       }
 
+      pdf.text(pos.x, pos.y, c);
+      pos.x += charWidth;
+      char += 1;
+
       if (pos.x > pageWidth - marginSide) {
+        // console.log(char);
         pos.x = marginSide;
         pos.y += charHeight;
         pos.y = roundDecimalPlace(pos.y);
+        line += 1;
+        char = 1;
       }
     }
 
-    pdf.save("test.pdf");
+    // pdf.save("test.pdf");
   });
 }
 
