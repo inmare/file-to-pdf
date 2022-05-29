@@ -27,28 +27,31 @@ function showFile(e) {
     fileType.classList.toggle("show");
   }, 2);
 
+  // removeEventListener를 적용할 수 있게 하기 위해 새로운 변수에 함수를 할당함
+  const detectTypeFunc = (event) => {
+    // 인자로 자기자신을 보내줘서 다른 함수에서도 removeEventListener를 적용할 수 있게 함
+    detectFileType(event, file, detectTypeFunc);
+  };
+
   fileInput.removeEventListener("change", showFile);
-  convertButton.addEventListener("click", (event) =>
-    detectFileType(event, file)
-  );
-  // convertTextToPDF(arrayHex);
+  convertButton.addEventListener("click", detectTypeFunc);
 }
 
-function detectFileType(event, file) {
+function detectFileType(event, file, func) {
+  // 한번 변환이 끝나면 더 이상 변환을 할 수 없도록 함
+  // 나중에 없앨 수도 있는 기능
+  convertButton.removeEventListener("click", func);
+  convertButton.classList.toggle("hover");
+
   const fileTypeOption = document.getElementById("file-type-option");
   const optionIdx = fileTypeOption.selectedIndex;
-
-  console.log(fileTypeOption.value);
+  // console.log(fileTypeOption.value);
   switch (optionIdx) {
     case 0: // 파일 종류
       return alert("파일 종류를 선택해주세요");
     default: // 그 외 나머지
       convertFileToText(file, optionIdx);
   }
-
-  // let doc = new jsPDF("p", "mm", "a4");
-  // doc.text(15, 40, arrayHex);
-  //   doc.save("web.pdf");
 }
 
 function convertFileToText(file, optionIdx) {
@@ -223,7 +226,8 @@ function convertTextToPDF(text) {
     pdf.setFont("UbuntuMono-R");
 
     pdf.text(15, 40, text);
-    pdf.save("test.pdf");
+    console.log("file conversion finished");
+    // pdf.save("test.pdf");
   });
 }
 

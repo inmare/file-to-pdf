@@ -124,6 +124,6 @@ select {
   padding-right: 10px;
 }
 
-#convert-button:hover {
+#convert-button.hover:hover {
   transform: scale(105%);
 }
