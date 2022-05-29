@@ -215,7 +215,15 @@ function detectAvailSpaceChar(asciiInfoArr) {
 
 function convertTextToPDF(text) {
   ttf2base64().then((result) => {
-    console.log(result);
+    const pdf = new jsPDF("p", "pt", "a4");
+    const fontDataURL = result;
+
+    pdf.addFileToVFS("UbuntuMono-R.ttf", fontDataURL);
+    pdf.addFont("UbuntuMono-R.ttf", "UbuntuMono-R", "normal");
+    pdf.setFont("UbuntuMono-R");
+
+    pdf.text(15, 40, text);
+    pdf.save("test.pdf");
   });
 }
 
@@ -229,5 +237,7 @@ async function ttf2base64() {
   });
   const result = await promise;
 
-  return result;
+  // jspdf는 앞부분에 메타 데이터가 없는 base64문자열을 읽어들이기 때문에
+  // , 뒷부분을 없애줌
+  return result.split(",")[1];
 }
