@@ -37,27 +37,27 @@ function showFile(e) {
   convertButton.addEventListener("click", detectTypeFunc);
 }
 
-function detectFileType(event, file, func) {
-  // 한번 변환이 끝나면 더 이상 변환을 할 수 없도록 함
-  // 나중에 없앨 수도 있는 기능
-  convertButton.removeEventListener("click", func);
-  convertButton.classList.toggle("hover");
-
+function detectFileType(event, file, detectTypeFunc) {
   const fileTypeOption = document.getElementById("file-type-option");
-  const optionIdx = fileTypeOption.selectedIndex;
+  const option = fileTypeOption.value;
   // console.log(fileTypeOption.value);
-  switch (optionIdx) {
-    case 0: // 파일 종류
-      return alert("파일 종류를 선택해주세요");
+  switch (option) {
+    case "default": // 파일 종류
+      alert("파일 종류를 선택해주세요");
+      break;
     default: // 그 외 나머지
-      convertFileToText(file, optionIdx);
+      // 한번 변환이 끝나면 더 이상 변환을 할 수 없도록 함
+      // 나중에 없앨 수도 있는 기능
+      convertButton.removeEventListener("click", detectTypeFunc);
+      convertButton.classList.toggle("hover");
+      convertFileToText(file, option);
   }
 }
 
-function convertFileToText(file, optionIdx) {
+function convertFileToText(file, option) {
   const fileReader = new FileReader();
   const promise = new Promise((resolve, reject) => {
-    if (optionIdx == 3) {
+    if (option == "file") {
       fileReader.readAsArrayBuffer(file);
     } else {
       fileReader.readAsText(file);
@@ -68,7 +68,7 @@ function convertFileToText(file, optionIdx) {
 
   promise
     .then((result) => {
-      if (optionIdx == 3) {
+      if (option == "file") {
         // 일반 파일
         return convertFileToHex(result);
       } else {
@@ -78,10 +78,10 @@ function convertFileToText(file, optionIdx) {
         const regexp = new RegExp(lineBreak, "g");
         const text = result.replace(regexp, "\\n");
 
-        if (optionIdx == 1) {
+        if (option == "text") {
           // 텍스트 파일
           return replaceSpace(text);
-        } else if (optionIdx == 2) {
+        } else if (option == "unicode") {
           // 텍스트 파일(유니코드)
           return convertTextToUnicode(text);
         }
@@ -224,25 +224,16 @@ function convertTextToPDF(text) {
     pdf.addFileToVFS("UbuntuMono-R.ttf", fontDataURL);
     pdf.addFont("UbuntuMono-R.ttf", "UbuntuMono-R", "normal");
     pdf.setFont("UbuntuMono-R");
+    pdf.setFontSize(4); // hex에 대해서는 3pt로 적용되도록 수정
+    pdf.setTextColor(1); // 검은색
 
+    // 나중에 파일 종류에 따라서 다양하게 수정할 수 있도록 바꾸기
     const marginTop = cm2point(2);
     const marginSide = cm2point(1);
     const pageWidth = pdf.internal.pageSize.getWidth();
     const pageHeight = pdf.internal.pageSize.getHeight();
-
-    pdf.setFontSize(4);
-    pdf.setTextColor(1);
-
-    const fontInfo = {
-      fontWidth: pdf.getTextDimensions("A").w,
-      fontHeight: pdf.getTextDimensions("A").h,
-      get intervalH() {
-        return this.fontWidth + 0.5;
-      },
-      get intervalV() {
-        return this.fontHeight * 1.15;
-      },
-    };
+    const charWidth = pdf.getTextDimensions("A").w + 0.5;
+    const charHeight = pdf.getTextDimensions("A").h * 1.15;
 
     let pos = {
       x: marginSide,
@@ -251,7 +242,7 @@ function convertTextToPDF(text) {
 
     for (const c of text) {
       pdf.text(pos.x, pos.y, c);
-      pos.x += fontInfo.intervalH;
+      pos.x += charWidth;
 
       if (pos.y > pageHeight - marginSide) {
         pdf.addPage();
@@ -261,10 +252,8 @@ function convertTextToPDF(text) {
       }
 
       if (pos.x > pageWidth - marginSide) {
-        // console.log(pos.y);
         pos.x = marginSide;
-        // console.log(pos.y);
-        pos.y += fontInfo.intervalV;
+        pos.y += charHeight;
         pos.y = roundDecimalPlace(pos.y);
       }
     }
@@ -293,6 +282,7 @@ function cm2point(cm) {
   return cm * 28.346;
 }
 
+// 소수점 3자리까지만 정확히 숫자를 반환하도록 함
 function roundDecimalPlace(float, place = 3) {
   return Math.round(float * Math.pow(10, place)) / Math.pow(10, place);
 }
