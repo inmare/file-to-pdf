@@ -70,7 +70,11 @@ function convertFileToText(file, option) {
     .then((result) => {
       if (option == "file") {
         // 일반 파일
-        return convertFileToHex(result);
+        return {
+          text: convertFileToHex(result),
+          option: option,
+          spaceChar: null,
+        };
       } else {
         // 텍스트 파일, 텍스트 파일(유니코드)
         // 줄 바꿈 문자를 \n으로 통일시킴
@@ -80,14 +84,26 @@ function convertFileToText(file, option) {
 
         if (option == "text") {
           // 텍스트 파일
-          return replaceSpace(text);
+          const spaceChar = detectAvailSpaceChar(text);
+          const replacedText = text.replace(/ /g, spaceChar);
+          return {
+            text: replacedText,
+            option: option,
+            spaceChar: spaceChar,
+          };
         } else if (option == "unicode") {
           // 텍스트 파일(유니코드)
-          return convertTextToUnicode(text);
+          return {
+            text: convertTextToUnicode(text),
+            option: option,
+            spaceChar: null,
+          };
         }
       }
     })
-    .then((fileText) => convertTextToPDF(fileText));
+    .then((textInfo) => {
+      convertTextToPDF(textInfo.text, file.name);
+    });
 }
 
 // 줄 바꿈 문자가 어떤 os의 것인지 판단
@@ -139,17 +155,57 @@ function convertZeroToO(text) {
   return text.replace(/0/g, "O");
 }
 
-function replaceSpace(text) {
+/*
+현재 알고리즘이 만들어내는 공백 대체 문자는 각 아스키코드를 최대 한번 이용한다
+아스키코드를 2번 이상 이용해야 될 문자열이 입력으로 들어올 가능성은 거의 없기 때문에
+아래와 같은 방식을 이용했다
+*/
+function detectAvailSpaceChar(text) {
   let asciiInfoArr = makeAsciiInfoArray(text);
 
   // 글자들 중 빈도수가 작은 것부터 우선적으로 분류
   asciiInfoArr = sortAsciiInfoArray(asciiInfoArr);
 
-  let spaceChar = detectAvailSpaceChar(asciiInfoArr, text);
-  console.log(`space converted to ${spaceChar}`);
-  const replacedText = text.replace(/ /g, spaceChar);
+  // 혼동이 가능한 글자의 리스트, 후에 추가 가능
+  let charChecklist = RegExp.escape("'`,.~-08BOD5S$");
+  let spaceCharArr = [];
+  let spaceChar = "";
 
-  return replacedText;
+  for (let i = 0; i < asciiInfoArr.length; i++) {
+    const asciiInfo = asciiInfoArr[i];
+    const regexp = new RegExp(asciiInfo.regChar, "g");
+
+    if (charChecklist.match(regexp)) {
+      continue;
+    }
+
+    // 텍스트에 해당 글자가 없을 때
+    if (asciiInfo.count == 0) {
+      spaceChar = asciiInfo.char;
+      break;
+    } else {
+      // 해당 글자가 있을 때
+      if (!spaceCharArr.length) {
+        spaceCharArr.push(asciiInfo);
+        continue;
+      } else {
+        let tempSpaceChar = "";
+        for (const charInfo of spaceCharArr) {
+          tempSpaceChar += charInfo.regchar;
+        }
+        tempSpaceChar += asciiInfo.regchar;
+        const tempRegexp = new RegExp(tempSpaceChar, "g");
+        if (!text.match(tempRegexp)) {
+          spaceChar = spaceCharArr[0].char + asciiInfo.char;
+          break;
+        } else {
+          continue;
+        }
+      }
+    }
+  }
+
+  return spaceChar;
 }
 
 function makeAsciiInfoArray(text) {
@@ -180,51 +236,15 @@ function sortAsciiInfoArray(asciiInfoArr) {
   });
 }
 
-/*
-현재 알고리즘이 만들어내는 공백 대체 문자는 각 아스키코드를 최대 한번 이용한다
-아스키코드를 2번 이상 이용해야 될 문자열이 입력으로 들어올 가능성은 거의 없기 때문에
-아래와 같은 방식을 이용했다
+/* 
+글자에 관한 정보 -> 추후 머신러닝의 결과에 따라 수정가능
+현재는 파이썬에 만든 것과 최대한 흡사하게 만듦
+char: 221, line: 174
+가로 여백 : 0.45
+세로 여백 : 1.1
 */
-function detectAvailSpaceChar(asciiInfoArr, text) {
-  // 혼동이 가능한 글자의 리스트, 후에 추가 가능
-  let charChecklist = RegExp.escape("'`,.~-08BOD5S$");
-  let spaceCharArr = [];
 
-  for (let i = 0; i < asciiInfoArr.length; i++) {
-    const asciiInfo = asciiInfoArr[i];
-    const regexp = new RegExp(asciiInfo.regChar, "g");
-
-    if (charChecklist.match(regexp)) {
-      continue;
-    }
-
-    // 텍스트에 해당 글자가 없을 때
-    if (asciiInfo.count == 0) {
-      return asciiInfo.char;
-    } else {
-      // 해당 글자가 있을 때
-      if (!spaceCharArr.length) {
-        spaceCharArr.push(asciiInfo);
-        continue;
-      } else {
-        let tempSpaceChar = "";
-        for (const charInfo of spaceCharArr) {
-          tempSpaceChar += charInfo.regchar;
-        }
-        tempSpaceChar += asciiInfo.regchar;
-        const tempRegexp = new RegExp(tempSpaceChar, "g");
-        if (!text.match(tempRegexp)) {
-          return spaceCharArr[0].char + asciiInfo.char;
-        } else {
-          continue;
-        }
-      }
-    }
-  }
-}
-
-// char: 221, line: 174
-function convertTextToPDF(text) {
+function convertTextToPDF(text, fileName) {
   ttf2base64().then((result) => {
     const pdf = new jsPDF("p", "pt", "a4");
     const fontDataURL = result;
