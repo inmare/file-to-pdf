@@ -1,3 +1,5 @@
+"use strict";
+
 window.jsPDF = window.jspdf.jsPDF;
 // 특수문자의 경우 자동으로 \를 앞에 붙여줌
 RegExp.escape = function (s) {
@@ -102,7 +104,8 @@ function convertFileToText(file, option) {
       }
     })
     .then((textInfo) => {
-      convertTextToPDF(textInfo.text, file.name);
+      const fileText = addMetadataToText(textInfo, file.name);
+      convertTextToPDF(fileText, file.name);
     });
 }
 
@@ -147,6 +150,97 @@ function convertTextToUnicode(text) {
   }
 
   return unicodeText;
+}
+
+/* 메타데이터 구조
+
+텍스트 파일
+A BB CC DDD EEE <파일 이름> <공백 대체 문자> 
+
+- A: 파일의 종류. 일반 텍스트 파일일 경우 0입니다.
+- B: 띄어쓰기를 대체하는 글자의 길이
+- C: 파일 이름의 길이
+- D: 마지막 줄의 글자 수
+- E: 마지막 페이지의 줄 수
+
+텍스트 파일(유니코드), 일반 파일
+A BB CC DDD EEE <파일 이름(유니코드화)>
+
+- A: 파일의 종류. 유니코드 텍스트 파일의 경우 1, 일반 파일의 경우 2입니다.
+- B: 일반 텍스트 파일과 데이터 길이를 맞추기 위한 공백으로 00이 들어갑니다.
+- C: 파일 이름의 길이
+- D: 마지막 줄의 글자 수
+- E: 마지막 페이지의 줄 수
+*/
+function addMetadataToText(textInfo, fileName) {
+  // textHLen, textVLen과 metaLength은 추후에 수정 될 수 있음
+  const info = textInfo;
+  const textHLength = 220;
+  const textVLength = 173;
+  const pageLength = textHLength * textVLength;
+  const metaLength = 11;
+  const dec2Hex = convertDecimalToHex; // 자주 쓰이는 함수 이름 축약
+  const fileNameUnicode = convertTextToUnicode(fileName);
+  let textLength = null;
+  let metadata = "";
+
+  if (info.option == "text") {
+    textLength =
+      info.text.length +
+      info.spaceChar.length +
+      fileNameUnicode.length +
+      metaLength;
+    metadata += "0"; // 파일 종류
+    metadata += dec2Hex(info.spaceChar.length, 2, info.option); // 공백 대체 문자
+  } else {
+    textLength = textInfo.text.length + fileNameUnicode.length + metaLength;
+    // 유니코드: 1, 일반 파일 :2
+    info.option == "unicode" ? (metadata += "1") : (metadata += "2");
+    metadata += "OO"; // 길이 맞춤용 문자. 00이 아니라 OO임에 유의
+  }
+
+  metadata += dec2Hex(fileName.length, 2, info.option); // 파일 이름 길이
+
+  const lastCharLength = textLength % textHLength;
+  console.log(lastCharLength);
+  metadata += dec2Hex(lastCharLength, 3, info.option); // 마지막 줄의 글자 수
+
+  const lastPageLen =
+    textLength > pageLength ? textLength % pageLength : textLength;
+  const lineLen = roundDecimalPlace(lastPageLen / textHLength);
+  console.log(lineLen);
+  const fullLineLen = Math.floor(lineLen);
+  const lastLine = lineLen - fullLineLen == 0.0 ? 1 : 0;
+  const lastLineLength = fullLineLen + lastLine;
+  console.log(lastLineLength);
+  metadata += dec2Hex(lastLineLength, 3, info.option); // 마지막 페이지의 줄 수
+
+  const lastLineFiller = info.text[info.text.length - 1].repeat(
+    textHLength - lastCharLength
+  ); // 마지막 줄을 완전히 채워줄 글자
+
+  let fileText = null;
+  if (info.option == "text") {
+    fileText =
+      metadata + fileNameUnicode + info.spaceChar + info.text + lastLineFiller;
+  } else {
+    fileText = metadata + fileNameUnicode + info.text + lastLineFiller;
+  }
+
+  return fileText;
+}
+
+function convertDecimalToHex(num, hexLength, option) {
+  let hexNum = num.toString(16);
+  if (hexNum.length < hexLength) {
+    hexNum = "0".repeat(hexLength - hexNum.length) + hexNum;
+    if (option != "text") {
+      hexNum = convertZeroToO(hexNum); // 일반 파일, 유니코드의 경우 0을 대문자 O로 변환
+    }
+  }
+
+  console.log(hexNum);
+  return hexNum;
 }
 
 // 유니코드와 일반파일의 경우, 머신러닝 프로그램이 구분을 더 쉽게 할 수 있도록
@@ -283,6 +377,7 @@ function convertTextToPDF(text, fileName) {
         pdf.addPage();
         pos.x = sizeInfo.marginSide;
         pos.y = sizeInfo.marginTop;
+        index.page += 1;
         index.line = 1;
       }
 
@@ -334,21 +429,21 @@ function roundDecimalPlace(float, place = 3) {
 
 function addGuideToPage(pdf, pos, index, sizeInfo) {
   // 페이지 가이드라인 추가
-  if (index.page == 1 && index.line == 1 && index.char == 1) {
+  if (index.line == 1 && index.char == 1) {
     const pageString = "page " + index.page;
     pdf.text(0, sizeInfo.charH, pageString);
   }
-  // 세로 가이드라인 추가
-  if (index.char == 1) {
-    const lineString = fitNumberToGuide(index.line, (mode = "v"));
-    pdf.text(0, pos.y, lineString);
-    pdf.text(sizeInfo.pageW - sizeInfo.charW * 3, pos.y, lineString);
-  }
   // 가로 가이드라인 추가
   if (index.line == 1 && index.char % 10 == 0) {
-    const charString = fitNumberToGuide(index.char, (mode = "h"));
+    const charString = fitNumberToGuide(index.char, "h");
     pdf.text(pos.x, sizeInfo.charH, charString);
     pdf.text(pos.x, sizeInfo.pageH, charString);
+  }
+  // 세로 가이드라인 추가
+  if (index.char == 1) {
+    const lineString = fitNumberToGuide(index.line, "v");
+    pdf.text(0, pos.y, lineString);
+    pdf.text(sizeInfo.pageW - sizeInfo.charW * 3, pos.y, lineString);
   }
 }
 
