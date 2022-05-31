@@ -1,8 +1,8 @@
-function convertTextToUnicode(text) {
+function textToUnicode(text) {
   let unicodeText = "";
   for (let i = 0; i < text.length; i++) {
     let unicodeChar = text.charCodeAt(i).toString(16);
-    unicodeChar = convertZeroToO(unicodeChar);
+    unicodeChar = zeroToO(unicodeChar);
 
     // 유니코드 문자의 길이를 4글자로 통일하기
     // 아래 if문에서 0 대신 대문자 O를 사용하는 것에 유의하기
@@ -17,12 +17,12 @@ function convertTextToUnicode(text) {
   return unicodeText;
 }
 
-function convertDcmToHex(num, hexLength, option) {
+function dcmToHex(num, hexLength, option) {
   let hexNum = num.toString(16);
   if (hexNum.length < hexLength) {
     hexNum = "0".repeat(hexLength - hexNum.length) + hexNum;
     if (option != "text") {
-      hexNum = convertZeroToO(hexNum); // 일반 파일, 유니코드의 경우 0을 대문자 O로 변환
+      hexNum = ZeroToO(hexNum); // 일반 파일, 유니코드의 경우 0을 대문자 O로 변환
     }
   }
 
@@ -31,19 +31,54 @@ function convertDcmToHex(num, hexLength, option) {
 
 // 유니코드와 일반파일의 경우, 머신러닝 프로그램이 구분을 더 쉽게 할 수 있도록
 // 숫자 0을 알파벳 대문자 O로 바꿔준다
-function convertZeroToO(text) {
+function zeroToO(text) {
   return text.replace(/0/g, "O");
 }
 
 // 소수점 n자리까지만 정확히 숫자를 반환하도록 함
 // 기본은 3자리로 설정됨
-function roundDecimalPlace(float, place = 3) {
+function roundDcmPlace(float, place = 3) {
   return Math.round(float * Math.pow(10, place)) / Math.pow(10, place);
 }
 
+async function ttfToBase64() {
+  const response = await fetch("./fonts/UbuntuMono-R.ttf");
+  const blob = await response.blob();
+  const fileReader = new FileReader();
+  const promise = new Promise((resolve, reject) => {
+    fileReader.readAsDataURL(blob);
+    fileReader.onload = () => resolve(fileReader.result);
+  });
+  const result = await promise;
+
+  // jspdf는 앞부분에 메타 데이터가 없는 base64문자열을 읽어들이기 때문에
+  // , 뒷부분을 없애줌
+  return result.split(",")[1];
+}
+
+// cm 단위를 pdf에서 쓰이는 point로 바꿔줌
+function cmToPoint(cm) {
+  return cm * 28.346;
+}
+
+function fitNumToGuide(num, mode) {
+  if (mode == "v") {
+    // 세로 가이드라인, 숫자 앞에 0을 붙여서 3자리로 만들어 줌
+    return num >= 100 ? num.toString() : num >= 10 ? "0" + num : "00" + num;
+  } else if (mode == "h") {
+    // 가로 가이드라인, 숫자에서 10의 자리만 추출함
+    return num < 100
+      ? parseInt(num / 10).toString()
+      : parseInt((num % 100) / 10).toString();
+  }
+}
+
 export {
-  convertTextToUnicode,
-  convertDcmToHex,
-  convertZeroToO,
-  roundDecimalPlace,
+  textToUnicode,
+  dcmToHex,
+  zeroToO,
+  roundDcmPlace,
+  ttfToBase64,
+  cmToPoint,
+  fitNumToGuide,
 };

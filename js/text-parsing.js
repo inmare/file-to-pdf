@@ -1,6 +1,6 @@
-import * as type from "./type-conversion.js";
+import * as convert from "./type-conversion.js";
 
-/* 메타데이터 구조
+/* 메타데이터 구조 (readme에 설명 되어 있음)
 
 텍스트 파일
 A BB CC DDD EEE <파일 이름(유니코드화)> <공백 대체 문자> 
@@ -27,19 +27,19 @@ function addMetadataToText(textInfo, fileName) {
   const textVLength = 173;
   const pageLength = textHLength * textVLength;
   const metaLength = 11;
-  const dcm2Hex = type.convertDcmToHex; // 자주 쓰이는 함수 이름 축약
-  const fileNameUnicode = type.convertTextToUnicode(fileName);
+  const fileNameUnicode = convert.textToUnicode(fileName);
   let textLength = null;
   let metadata = "";
 
+  // 파일 이름, 공백 대체 문자(텍스트 파일 한정)
   if (info.option == "text") {
     textLength =
       info.text.length +
       info.spaceChar.length +
       fileNameUnicode.length +
       metaLength;
-    metadata += "0"; // 파일 종류
-    metadata += dcm2Hex(info.spaceChar.length, 2, info.option); // 공백 대체 문자
+    metadata += "0";
+    metadata += convert.dcmToHex(info.spaceChar.length, 2, info.option);
   } else {
     textLength = textInfo.text.length + fileNameUnicode.length + metaLength;
     // 유니코드: 1, 일반 파일 :2
@@ -47,22 +47,26 @@ function addMetadataToText(textInfo, fileName) {
     metadata += "OO"; // 길이 맞춤용 문자. 00이 아니라 OO임에 유의
   }
 
-  metadata += dcm2Hex(fileName.length, 2, info.option); // 파일 이름 길이
+  // 파일 이름 길이
+  metadata += convert.dcmToHex(fileName.length, 2, info.option);
 
+  // 마지막 줄의 글자 수
   const lastCharLength = textLength % textHLength;
-  metadata += dcm2Hex(lastCharLength, 3, info.option); // 마지막 줄의 글자 수
+  metadata += convert.dcmToHex(lastCharLength, 3, info.option);
 
+  // 마지막 페이지의 줄 수
   const lastPageLen =
     textLength > pageLength ? textLength % pageLength : textLength;
-  const lineLen = type.roundDecimalPlace(lastPageLen / textHLength);
+  const lineLen = convert.roundDcmPlace(lastPageLen / textHLength);
   const fullLineLen = Math.floor(lineLen);
   const lastLine = lineLen - fullLineLen == 0.0 ? 1 : 0;
   const lastLineLength = fullLineLen + lastLine;
-  metadata += dcm2Hex(lastLineLength, 3, info.option); // 마지막 페이지의 줄 수
+  metadata += convert.dcmToHex(lastLineLength, 3, info.option);
 
+  // 마지막 줄을 완전히 채워줄 글자
   const lastLineFiller = info.text[info.text.length - 1].repeat(
     textHLength - lastCharLength
-  ); // 마지막 줄을 완전히 채워줄 글자
+  );
 
   let fileText = null;
   if (info.option == "text") {

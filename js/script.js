@@ -1,11 +1,7 @@
 "use strict";
 
 import { addMetadataToText } from "./text-parsing.js";
-import {
-  convertTextToUnicode,
-  convertZeroToO,
-  roundDecimalPlace,
-} from "./type-conversion.js";
+import * as convert from "./type-conversion.js";
 
 window.jsPDF = window.jspdf.jsPDF;
 // 특수문자의 경우 자동으로 \를 앞에 붙여줌
@@ -13,7 +9,6 @@ RegExp.escape = function (s) {
   return s.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&");
 };
 
-const main = document.querySelector("main");
 const fileInput = document.getElementById("file-input");
 const convertButton = document.getElementById("convert-button");
 fileInput.addEventListener("change", showFile);
@@ -103,7 +98,7 @@ function convertFileToText(file, option) {
         } else if (option == "unicode") {
           // 텍스트 파일(유니코드)
           return {
-            text: convertTextToUnicode(text),
+            text: convert.textToUnicode(text),
             option: option,
             spaceChar: null,
           };
@@ -134,7 +129,7 @@ function convertFileToHex(buffer) {
 
   let hexText = "";
   for (let num in view) {
-    hexText += convertZeroToO(view[num].toString(16));
+    hexText += convert.zeroToO(view[num].toString(16));
   }
 
   return hexText;
@@ -224,13 +219,13 @@ function sortAsciiInfoArray(asciiInfoArr) {
 /* 
 글자에 관한 정보 -> 추후 머신러닝의 결과에 따라 수정가능
 현재는 파이썬에 만든 것과 최대한 흡사하게 만듦
-char: 221, line: 174
+char: 220, line: 173
 가로 여백 : 0.45
 세로 여백 : 1.1
 */
 
 function convertTextToPDF(text, fileName) {
-  ttf2base64().then((result) => {
+  convert.ttfToBase64().then((result) => {
     const pdf = new jsPDF("p", "pt", "a4");
     const fontDataURL = result;
 
@@ -244,8 +239,8 @@ function convertTextToPDF(text, fileName) {
     // 변수 이름도 수정 할 수도?
     const sizeInfo = {};
 
-    sizeInfo.marginTop = cm2point(2);
-    sizeInfo.marginSide = cm2point(1);
+    sizeInfo.marginTop = convert.cmToPoint(2);
+    sizeInfo.marginSide = convert.cmToPoint(1);
     sizeInfo.pageW = pdf.internal.pageSize.getWidth();
     sizeInfo.pageH = pdf.internal.pageSize.getHeight();
     sizeInfo.charW = pdf.getTextDimensions("A").w + 0.45;
@@ -272,7 +267,7 @@ function convertTextToPDF(text, fileName) {
         index.line = 1;
       }
 
-      pdf.setTextColor("0.5");
+      pdf.setTextColor("0.5"); // guide는 회색으로 표시
       addGuideToPage(pdf, pos, index, sizeInfo);
       pdf.setTextColor("0");
       pdf.text(pos.x, pos.y, c);
@@ -283,34 +278,16 @@ function convertTextToPDF(text, fileName) {
       if (pos.x > sizeInfo.pageW - sizeInfo.marginSide) {
         pos.x = sizeInfo.marginSide;
         pos.y += sizeInfo.charH;
-        pos.y = roundDecimalPlace(pos.y);
+        pos.y = convert.roundDcmPlace(pos.y);
         index.line += 1;
         index.char = 1;
       }
     }
 
-    pdf.save("test.pdf");
+    const fileSuffix = "-changed";
+
+    pdf.save(`${fileName}` + fileSuffix + ".pdf");
   });
-}
-
-async function ttf2base64() {
-  const response = await fetch("./fonts/UbuntuMono-R.ttf");
-  const blob = await response.blob();
-  const fileReader = new FileReader();
-  const promise = new Promise((resolve, reject) => {
-    fileReader.readAsDataURL(blob);
-    fileReader.onload = () => resolve(fileReader.result);
-  });
-  const result = await promise;
-
-  // jspdf는 앞부분에 메타 데이터가 없는 base64문자열을 읽어들이기 때문에
-  // , 뒷부분을 없애줌
-  return result.split(",")[1];
-}
-
-// cm 단위를 pdf에서 쓰이는 point로 바꿔줌
-function cm2point(cm) {
-  return cm * 28.346;
 }
 
 function addGuideToPage(pdf, pos, index, sizeInfo) {
@@ -321,26 +298,14 @@ function addGuideToPage(pdf, pos, index, sizeInfo) {
   }
   // 가로 가이드라인 추가
   if (index.line == 1 && index.char % 10 == 0) {
-    const charString = fitNumberToGuide(index.char, "h");
+    const charString = convert.fitNumToGuide(index.char, "h");
     pdf.text(pos.x, sizeInfo.charH, charString);
     pdf.text(pos.x, sizeInfo.pageH, charString);
   }
   // 세로 가이드라인 추가
   if (index.char == 1) {
-    const lineString = fitNumberToGuide(index.line, "v");
+    const lineString = convert.fitNumToGuide(index.line, "v");
     pdf.text(0, pos.y, lineString);
     pdf.text(sizeInfo.pageW - sizeInfo.charW * 3, pos.y, lineString);
-  }
-}
-
-function fitNumberToGuide(num, mode) {
-  if (mode == "v") {
-    // 세로 가이드라인, 숫자 앞에 0을 붙여서 3자리로 만들어 줌
-    return num >= 100 ? num.toString() : num >= 10 ? "0" + num : "00" + num;
-  } else if (mode == "h") {
-    // 가로 가이드라인, 숫자에서 10의 자리만 추출함
-    return num < 100
-      ? parseInt(num / 10).toString()
-      : parseInt((num % 100) / 10).toString();
   }
 }
