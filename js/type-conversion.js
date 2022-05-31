@@ -22,7 +22,7 @@ function dcmToHex(num, hexLength, option) {
   if (hexNum.length < hexLength) {
     hexNum = "0".repeat(hexLength - hexNum.length) + hexNum;
     if (option != "text") {
-      hexNum = ZeroToO(hexNum); // 일반 파일, 유니코드의 경우 0을 대문자 O로 변환
+      hexNum = zeroToO(hexNum); // 일반 파일, 유니코드의 경우 0을 대문자 O로 변환
     }
   }
 

@@ -1,5 +1,104 @@
 import * as convert from "./type-conversion.js";
 
+// 특수문자의 경우 자동으로 \를 앞에 붙여줌
+RegExp.escape = function (s) {
+  return s.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&");
+};
+
+// 줄 바꿈 문자가 어떤 os의 것인지 판단
+function getLineBreakChar(text) {
+  const indexOfLF = text.indexOf("\n", 1);
+
+  if (indexOfLF === -1) {
+    if (text.indexOf("\r") !== -1) return "\r";
+    return "\n";
+  }
+
+  if (text[indexOfLF - 1] === "\r") return "\r\n";
+  return "\n";
+}
+
+/*
+현재 알고리즘이 만들어내는 공백 대체 문자는 각 아스키코드를 최대 한번 이용한다
+아스키코드를 2번 이상 이용해야 될 문자열이 입력으로 들어올 가능성은 거의 없기 때문에
+아래와 같은 방식을 이용했다
+*/
+function getAvailSpaceChar(text) {
+  let asciiInfoArr = makeAsciiInfoArray(text);
+
+  // 글자들 중 빈도수가 작은 것부터 우선적으로 분류
+  asciiInfoArr = sortAsciiInfoArray(asciiInfoArr);
+
+  // 혼동이 가능한 글자의 리스트, 후에 추가 가능
+  let charChecklist = RegExp.escape("'`,.~-08BOD5S$");
+  let spaceCharArr = [];
+  let spaceChar = "";
+
+  for (let i = 0; i < asciiInfoArr.length; i++) {
+    const asciiInfo = asciiInfoArr[i];
+    const regexp = new RegExp(asciiInfo.regChar, "g");
+
+    if (charChecklist.match(regexp)) {
+      continue;
+    }
+
+    // 텍스트에 해당 글자가 없을 때
+    if (asciiInfo.count == 0) {
+      spaceChar = asciiInfo.char;
+      break;
+    } else {
+      // 해당 글자가 있을 때
+      if (!spaceCharArr.length) {
+        spaceCharArr.push(asciiInfo);
+        continue;
+      } else {
+        let tempSpaceChar = "";
+        for (const charInfo of spaceCharArr) {
+          tempSpaceChar += charInfo.regchar;
+        }
+        tempSpaceChar += asciiInfo.regchar;
+        const tempRegexp = new RegExp(tempSpaceChar, "g");
+        if (!text.match(tempRegexp)) {
+          spaceChar = spaceCharArr[0].char + asciiInfo.char;
+          break;
+        } else {
+          continue;
+        }
+      }
+    }
+  }
+
+  return spaceChar;
+}
+
+function makeAsciiInfoArray(text) {
+  let asciiInfoArr = [];
+
+  for (let i = 0x21; i < 0x7f; i++) {
+    const ascii = RegExp.escape(String.fromCharCode(i));
+    const regexp = new RegExp(ascii, "g");
+
+    // 일치하는 문자열이 없을 경우 match가 null을 반환
+    const charCount = text.match(regexp) ? text.match(regexp).length : 0;
+    const asciiInfo = {
+      num: i,
+      char: String.fromCharCode(i),
+      regChar: ascii,
+      count: charCount,
+    };
+
+    asciiInfoArr.push(asciiInfo);
+  }
+
+  return asciiInfoArr;
+}
+
+function sortAsciiInfoArray(asciiInfoArr) {
+  return asciiInfoArr.sort(function (a, b) {
+    return a.count < b.count ? -1 : a.num > b.num ? 1 : 0;
+  });
+}
+
 /* 메타데이터 구조 (readme에 설명 되어 있음)
 
 텍스트 파일
@@ -79,4 +178,10 @@ function addMetadataToText(textInfo, fileName) {
   return fileText;
 }
 
-export { addMetadataToText };
+export {
+  getLineBreakChar,
+  getAvailSpaceChar,
+  makeAsciiInfoArray,
+  sortAsciiInfoArray,
+  addMetadataToText,
+};
