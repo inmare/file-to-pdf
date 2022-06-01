@@ -129,6 +129,7 @@ function makeRandomText() {
     randomText += random.choice(randomArray);
   }
 
-  const fileName = `random-${textType}`;
-  textToPDF(randomText, fileName);
+  const fileName = `random-${textType}-${randomSeed.value}`;
+  // 랜덤한 텍스트라는 의미로 마지막 인수에 false를 넣음
+  textToPDF(randomText, fileName, true);
 }

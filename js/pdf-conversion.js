@@ -10,7 +10,7 @@ char: 220, line: 173
 세로 여백 : 1.1
 */
 
-function textToPDF(text, fileName) {
+function textToPDF(text, fileName, isRandom) {
   convert.ttfToBase64().then((result) => {
     const pdf = new jsPDF("p", "pt", "a4");
     const fontDataURL = result;
@@ -72,7 +72,11 @@ function textToPDF(text, fileName) {
 
     const fileSuffix = "-changed";
 
-    pdf.save(`${fileName}` + fileSuffix + ".pdf");
+    if (isRandom) {
+      pdf.save(`${fileName}` + ".pdf");
+    } else {
+      pdf.save(`${fileName}` + fileSuffix + ".pdf");
+    }
   });
 }
 

@@ -56,7 +56,8 @@ async function fileToText(file, option) {
     })
     .then((textInfo) => {
       const fileText = addMetadataToText(textInfo, file.name);
-      textToPDF(fileText, file.name);
+      // 랜덤한 텍스트가 아니라는 의미로 마지막 인수에 false를 넣음
+      textToPDF(fileText, file.name, false);
     });
 }
 
