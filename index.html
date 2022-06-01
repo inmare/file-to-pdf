@@ -100,9 +100,9 @@
                   </li>
                   <li>
                     시드<br /><span>
-                      랜덤 시드를 설정합니다. 최대 3자리의 숫자만 입력할 수
-                      있으며, 어떤 시드값을 입력하냐에 따라 생성되는 텍스트가
-                      달라집니다.
+                      랜덤 시드를 설정합니다. 0이 아닌 최대 3자리의 숫자만
+                      입력할 수 있으며, 어떤 시드값을 입력하냐에 따라 생성되는
+                      텍스트가 달라집니다.
                     </span>
                   </li>
                 </ul>
@@ -117,28 +117,17 @@
             </select>
             <select name="random-pages" id="random-pages">
               <option disabled selected value="default">페이지 수</option>
-              <option>1</option>
-              <option>2</option>
-              <option>3</option>
-              <option>4</option>
-              <option>5</option>
-              <option>6</option>
-              <option>7</option>
-              <option>8</option>
-              <option>9</option>
-              <option>10</option>
             </select>
             <input
               type="text"
               name="random-seed"
               id="random-seed"
-              minlength="1"
               maxlength="3"
               placeholder="시드"
               size="1"
             />
           </div>
-          <div id="generate-button" class="generate-button hover">
+          <div id="random-generate" class="generate-button hover">
             <i class="fa-solid fa-file-pdf"></i>PDF 생성하기
           </div>
         </div>

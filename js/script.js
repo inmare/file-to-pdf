@@ -1,8 +1,32 @@
 import { fileToText } from "./file-parsing.js";
+import { seedRandom } from "./random-generation.js";
+import { textToPDF } from "./pdf-conversion.js";
+import { zeroToO } from "./type-conversion.js";
+
+// 페이지 수에 옵션 더해주기 (10페이지까지)
+const defaultPages = document.getElementById("random-pages");
+for (let i = 0; i < 10; i++) {
+  const option = document.createElement("option");
+  option.innerHTML = String(i + 1);
+  option.value = String(i + 1);
+  defaultPages.append(option);
+}
 
 const fileInput = document.getElementById("file-input");
 const convertButton = document.getElementById("convert-button");
 fileInput.addEventListener("change", showFile);
+
+const settingButton = document.getElementById("setting-button");
+const setting = document.querySelector(".setting");
+settingButton.addEventListener("click", () => {
+  setting.classList.toggle("hide");
+  setTimeout(() => {
+    setting.classList.toggle("show");
+  }, 2);
+});
+
+const randomButton = document.getElementById("random-generate");
+randomButton.addEventListener("click", makeRandomText);
 
 // 파일 업로드하기
 function showFile(event) {
@@ -47,4 +71,64 @@ function detectFileType(event, file, detectTypeFunc) {
       convertButton.classList.toggle("hover");
       fileToText(file, option);
   }
+}
+
+function makeRandomText() {
+  randomButton.removeEventListener("click", makeRandomText);
+  randomButton.classList.toggle("hover");
+
+  const randomTextType = document.getElementById("random-text-type");
+  const randomPages = document.getElementById("random-pages");
+  const randomSeed = document.getElementById("random-seed");
+  let textType = null;
+  let pages = null;
+  let seed = null;
+
+  if (
+    randomTextType.value == "default" ||
+    randomPages.vaue == "default" ||
+    randomSeed.value == ""
+  ) {
+    return alert("모든 설정을 제대로 입력해주세요.");
+  } else {
+    if (!Number(randomSeed.value)) {
+      return alert("시드에는 0이 아닌 숫자만 입력할 수 있습니다.");
+    } else {
+      textType = randomTextType.value;
+      pages = Number(randomPages.value);
+      seed = Number(randomSeed.value);
+    }
+  }
+
+  const random = new seedRandom(seed);
+  // hex 값이기 때문에 0을 O으로 바꿔줌
+  const hexString = zeroToO("0123456789abcdef");
+  const randomArray = [];
+
+  // 조금 더 랜덤한 값을 넣어주기 위해 랜덤함수를 한 번 실행시켜 줌
+  random.random();
+
+  if (textType == "ascii") {
+    for (let i = 0x21; i < 0x7f; i++) {
+      const ascii = String.fromCharCode(i);
+      randomArray.push(ascii);
+    }
+  } else if (textType == "hex") {
+    for (let i = 0; i < 16; i++) {
+      const hex = hexString[i];
+      randomArray.push(hex);
+    }
+  }
+
+  // 페이지 값을 하드코딩 해 둠
+  // 다른 함수에서도 쓰이는 값이기 때문에 json파일 같은 곳에 저장해야 할 듯
+  const textLength = 220 * 173 * pages;
+  let randomText = "";
+
+  for (let i = 0; i < textLength; i++) {
+    randomText += random.choice(randomArray);
+  }
+
+  const fileName = `random-${textType}`;
+  textToPDF(randomText, fileName);
 }
