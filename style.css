@@ -20,12 +20,7 @@ p {
   padding: 10px;
 }
 
-main {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  position: fixed;
+.wrapper {
   /* 모바일 사파리에서도 화면 전체가 꽉 차게 하기 */
   height: 100vh;
   height: -webkit-fill-available;
@@ -34,7 +29,26 @@ main {
   max-width: 700px;
   padding: 20px;
   font-size: 2rem;
-  overflow: auto;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+body::-webkit-scrollbar {
+  width: 5px;
+}
+body::-webkit-scrollbar-thumb {
+  background-color: rgb(117, 117, 117);
+  border-radius: 10px;
+}
+body::-webkit-scrollbar-track {
+  background-color: rgb(185, 185, 185);
+  border-radius: 10px;
 }
 
 .file-label {
@@ -162,10 +176,7 @@ select {
   font-size: 1.3rem;
 }
 
-.setting li span {
-  font-size: 1rem;
-}
-
+.setting li span,
 .setting li li {
   font-size: 1rem;
 }

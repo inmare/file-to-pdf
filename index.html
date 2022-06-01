@@ -20,115 +20,116 @@
     <link rel="stylesheet" href="./style.css" />
   </head>
   <body>
-    <main>
-      <p>일반 파일이나 텍스트 파일을 선택하세요</p>
-      <div class="file-label">
-        <label for="file-input">
-          <i
-            class="fa-solid fa-file-arrow-up"
-            id="left-arrow"
-            class="arrow"
-          ></i>
-          파일 업로드
-        </label>
-        <input type="file" name="select-file" id="file-input" />
-      </div>
-
-      <div class="file-type hide">
-        <p>파일의 종류를 선택해주세요</p>
-        <select name="file-type" id="file-type-option">
-          <option disabled selected value="default">파일 종류</option>
-          <option value="text">텍스트 파일</option>
-          <option value="unicode">텍스트 파일(유니코드)</option>
-          <option value="file">일반 파일</option>
-        </select>
-        <ul>
-          <li>
-            텍스트 파일<br />아스키코드(영어 대소문자, 숫자, 키보드에 있는
-            특수문자)로 쓰여진 텍스트 파일입니다.
-          </li>
-          <li>
-            텍스트 파일(유니코드)<br />한국어나 일본어, 특수기호와 같이
-            아스키코드가 아닌 유니코드로 쓰여진 텍스트 파일입니다.
-          </li>
-          <li>일반 파일<br />텍스트 파일을 제외한 일반적인 파일입니다.</li>
-        </ul>
-        <div id="convert-button" class="generate-button hover">
-          <i class="fa-solid fa-file-pdf"></i>PDF로 변환하기
+    <div class="wrapper">
+      <main>
+        <p>일반 파일이나 텍스트 파일을 선택하세요</p>
+        <div class="file-label">
+          <label for="file-input">
+            <i
+              class="fa-solid fa-file-arrow-up"
+              id="left-arrow"
+              class="arrow"
+            ></i>
+            파일 업로드
+          </label>
+          <input type="file" name="select-file" id="file-input" />
         </div>
-      </div>
-
-      <div id="setting-button">
-        <p>
-          <i class="fa-solid fa-gears"></i>PDF 및 텍스트 설정<i
-            class="fa-solid fa-chevron-down fa-xs"
-          ></i>
-        </p>
-      </div>
-      <div class="setting">
-        <ul>
-          <li>
-            랜덤한 텍스트 생성<br /><span>
-              랜덤한 텍스트를 생성해줍니다. 이미 파일이 업로드 되어있다면 해당
-              파일은 무시됩니다.
-            </span>
-            <ul>
-              <li>
-                텍스트의 종류<br /><span>
-                  생성할 텍스트의 종류를 선택합니다. 아스키코드의 경우 알파벳
-                  대문자, 소문자, 숫자 및 키보드에 있는 특수문자를, 16진수의
-                  경우 숫자 및 a~f까지의 알파벳 소문자를 생성합니다.
-                </span>
-              </li>
-              <li>
-                페이지 수<br /><span>
-                  얼마나 많은 텍스트를 생성할 건지 결정할 수 있습니다. 최대
-                  10페이지까지 텍스트를 생성할 수 있습니다.
-                </span>
-              </li>
-              <li>
-                시드<br /><span>
-                  랜덤 시드를 설정합니다. 최대 3자리의 숫자만 입력할 수 있으며,
-                  어떤 시드값을 입력하냐에 따라 생성되는 텍스트가 달라집니다.
-                </span>
-              </li>
-            </ul>
-          </li>
-        </ul>
-        <div class="setting-options">
-          <select name="random-text-type" id="random-text-type">
-            <option disabled selected value="default">텍스트의 종류</option>
-            <option value="ascii">아스키코드</option>
-            <option value="hex">16진수</option>
+        <div class="file-type show">
+          <p>파일의 종류를 선택해주세요</p>
+          <select name="file-type" id="file-type-option">
+            <option disabled selected value="default">파일 종류</option>
+            <option value="text">텍스트 파일</option>
+            <option value="unicode">텍스트 파일(유니코드)</option>
+            <option value="file">일반 파일</option>
           </select>
-          <select name="random-pages" id="random-pages">
-            <option disabled selected value="default">페이지 수</option>
-            <option>1</option>
-            <option>2</option>
-            <option>3</option>
-            <option>4</option>
-            <option>5</option>
-            <option>6</option>
-            <option>7</option>
-            <option>8</option>
-            <option>9</option>
-            <option>10</option>
-          </select>
-          <input
-            type="text"
-            name="random-seed"
-            id="random-seed"
-            minlength="1"
-            maxlength="3"
-            placeholder="시드"
-            size="1"
-          />
+          <ul>
+            <li>
+              텍스트 파일<br />아스키코드(영어 대소문자, 숫자, 키보드에 있는
+              특수문자)로 쓰여진 텍스트 파일입니다.
+            </li>
+            <li>
+              텍스트 파일(유니코드)<br />한국어나 일본어, 특수기호와 같이
+              아스키코드가 아닌 유니코드로 쓰여진 텍스트 파일입니다.
+            </li>
+            <li>일반 파일<br />텍스트 파일을 제외한 일반적인 파일입니다.</li>
+          </ul>
+          <div id="convert-button" class="generate-button hover">
+            <i class="fa-solid fa-file-pdf"></i>PDF로 변환하기
+          </div>
         </div>
-        <div id="generate-button" class="generate-button hover">
-          <i class="fa-solid fa-file-pdf"></i>PDF 생성하기
+        <div id="setting-button">
+          <p>
+            <i class="fa-solid fa-gears"></i>PDF 및 텍스트 설정<i
+              class="fa-solid fa-chevron-down fa-xs"
+            ></i>
+          </p>
         </div>
-      </div>
-    </main>
+        <div class="setting">
+          <ul>
+            <li>
+              랜덤한 텍스트 생성<br /><span>
+                랜덤한 텍스트를 생성해줍니다. 이미 파일이 업로드 되어있다면 해당
+                파일은 무시됩니다.
+              </span>
+              <ul>
+                <li>
+                  텍스트의 종류<br /><span>
+                    생성할 텍스트의 종류를 선택합니다. 아스키코드의 경우 알파벳
+                    대문자, 소문자, 숫자 및 키보드에 있는 특수문자를, 16진수의
+                    경우 숫자 및 a~f까지의 알파벳 소문자를 생성합니다.
+                  </span>
+                </li>
+                <li>
+                  페이지 수<br /><span>
+                    얼마나 많은 텍스트를 생성할 건지 결정할 수 있습니다. 최대
+                    10페이지까지 텍스트를 생성할 수 있습니다.
+                  </span>
+                </li>
+                <li>
+                  시드<br /><span>
+                    랜덤 시드를 설정합니다. 최대 3자리의 숫자만 입력할 수
+                    있으며, 어떤 시드값을 입력하냐에 따라 생성되는 텍스트가
+                    달라집니다.
+                  </span>
+                </li>
+              </ul>
+            </li>
+          </ul>
+          <div class="setting-options">
+            <select name="random-text-type" id="random-text-type">
+              <option disabled selected value="default">텍스트의 종류</option>
+              <option value="ascii">아스키코드</option>
+              <option value="hex">16진수</option>
+            </select>
+            <select name="random-pages" id="random-pages">
+              <option disabled selected value="default">페이지 수</option>
+              <option>1</option>
+              <option>2</option>
+              <option>3</option>
+              <option>4</option>
+              <option>5</option>
+              <option>6</option>
+              <option>7</option>
+              <option>8</option>
+              <option>9</option>
+              <option>10</option>
+            </select>
+            <input
+              type="text"
+              name="random-seed"
+              id="random-seed"
+              minlength="1"
+              maxlength="3"
+              placeholder="시드"
+              size="1"
+            />
+          </div>
+          <div id="generate-button" class="generate-button hover">
+            <i class="fa-solid fa-file-pdf"></i>PDF 생성하기
+          </div>
+        </div>
+      </main>
+    </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="./js/script.js" type="module"></script>
     <script src="./js/file-parsing.js" type="module"></script>
