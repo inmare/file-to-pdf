@@ -54,7 +54,7 @@ function textToPDF(text, fileName, isRandom) {
       }
 
       pdf.setTextColor("0.5"); // guide는 회색으로 표시
-      addGuideToPage(pdf, pos, index, sizeInfo);
+      addGuideToPage(pdf, pos, index, sizeInfo, fileName);
       pdf.setTextColor("0");
       pdf.text(pos.x, pos.y, c);
       pos.x += sizeInfo.charW;
@@ -80,11 +80,12 @@ function textToPDF(text, fileName, isRandom) {
   });
 }
 
-function addGuideToPage(pdf, pos, index, sizeInfo) {
+function addGuideToPage(pdf, pos, index, sizeInfo, fileName) {
   // 페이지 가이드라인 추가
   if (index.line == 1 && index.char == 1) {
     const pageString = "page " + index.page;
     pdf.text(0, sizeInfo.charH, pageString);
+    pdf.text(0, sizeInfo.charH * 2, fileName);
   }
   // 가로 가이드라인 추가
   if (index.line == 1 && index.char % 10 == 0) {

@@ -74,9 +74,6 @@ function detectFileType(event, file, detectTypeFunc) {
 }
 
 function makeRandomText() {
-  randomButton.removeEventListener("click", makeRandomText);
-  randomButton.classList.toggle("hover");
-
   const randomTextType = document.getElementById("random-text-type");
   const randomPages = document.getElementById("random-pages");
   const randomSeed = document.getElementById("random-seed");
@@ -129,7 +126,7 @@ function makeRandomText() {
     randomText += random.choice(randomArray);
   }
 
-  const fileName = `random-${textType}-${randomSeed.value}`;
+  const fileName = `random-${textType}-seed-${randomSeed.value}`;
   // 랜덤한 텍스트라는 의미로 마지막 인수에 false를 넣음
   textToPDF(randomText, fileName, true);
 }
