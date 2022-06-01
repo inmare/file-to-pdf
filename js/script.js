@@ -1,7 +1,5 @@
 import { fileToText } from "./file-parsing.js";
 
-window.jsPDF = window.jspdf.jsPDF;
-
 const fileInput = document.getElementById("file-input");
 const convertButton = document.getElementById("convert-button");
 fileInput.addEventListener("change", showFile);
