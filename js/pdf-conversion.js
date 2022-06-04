@@ -81,23 +81,26 @@ function textToPDF(text, fileName, isRandom) {
 }
 
 function addGuideToPage(pdf, pos, index, sizeInfo, fileName) {
+  // 인쇄 될 때 가장자리 잘림에 따른 3mm여백 추가
+  const indentV = convert.cmToPoint(0.3);
+  const indentH = convert.cmToPoint(0.3);
   // 페이지 가이드라인 추가
   if (index.line == 1 && index.char == 1) {
     const pageString = "page " + index.page;
-    pdf.text(0, sizeInfo.charH, pageString);
-    pdf.text(0, sizeInfo.charH * 2, fileName);
+    pdf.text(indentH, sizeInfo.charH + indentV, pageString);
+    pdf.text(indentH, sizeInfo.charH * 2 + indentV, fileName);
   }
   // 가로 가이드라인 추가
   if (index.line == 1 && index.char % 10 == 0) {
     const charString = convert.fitNumToGuide(index.char, "h");
-    pdf.text(pos.x, sizeInfo.charH, charString);
-    pdf.text(pos.x, sizeInfo.pageH, charString);
+    pdf.text(pos.x, sizeInfo.charH + indentV, charString);
+    pdf.text(pos.x, sizeInfo.pageH - indentV, charString);
   }
   // 세로 가이드라인 추가
   if (index.char == 1) {
     const lineString = convert.fitNumToGuide(index.line, "v");
-    pdf.text(0, pos.y, lineString);
-    pdf.text(sizeInfo.pageW - sizeInfo.charW * 3, pos.y, lineString);
+    pdf.text(indentH, pos.y, lineString);
+    pdf.text(sizeInfo.pageW - sizeInfo.charW * 3 - indentH, pos.y, lineString);
   }
 }
 
