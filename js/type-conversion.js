@@ -42,7 +42,7 @@ function roundDcmPlace(float, place = 3) {
 }
 
 async function ttfToBase64() {
-  const response = await fetch("./fonts/UbuntuMono-R.ttf");
+  const response = await fetch("./fonts/D2CodingBold.ttf");
   const blob = await response.blob();
   const fileReader = new FileReader();
   const promise = new Promise((resolve, reject) => {
@@ -61,16 +61,11 @@ function cmToPoint(cm) {
   return cm * 28.346;
 }
 
-function fitNumToGuide(num, mode) {
-  if (mode == "v") {
-    // 세로 가이드라인, 숫자 앞에 0을 붙여서 3자리로 만들어 줌
-    return num >= 100 ? num.toString() : num >= 10 ? "0" + num : "00" + num;
-  } else if (mode == "h") {
-    // 가로 가이드라인, 숫자에서 10의 자리만 추출함
-    return num < 100
-      ? parseInt(num / 10).toString()
-      : parseInt((num % 100) / 10).toString();
-  }
+function fitNumToGuide(num) {
+  // 숫자에서 10의 자리만 추출함
+  return num < 100
+    ? parseInt(num / 10).toString()
+    : parseInt((num % 100) / 10).toString();
 }
 
 export {
