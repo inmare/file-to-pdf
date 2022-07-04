@@ -15,22 +15,22 @@ function textToPDF(text, fileName, isRandom) {
     const pdf = new jsPDF("p", "pt", "a4");
     const fontDataURL = result;
 
-    pdf.addFileToVFS("UbuntuMono-R.ttf", fontDataURL);
-    pdf.addFont("UbuntuMono-R.ttf", "UbuntuMono-R", "normal");
-    pdf.setFont("UbuntuMono-R");
-    pdf.setFontSize(4); // hex에 대해서는 3pt로 적용되도록 수정
+    pdf.addFileToVFS("D2CodingBold.ttf", fontDataURL);
+    pdf.addFont("D2CodingBold.ttf", "D2CodingBold", "normal");
+    pdf.setFont("D2CodingBold");
+    pdf.setFontSize(3.8); // hex에 대해서는 3pt로 적용되도록 수정
     pdf.setTextColor("0"); // 검은색
 
     // 나중에 파일 종류에 따라서 다양하게 수정할 수 있도록 바꾸기
     // 변수 이름도 수정 할 수도?
     const sizeInfo = {};
 
-    sizeInfo.marginTop = convert.cmToPoint(2);
+    sizeInfo.marginTop = convert.cmToPoint(1.8);
     sizeInfo.marginSide = convert.cmToPoint(1);
     sizeInfo.pageW = pdf.internal.pageSize.getWidth();
     sizeInfo.pageH = pdf.internal.pageSize.getHeight();
     sizeInfo.charW = pdf.getTextDimensions("A").w + 0.45;
-    sizeInfo.charH = pdf.getTextDimensions("A").h * 1.1;
+    sizeInfo.charH = pdf.getTextDimensions("A").h * 1.2;
 
     let pos = {
       x: sizeInfo.marginSide,
@@ -81,9 +81,9 @@ function textToPDF(text, fileName, isRandom) {
 }
 
 function addGuideToPage(pdf, pos, index, sizeInfo, fileName) {
-  // 인쇄 될 때 가장자리 잘림에 따른 3mm여백 추가
-  const indentV = convert.cmToPoint(0.3);
-  const indentH = convert.cmToPoint(0.3);
+  // 인쇄 될 때 가장자리 잘림에 따른 여백 추가
+  const indentV = convert.cmToPoint(0.5);
+  const indentH = convert.cmToPoint(0.5);
   // 페이지 가이드라인 추가
   if (index.line == 1 && index.char == 1) {
     const pageString = "page " + index.page;
@@ -92,15 +92,15 @@ function addGuideToPage(pdf, pos, index, sizeInfo, fileName) {
   }
   // 가로 가이드라인 추가
   if (index.line == 1 && index.char % 10 == 0) {
-    const charString = convert.fitNumToGuide(index.char, "h");
+    const charString = convert.fitNumToGuide(index.char);
     pdf.text(pos.x, sizeInfo.charH + indentV, charString);
     pdf.text(pos.x, sizeInfo.pageH - indentV, charString);
   }
   // 세로 가이드라인 추가
-  if (index.char == 1) {
-    const lineString = convert.fitNumToGuide(index.line, "v");
+  if (index.char == 1 && index.line % 10 == 0) {
+    const lineString = convert.fitNumToGuide(index.line);
     pdf.text(indentH, pos.y, lineString);
-    pdf.text(sizeInfo.pageW - sizeInfo.charW * 3 - indentH, pos.y, lineString);
+    pdf.text(sizeInfo.pageW - sizeInfo.charW - indentH, pos.y, lineString);
   }
 }
 
