@@ -65,8 +65,10 @@ function fileToHex(buffer) {
   const view = new Uint8Array(buffer);
 
   let hexText = "";
-  for (let num in view) {
-    hexText += convert.zeroToO(view[num].toString(16));
+  for (let num of view) {
+    let convertedNum = convert.zeroToO(num.toString(16));
+    convertedNum = num < 16 ? "O" + convertedNum : convertedNum;
+    hexText += convertedNum;
   }
 
   return hexText;
