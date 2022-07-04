@@ -119,7 +119,7 @@ function makeRandomText() {
 
   // 페이지 값을 하드코딩 해 둠
   // 다른 함수에서도 쓰이는 값이기 때문에 json파일 같은 곳에 저장해야 할 듯
-  const textLength = 220 * 173 * pages;
+  const textLength = 230 * 168 * pages;
   let randomText = "";
 
   for (let i = 0; i < textLength; i++) {

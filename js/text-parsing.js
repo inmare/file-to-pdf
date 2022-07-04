@@ -122,8 +122,8 @@ A BB CC DDD EEE <파일 이름(유니코드화)>
 function addMetadataToText(textInfo, fileName) {
   // textHLen, textVLen과 metaLength은 추후에 수정 될 수 있음
   const info = textInfo;
-  const textHLength = 220;
-  const textVLength = 173;
+  const textHLength = 230;
+  const textVLength = 168;
   const pageLength = textHLength * textVLength;
   const metaLength = 11;
   const fileNameUnicode = convert.textToUnicode(fileName);
