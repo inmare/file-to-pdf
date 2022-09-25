@@ -5,11 +5,6 @@
   font-weight: 700;
 }
 
-:root {
-  --wrapper-padding: 5px;
-  --wrapper-padding-mobile: 3px;
-}
-
 html {
   height: -webkit-fill-available;
 }
