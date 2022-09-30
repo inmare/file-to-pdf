@@ -11,13 +11,14 @@ char: 220, line: 173
 */
 
 function textToPDF(text, fileName, isRandom) {
-  convert.ttfToBase64().then((result) => {
+  const fontName = "UbuntuMono-Bold";
+  convert.ttfToBase64(fontName).then((result) => {
     const pdf = new jsPDF("p", "pt", "a4");
     const fontDataURL = result;
 
-    pdf.addFileToVFS("D2CodingBold.ttf", fontDataURL);
-    pdf.addFont("D2CodingBold.ttf", "D2CodingBold", "normal");
-    pdf.setFont("D2CodingBold");
+    pdf.addFileToVFS(fontName + ".ttf", fontDataURL);
+    pdf.addFont(fontName + ".ttf", fontName, "normal");
+    pdf.setFont(fontName);
     pdf.setFontSize(3.8); // hex에 대해서는 3pt로 적용되도록 수정
     pdf.setTextColor("0"); // 검은색
 

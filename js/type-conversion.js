@@ -41,8 +41,8 @@ function roundDcmPlace(float, place = 3) {
   return Math.round(float * Math.pow(10, place)) / Math.pow(10, place);
 }
 
-async function ttfToBase64() {
-  const response = await fetch("./fonts/D2CodingBold.ttf");
+async function ttfToBase64(fontName) {
+  const response = await fetch(`./fonts/${fontName}.ttf`);
   const blob = await response.blob();
   const fileReader = new FileReader();
   const promise = new Promise((resolve, reject) => {
