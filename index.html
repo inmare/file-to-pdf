@@ -8,20 +8,29 @@
     <link rel="icon" type="image/x-icon" href="./favicon-16x16.png" />
     <link
       rel="stylesheet"
-      type="text/css"
-      href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard-dynamic-subset.css"
-    />
-    <link
-      rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
       integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     />
-    <link rel="stylesheet" href="./style.css" />
+    <link rel="stylesheet" href="css/style.css" />
   </head>
   <body>
-    <div class="wrapper">
+    <div id="app">
+      <header>
+        <h1>File to PDF</h1>
+        <nav>
+          <div id="about" class="nav-menu"><a href="./about.html">소개</a></div>
+          <div id="setting" class="nav-menu">
+            <a href="./setting.html">설정</a>
+          </div>
+          <div class="nav-menu">
+            <a href="https://github.com/yatsumehole/file-to-pdf"
+              ><i class="fa-brands fa-github"></i
+            ></a>
+          </div>
+        </nav>
+      </header>
       <main>
         <div class="file-select">
           <p>파일을 선택해주세요</p>
