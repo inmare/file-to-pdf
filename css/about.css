@@ -1,0 +1,12 @@
+#about-section p {
+  margin: 10px 0px;
+  font-weight: 500;
+}
+
+#about-section a {
+  color: rgb(41, 109, 236);
+}
+
+#about-section a:visited {
+  color: rgb(41, 109, 236);
+}

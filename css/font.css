@@ -6,3 +6,11 @@
   src: local("Pretendard Variable"),
     url("../fonts/PretendardVariable.woff2") format("woff2-variations");
 }
+
+@font-face {
+  font-family: "Adobe Blank";
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+  src: url("../fonts/AdobeBlank.ttf") format("truetype");
+}

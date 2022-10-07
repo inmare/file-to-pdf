@@ -1,0 +1,25 @@
+#setting-section p {
+  margin: 10px 0px;
+  font-weight: 500;
+}
+
+#setting-section a {
+  color: rgb(41, 109, 236);
+  text-decoration: none;
+}
+
+#setting-section a:visited {
+  color: rgb(41, 109, 236);
+}
+
+#setting-section h2 > sub {
+  font-size: 0.8rem;
+}
+
+.setting-div {
+  padding: 10px 20px;
+  margin: 20px 10px;
+  background-color: rgb(34, 34, 34);
+  border-radius: 10px;
+  border: 1px solid rgb(80, 80, 80);
+}
