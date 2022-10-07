@@ -13,16 +13,16 @@
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     />
-    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/index.css" />
   </head>
   <body>
     <div id="app">
       <header>
         <h1>File to PDF</h1>
         <nav>
-          <div id="about" class="nav-menu"><a href="./about.html">소개</a></div>
+          <div id="about" class="nav-menu"><a href="#about">소개</a></div>
           <div id="setting" class="nav-menu">
-            <a href="./setting.html">설정</a>
+            <a href="#setting">설정</a>
           </div>
           <div class="nav-menu">
             <a href="https://github.com/yatsumehole/file-to-pdf"
@@ -32,116 +32,141 @@
         </nav>
       </header>
       <main>
-        <div class="file-select">
-          <p>파일을 선택해주세요</p>
-          <div class="file-label">
-            <label for="file-input">
-              <i
-                class="fa-solid fa-file-arrow-up"
-                id="left-arrow"
-                class="arrow"
-              ></i>
-              파일 업로드
-            </label>
-            <input type="file" name="select-file" id="file-input" />
+        <section id="file-convert-section">
+          <h1 id="file-convert">파일 변환하기</h1>
+          <div class="file-select">
+            <p>파일을 선택해주세요</p>
+            <div class="file-label">
+              <label for="file-input">
+                <i
+                  class="fa-solid fa-file-arrow-up"
+                  id="left-arrow"
+                  class="arrow"
+                ></i>
+                파일 업로드
+              </label>
+              <input type="file" name="select-file" id="file-input" />
+            </div>
+            <button id="create-sample">샘플 만들기</button>
           </div>
-          <button id="create-sample">샘플 만들기</button>
-        </div>
-        <div class="file-type hide">
-          <p>파일의 종류를 선택해주세요</p>
-          <select name="file-type" id="file-type-option">
-            <option disabled selected value="default">파일 종류</option>
-            <option value="text">텍스트 파일</option>
-            <option value="unicode">텍스트 파일(유니코드)</option>
-            <option value="file">일반 파일</option>
-          </select>
-          <div class="list-wrapper">
-            <ul>
-              <li>
-                텍스트 파일<br /><span>
-                  아스키코드(영어 대소문자, 숫자, 키보드에 있는 특수문자)로
-                  쓰여진 텍스트 파일입니다.
-                </span>
-              </li>
-              <li>
-                텍스트 파일(유니코드)<br /><span>
-                  한국어나 일본어, 특수기호와 같이 아스키코드가 아닌 유니코드로
-                  쓰여진 텍스트 파일입니다.
-                </span>
-              </li>
-              <li>
-                일반 파일<br /><span
-                  >텍스트 파일을 제외한 일반적인 파일입니다.</span
-                >
-              </li>
-            </ul>
-          </div>
-          <div id="convert-button" class="generate-button hover">
-            <i class="fa-solid fa-file-pdf"></i>PDF로 변환하기
-          </div>
-        </div>
-        <div id="setting-button">
+        </section>
+        <section id="about-section">
+          <h1>소개</h1>
           <p>
-            <i class="fa-solid fa-gears"></i>PDF 및 텍스트 설정<i
-              class="fa-solid fa-chevron-down fa-xs"
-            ></i>
+            원하는 파일을 올려주면 파일의 내용물을 Ascii, Hex, 또는
+            Base64문자열로 바꾼 다음, 해당 텍스트를 PDF파일로 만들어 출력이
+            가능하도록 만들어주는 사이트입니다.
           </p>
-        </div>
-        <div class="setting hide">
-          <div class="list-wrapper">
-            <ul>
-              <li>
-                랜덤한 텍스트 생성<br /><span>
-                  랜덤한 텍스트를 생성해줍니다. 이미 파일이 업로드 되어있다면
-                  해당 파일은 무시됩니다.
-                </span>
-                <ul>
-                  <li>
-                    텍스트의 종류<br /><span>
-                      생성할 텍스트의 종류를 선택합니다. 아스키코드는 영어
-                      대소문자, 숫자, 키보드에 있는 특수문자를, 16진수는 숫자 및
-                      a~f까지의 알파벳 소문자를 생성합니다.
-                    </span>
-                  </li>
-                  <li>
-                    페이지 수<br /><span>
-                      얼마나 많은 텍스트를 생성할 건지 결정할 수 있습니다. 최대
-                      10페이지까지 텍스트를 생성할 수 있습니다.
-                    </span>
-                  </li>
-                  <li>
-                    시드<br /><span>
-                      랜덤 시드를 설정합니다. 0이 아닌 최대 3자리의 숫자만
-                      입력할 수 있으며, 어떤 시드값을 입력하냐에 따라 생성되는
-                      텍스트가 달라집니다.
-                    </span>
-                  </li>
-                </ul>
-              </li>
-            </ul>
+          <p>
+            이때 변경된 PDF파일에는 단순한 파일의 텍스트나 hex값이 아닌, 제가
+            만든 머신러닝 프로그램이 인식할 수 있는 형태로 글자들이 바뀌게
+            됩니다.
+          </p>
+          <p>
+            해당 머신러닝 프로그램이 무엇인지, 그리고 왜 그러한 작업이 필요한지
+            궁금하다면 아래 링크를 참고해주세요.
+          </p>
+          <p>
+            <a href="https://github.com/yatsumehole/tf-text-recognition"
+              >머신러닝 프로젝트 github 링크</a
+            >
+          </p>
+        </section>
+        <section id="setting-section">
+          <h1 id="setting">설정</h1>
+          <p>
+            PDF와 관련해서 여러가지 설정을 할 수 있는 곳입니다. 설명을 보고
+            자신의 상황에 맞게 값을 조절해서 PDF파일을 만들 수 있습니다.
+          </p>
+          <h2>
+            랜덤한 텍스트 생성하기<sub
+              ><a href="#file-convert">맨 위로↑</a></sub
+            >
+          </h2>
+          <p>주어진 파일과 상관없이 랜덤한 텍스트를 생성합니다.</p>
+          <div class="setting-div">
+            <label for="text-type">텍스트 종류</label>
+            <select name="text-type" id="text-type"></select>
+            <label for="page-num">페이지 수</label>
+            <select name="page-num" id="page-num"></select>
           </div>
-          <div class="setting-options">
-            <select name="random-text-type" id="random-text-type">
-              <option disabled selected value="default">텍스트의 종류</option>
-              <option value="ascii">아스키코드</option>
-              <option value="hex">16진수</option>
-            </select>
-            <select name="random-pages" id="random-pages">
-              <option disabled selected value="default">페이지 수</option>
-            </select>
+          <h2>
+            파일 여백<sub><a href="#file-convert">맨 위로↑</a></sub>
+          </h2>
+          <p>
+            PDF에 인쇄될 때 가장자리에 얼마나 여백이 생기게 할지 설정합니다.
+            단위는 전부 cm입니다.
+          </p>
+          <div class="setting-div">
+            <label for="m-top">위</label>
             <input
               type="text"
-              name="random-seed"
-              id="random-seed"
-              maxlength="3"
-              placeholder="시드"
+              name="m-top"
+              id="m-top"
+              maxlength="2"
               size="1"
+              placeholder="2"
+            />
+            <label for="m-right">오른쪽</label>
+            <input
+              type="text"
+              name="m-left"
+              id="m-right"
+              maxlength="2"
+              size="1"
+              placeholder="1"
+            />
+            <label for="m-bottom">아래</label>
+            <input
+              type="text"
+              name="m-bottom"
+              id="m-bottom"
+              maxlength="2"
+              size="1"
+              placeholder="1"
+            />
+            <label for="m-left">왼쪽</label>
+            <input
+              type="text"
+              name="m-left"
+              id="m-left"
+              maxlength="2"
+              size="1"
+              placeholder="1"
             />
           </div>
-          <div id="random-generate" class="generate-button hover">
-            <i class="fa-solid fa-file-pdf"></i>PDF 생성하기
-          </div>
-        </div>
+          <h2>
+            가이드라인 추가<sub><a href="#file-convert">맨 위로↑</a></sub>
+          </h2>
+          <p>
+            PDF파일의 맨 첫장에 해당 파일이나 설정값에 대한 정보를 추가할지,
+            그리고 본문 가장자리에 파일 이름이나 줄 수에 대한 정보를 추가할지
+            결정합니다.
+          </p>
+          <h2>
+            상세 글자 설정<sub><a href="#file-convert">맨 위로↑</a></sub>
+          </h2>
+          <p>
+            폰트, 글자 크기, 자간, 줄 높이 등 글자에 대해서 보다 자세한 내용을
+            설정합니다.
+          </p>
+          <h2>
+            글자 바꾸기<sub><a href="#file-convert">맨 위로↑</a></sub>
+          </h2>
+          <p>
+            글자의 모양이 비슷하거나, 글자 크기가 너무 작아서 머신러닝이 글자를
+            인식하기 어려울 경우 해당 글자를 폰트에 존재하는 다른 글자(주로
+            그리스어나 러시아어)로 바꿀 수 있게 해줍니다. 단, 폰트에 해당 글자가
+            존재하지 않을 경우 변환이 거부됩니다.
+          </p>
+          <p>
+            이럴 경우 <a href="https://fonts.google.com/">Google Fonts</a>에서
+            해당 폰트를 검색 후 Glyphs탭을 통해서 어떤 글자가 존재하는지 알아 볼
+            수 있습니다. 또한, 아래의 표에 특정 폰트에 존재하지 않는 글자를
+            입력하면 해당 글자는 표시되지 않는 방법으로 폰트의 존재유무를 파악
+            할 수 있습니다.
+          </p>
+        </section>
       </main>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
