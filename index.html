@@ -35,7 +35,6 @@
         <section id="file-convert-section">
           <h1 id="file-convert">파일 변환하기</h1>
           <div class="file-select">
-            <p>파일을 선택해주세요</p>
             <div class="file-label">
               <label for="file-input">
                 <i
@@ -47,7 +46,6 @@
               </label>
               <input type="file" name="select-file" id="file-input" />
             </div>
-            <button id="create-sample">샘플 만들기</button>
           </div>
         </section>
         <section id="about-section">
@@ -78,18 +76,15 @@
             PDF와 관련해서 여러가지 설정을 할 수 있는 곳입니다. 설명을 보고
             자신의 상황에 맞게 값을 조절해서 PDF파일을 만들 수 있습니다.
           </p>
-          <h2>
-            변환될 문자열의 종류(필수)<sub
-              ><a href="#file-convert">맨 위로↑</a></sub
-            >
-          </h2>
+          <h2>변환될 문자열의 종류</h2>
           <p>
-            파일 변환시 어떤 종류의 문자열로 파일을 변환할지 설정합니다. 필수
-            기입 항목으로 설정하지 않는다면 파일 변환이 거부됩니다.
+            파일 변환시 어떤 종류의 문자열로 파일을 변환할지 설정합니다.
+            사이트에서 자동으로 적절한 변환방식을 찾아주지만, 이 항목에서
+            수동으로 변환방법을 설정할 수도 있습니다.
           </p>
           <p>
-            아래는 내용이 "Hello world!"인 txt파일을 변환 할 경우 각 설정에 대한
-            변환 예시입니다. 각 항목들을 클릭하면 해당 항목들의 나무위키
+            아래는 특정한 문자열들이 각 설정에 따라 어떻게 변환되는지를 보여주는
+            예시입니다. 각 항목들을 클릭하면 해당 항목들이 설명된 나무위키
             페이지로 이동합니다.
           </p>
           <ul>
@@ -97,115 +92,137 @@
               <a
                 href="https://namu.wiki/w/%EC%95%84%EC%8A%A4%ED%82%A4%20%EC%BD%94%EB%93%9C"
                 >Ascii</a
-              >: 영문 키보드에서 입력할 수 있는 기호들로 문자열이 변환됩니다.
-              파일이 영어 및 키보드에 있는 특수문자들로만 이루어져 있을 때
-              사용하면 좋습니다.
-              <ul>
-                <li>
-                  Hello world! -> Hello world! (왜 띄어쓰기가 다른 문자로
-                  바뀌는지는 아래의 글자 바꾸기 항목을 참고해주세요.)
-                </li>
-              </ul>
+              ><br />
+              <p>
+                영문 키보드에서 입력할 수 있는 문자 및 기호들로 문자열이
+                변환됩니다. 파일이 영어 및 키보드에 있는 특수문자들로만 이루어져
+                있을 때 사용하면 좋습니다.
+              </p>
+              <p>
+                ex) Hello world! -> Hello world! (왜 띄어쓰기가 다른 문자로
+                바뀌는지는 아래의 글자 바꾸기 항목을 참고해주세요.)
+              </p>
             </li>
             <li>
-              <a href="https://namu.wiki/w/16%EC%A7%84%EB%B2%95">Hex</a>: 파일의
-              이진 데이터를 0부터 f까지 16개의 문자로 이루어진 16진수로 바꾸어
-              줍니다. 파일이 일반적인 텍스트 파일이 아닌 이미지파일 같이
-              텍스트의 형태로 표현이 불가능한 파일일 때 사용하면 좋습니다.
+              <a href="https://namu.wiki/w/16%EC%A7%84%EB%B2%95">Hex</a><br />
+              <p>
+                파일의 이진 데이터를 0부터 f까지 16개의 문자로 이루어진 16진수로
+                바꾸어 줍니다. 파일이 일반적인 텍스트 파일이 아닌 이미지파일
+                같이 텍스트의 형태로 표현이 불가능한 파일일 때 사용하면
+                좋습니다.
+              </p>
+              <p>ex) Hello world! -> 48656c6c6f20776f726c6421</p>
             </li>
             <li>
               <a href="https://namu.wiki/w/%EC%9C%A0%EB%8B%88%EC%BD%94%EB%93%9C"
                 >Unicode</a
-              >: 문자를 4글자의 16진수로 표현하는 방법입니다. 파일의 내용이 주로
-              영어가 아닌 한국어, 일본어등의 문자일 때 사용하면 좋습니다. 단,
-              이모지와 같이 최근에 추가된 문자일 경우 4글자가 아닌 5글자로
-              표현될 수도 있는데, 그 경우 머신러닝 프로그램에서 제대로 글자를
-              인식하지 못합니다.
+              ><br />
+              <p>
+                문자를 4글자의 16진수로 표현하는 방법입니다. 파일의 내용이 주로
+                영어가 아닌 한국어, 일본어등의 문자일 때 사용하면 좋습니다. 단,
+                이모지와 같이 최근에 추가된 문자일 경우 4글자가 아닌 5글자로
+                표현될 수도 있는데, 그 경우 머신러닝 프로그램에서 제대로 글자를
+                인식하지 못합니다.
+              </p>
+              <p>ex) Hi, 안녕! -> 00480069002C0020C548B1550021</p>
             </li>
             <li>
-              <a href="https://namu.wiki/w/BASE64">Base64</a>: 파일의 이진
-              데이터를 64개의 Ascii문자로 표현하는 방식입니다. Hex와 동일하게
-              파일이 이미지파일 같이 텍스트의 형태로 표현이 불가능한 파일일 때
-              사용하면 좋습니다. Hex문자열에 비해 PDF의 길이는 줄어들지만,
-              인식해야될 문자열이 많아지기 때문에 머신러닝의 정확도나 성능에
-              영향을 미칠 수 있습니다.
+              <a href="https://namu.wiki/w/BASE64">Base64</a><br />
+              <p>
+                파일의 이진 데이터를 64개의 Ascii문자로 표현하는 방식입니다.
+                Hex와 동일하게 파일이 이미지파일 같이 텍스트의 형태로 표현이
+                불가능한 파일일 때 사용하면 좋습니다. Hex문자열에 비해 PDF의
+                길이는 줄어들지만, 인식해야될 문자열이 많아지기 때문에
+                머신러닝의 정확도나 성능에 영향을 미칠 수 있습니다.
+              </p>
+              <p>ex) Hello world! -> SGVsbG8gd29ybGQh</p>
             </li>
           </ul>
+          <div class="setting-div">
+            <label for="convert-type">변환할 텍스트 종류</label>
+            <select name="convert-type" id="convert-type"></select>
+          </div>
           <h2>
             랜덤한 텍스트 생성하기<sub
               ><a href="#file-convert">맨 위로↑</a></sub
             >
           </h2>
           <p>주어진 파일과 상관없이 랜덤한 텍스트를 생성합니다.</p>
-          <div class="setting-div">
-            <label for="text-type">텍스트 종류</label>
-            <select name="text-type" id="text-type"></select>
-            <label for="page-num">페이지 수</label>
-            <select name="page-num" id="page-num"></select>
+          <div class="setting-div flex-col">
+            <div>
+              <label for="make-random-text">생성하기</label>
+              <input
+                type="checkbox"
+                name="make-random-text"
+                id="make-random-text"
+              />
+            </div>
+            <div>
+              <label for="text-type">텍스트 종류</label>
+              <select name="text-type" id="text-type"></select>
+              <label for="page-num">페이지 수</label>
+              <select name="page-num" id="page-num"></select>
+            </div>
           </div>
-          <h2>
-            파일 여백<sub><a href="#file-convert">맨 위로↑</a></sub>
-          </h2>
+          <h2>파일 여백</h2>
           <p>
             PDF에 인쇄될 때 가장자리에 얼마나 여백이 생기게 할지 설정합니다.
             단위는 전부 cm입니다.
           </p>
           <div class="setting-div">
             <label for="m-top">위</label>
-            <input
-              type="text"
-              name="m-top"
-              id="m-top"
-              maxlength="2"
-              size="1"
-              placeholder="2"
-            />
+            <input type="text" name="m-top" id="m-top" size="2" />
             <label for="m-right">오른쪽</label>
-            <input
-              type="text"
-              name="m-left"
-              id="m-right"
-              maxlength="2"
-              size="1"
-              placeholder="1"
-            />
+            <input type="text" name="m-right" id="m-right" size="2" />
             <label for="m-bottom">아래</label>
-            <input
-              type="text"
-              name="m-bottom"
-              id="m-bottom"
-              maxlength="2"
-              size="1"
-              placeholder="1"
-            />
+            <input type="text" name="m-bottom" id="m-bottom" size="2" />
             <label for="m-left">왼쪽</label>
-            <input
-              type="text"
-              name="m-left"
-              id="m-left"
-              maxlength="2"
-              size="1"
-              placeholder="1"
-            />
+            <input type="text" name="m-left" id="m-left" size="2" />
           </div>
-          <h2>
-            가이드라인 추가<sub><a href="#file-convert">맨 위로↑</a></sub>
-          </h2>
+          <h2>가이드라인 추가</h2>
           <p>
             PDF파일의 맨 첫장에 해당 파일이나 설정값에 대한 정보를 추가할지,
             그리고 본문 가장자리에 파일 이름이나 줄 수에 대한 정보를 추가할지
             결정합니다.
           </p>
-          <h2>
-            상세 글자 설정<sub><a href="#file-convert">맨 위로↑</a></sub>
-          </h2>
+          <div class="setting-div flex-col">
+            <div>
+              <label for="make-first-page-guide"
+                >첫 페이지에 파일, PDF 정보 추가</label
+              >
+              <input
+                type="checkbox"
+                name="make-first-page-guide"
+                id="make-first-page-guide"
+              />
+            </div>
+            <div>
+              <label for="make-line-guide">가장자리에 줄 번호 추가</label>
+              <input
+                type="checkbox"
+                name="make-line-guide"
+                id="make-line-guide"
+              />
+            </div>
+          </div>
+          <h2>상세 글자 설정</h2>
           <p>
             폰트, 글자 크기, 자간, 줄 높이 등 글자에 대해서 보다 자세한 내용을
-            설정합니다.
+            설정합니다. 이때 사용되는 단위는 아래와 같습니다.
           </p>
-          <h2>
-            글자 바꾸기<sub><a href="#file-convert">맨 위로↑</a></sub>
-          </h2>
+          <ul>
+            <li>글자 크기: 포인트</li>
+            <li>자간, 줄 높이: 글자 크기의 n배</li>
+          </ul>
+          <div class="setting-div">
+            <label for="font">폰트</label>
+            <select name="font" id="font"></select>
+            <label for="kerning">자간</label>
+            <input type="text" name="kerning" id="kerning" size="3" />
+            <label for="line-height">줄 높이</label>
+            <input type="text" name="line-height" id="line-height" size="3" />
+          </div>
+          <h2>글자 바꾸기</h2>
           <p>
             글자의 모양이 비슷하거나, 글자 크기가 너무 작아서 머신러닝이 글자를
             인식하기 어려울 경우 해당 글자를 폰트에 존재하는 다른 글자(주로
@@ -216,9 +233,35 @@
             이럴 경우 <a href="https://fonts.google.com/">Google Fonts</a>에서
             해당 폰트를 검색 후 Glyphs탭을 통해서 어떤 글자가 존재하는지 알아 볼
             수 있습니다. 또한, 아래의 표에 특정 폰트에 존재하지 않는 글자를
-            입력하면 해당 글자는 표시되지 않는 방법으로 폰트의 존재유무를 파악
-            할 수 있습니다.
+            입력하면 해당 글자는 표시되지 않습니다.
           </p>
+          <div class="setting-div">
+            <div>
+              <label for="char-from">From</label
+              ><input
+                type="text"
+                name="char-from"
+                id="char-from"
+                maxlengt="1"
+                size="1"
+              />
+              <label for="char-to">To</label>
+              <input
+                type="text"
+                name="char-to"
+                id="char-to"
+                maxlength="1"
+                size="1"
+              />
+              <button id="add-char">추가하기</button>
+            </div>
+            <div>
+              <table id="char-table">
+                <tr id="char-from-tr"></tr>
+                <tr id="char-to-tr"></tr>
+              </table>
+            </div>
+          </div>
         </section>
       </main>
     </div>
