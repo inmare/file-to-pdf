@@ -42,6 +42,9 @@
   border-radius: 10px;
   border: 1px solid var(--color-gray);
 }
+.setting-div > div {
+  padding: 0px 5px;
+}
 
 #setting-section select {
   appearance: none;
@@ -50,9 +53,11 @@
   background-size: 10px;
   background-color: var(--color-white);
   font-size: 1rem;
-  padding: 5px 50px 5px 15px;
-  margin: 5px 10px;
+  padding: 5px;
+  padding-right: 30px;
+  margin: 5px;
   outline: none;
+  border: 1px solid var(--color-gray);
   border-radius: 5px;
   color: var(--color-black);
   width: auto;
@@ -63,7 +68,7 @@
   background-color: var(--color-white);
   font-size: 1rem;
   padding: 5px;
-  margin: 5px 10px;
+  margin: 5px;
   outline: none;
   border: 1px solid var(--color-gray);
   border-radius: 5px;
@@ -86,4 +91,29 @@
 
 #setting-section button:active {
   background-color: var(--color-dark-blue);
+}
+
+#char-table {
+  margin: 10px 0px;
+  border-collapse: collapse;
+  text-align: center;
+}
+
+#char-table td {
+  padding: 5px 10px;
+  border: 1px solid var(--color-white);
+  font-family: "UbuntuMono-Bold";
+}
+
+#char-table td:nth-child(1) {
+  font-family: inherit;
+}
+
+#char-table tr:nth-child(3) > td {
+  border: 0px transparent;
+  color: var(--color-blue);
+}
+
+#char-table tr:nth-child(3) > td i {
+  cursor: pointer;
 }
