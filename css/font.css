@@ -8,6 +8,22 @@
 }
 
 @font-face {
+  font-family: "UbuntuMono-Regular";
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+  src: url("../fonts/UbuntuMono-Regular.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "UbuntuMono-Bold";
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+  src: url("../fonts/UbuntuMono-Bold.ttf") format("truetype");
+}
+
+@font-face {
   font-family: "Adobe Blank";
   font-weight: normal;
   font-style: normal;
