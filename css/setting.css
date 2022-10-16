@@ -43,7 +43,7 @@
   border: 1px solid var(--color-gray);
 }
 
-.setting-div > div {
+.setting-chunk {
   padding: 0px 5px;
 }
 
@@ -92,6 +92,11 @@
 
 #setting-section button:active {
   background-color: var(--color-dark-blue);
+}
+
+#char-table-wrapper {
+  max-width: 100%;
+  overflow: auto;
 }
 
 #char-table {

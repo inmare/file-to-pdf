@@ -129,9 +129,7 @@ section > h1 {
   }
 
   #scroll-to-top {
-    width: 20px;
-    height: 20px;
-    left: calc(100% - 30px);
-    top: calc(100% - 30px);
+    left: calc(100% - 48px);
+    top: calc(100% - 48px);
   }
 }

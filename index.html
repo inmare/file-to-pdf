@@ -51,8 +51,8 @@
             <div>파일 변환하기</div>
           </div>
           <div>
-            <p>파일 이름: <span></span></p>
-            <p>현재 모드: <span></span></p>
+            <p>파일 이름: <span id="file-name"></span></p>
+            <p>현재 모드: <span id="current-mode"></span></p>
             <p>로그</p>
             <div></div>
           </div>
@@ -156,13 +156,15 @@
             </li>
           </ul>
           <div class="setting-div">
-            <label for="convert-type">변환할 텍스트 종류</label>
-            <select name="convert-type" id="convert-type"></select>
+            <div class="setting-chunk">
+              <label for="convert-type">변환할 텍스트 종류</label>
+              <select name="convert-type" id="convert-type"></select>
+            </div>
           </div>
           <h2>랜덤한 텍스트 생성하기</h2>
           <p>주어진 파일과 상관없이 랜덤한 텍스트를 생성합니다.</p>
           <div class="setting-div flex-col">
-            <div>
+            <div class="setting-chunk">
               <label for="make-random-text">생성하기</label>
               <input
                 type="checkbox"
@@ -171,11 +173,11 @@
               />
             </div>
             <div class="flex-row">
-              <div>
+              <div class="setting-chunk">
                 <label for="text-type">텍스트 종류</label>
                 <select name="text-type" id="text-type"></select>
               </div>
-              <div>
+              <div class="setting-chunk">
                 <label for="page-num">페이지 수</label>
                 <select name="page-num" id="page-num"></select>
               </div>
@@ -187,19 +189,19 @@
             단위는 전부 cm입니다.
           </p>
           <div class="setting-div flex-row">
-            <div>
+            <div class="setting-chunk">
               <label for="m-top">위</label>
               <input type="text" name="m-top" id="m-top" size="2" />
             </div>
-            <div>
+            <div class="setting-chunk">
               <label for="m-right">오른쪽</label>
               <input type="text" name="m-right" id="m-right" size="2" />
             </div>
-            <div>
+            <div class="setting-chunk">
               <label for="m-bottom">아래</label>
               <input type="text" name="m-bottom" id="m-bottom" size="2" />
             </div>
-            <div>
+            <div class="setting-chunk">
               <label for="m-left">왼쪽</label>
               <input type="text" name="m-left" id="m-left" size="2" />
             </div>
@@ -211,7 +213,7 @@
             결정합니다.
           </p>
           <div class="setting-div flex-col">
-            <div>
+            <div class="setting-chunk">
               <label for="make-first-page-guide"
                 >첫 페이지에 파일, PDF 정보 추가</label
               >
@@ -221,7 +223,7 @@
                 id="first-page-guide"
               />
             </div>
-            <div>
+            <div class="setting-chunk">
               <label for="make-line-guide">가장자리에 줄 번호 추가</label>
               <input type="checkbox" name="line-guide" id="line-guide" />
             </div>
@@ -236,19 +238,19 @@
             <li>자간, 줄 높이: 글자 크기의 n배</li>
           </ul>
           <div class="setting-div flex-row center-v">
-            <div>
+            <div class="setting-chunk">
               <label for="font-type">폰트</label>
               <select name="font-type" id="font-type"></select>
             </div>
-            <div>
+            <div class="setting-chunk">
               <label for="font-size">글자 크기</label>
               <input type="text" name="font-size" id="font-size" size="3" />
             </div>
-            <div>
+            <div class="setting-chunk">
               <label for="kerning">자간</label>
               <input type="text" name="kerning" id="kerning" size="3" />
             </div>
-            <div>
+            <div class="setting-chunk">
               <label for="line-height">줄 높이</label>
               <input type="text" name="line-height" id="line-height" size="3" />
             </div>
@@ -275,28 +277,32 @@
             글자의 넓이를 확인해주세요!
           </p>
           <div class="setting-div flex-col">
-            <div>
-              <label for="char-from">From</label
-              ><input
-                type="text"
-                name="char-from"
-                id="char-from"
-                maxlength="1"
-                size="1"
-              />
-              <label for="char-to">To</label>
-              <input
-                type="text"
-                name="char-to"
-                id="char-to"
-                maxlength="1"
-                size="1"
-              />
+            <div class="flex-row">
+              <div class="setting-chunk">
+                <label for="char-from">From</label
+                ><input
+                  type="text"
+                  name="char-from"
+                  id="char-from"
+                  maxlength="1"
+                  size="1"
+                />
+              </div>
+              <div class="setting-chunk">
+                <label for="char-to">To</label>
+                <input
+                  type="text"
+                  name="char-to"
+                  id="char-to"
+                  maxlength="1"
+                  size="1"
+                />
+              </div>
+              <div>
+                <button id="add-char">추가하기</button>
+              </div>
             </div>
-            <div>
-              <button id="add-char">추가하기</button>
-            </div>
-            <div>
+            <div id="char-table-wrapper">
               <table id="char-table"></table>
             </div>
           </div>
