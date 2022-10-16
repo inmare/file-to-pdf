@@ -65,7 +65,7 @@ function createTable(table, setting) {
   for (let i = 0; i < setting.from.length; i++) {
     const fromChar = setting.from[i];
     const toChar = setting.to[i];
-    const font = Setting.font.default;
+    const font = Setting.fontType.default;
     Util.appendCharToTable(fromChar, toChar, font);
   }
 }
