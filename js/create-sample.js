@@ -1,8 +1,8 @@
 import { seedRandom } from "./random-generation.js";
 import { cmToPoint, ttfToBase64 } from "./type-conversion.js";
 
-const createSampleBtn = document.querySelector("#create-sample");
-createSampleBtn.onclick = createSample;
+// const createSampleBtn = document.querySelector("#create-sample");
+// createSampleBtn.onclick = createSample;
 
 async function createSample() {
   // 랜덤한 텍스트 생성
