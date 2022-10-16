@@ -52,7 +52,7 @@ const Setting = {
     type: "checkbox",
     default: true,
   },
-  font: {
+  fontType: {
     id: "font-type",
     type: "select",
     value: [
