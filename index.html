@@ -20,12 +20,14 @@
       <header>
         <h1>File to PDF</h1>
         <nav>
-          <div id="about" class="nav-menu"><a href="#about">소개</a></div>
+          <div id="about" class="nav-menu">
+            <a href="#about-section">소개</a>
+          </div>
           <div id="setting" class="nav-menu">
-            <a href="#setting">설정</a>
+            <a href="#setting-section">설정</a>
           </div>
           <div class="nav-menu">
-            <a href="https://github.com/yatsumehole/file-to-pdf"
+            <a target="_blank" href="https://github.com/yatsumehole/file-to-pdf"
               ><i class="fa-brands fa-github"></i
             ></a>
           </div>
@@ -46,6 +48,13 @@
               </label>
               <input type="file" name="select-file" id="file-input" />
             </div>
+            <div>파일 변환하기</div>
+          </div>
+          <div>
+            <p>파일 이름: <span></span></p>
+            <p>현재 모드: <span></span></p>
+            <p>로그</p>
+            <div></div>
           </div>
         </section>
         <section id="about-section">
@@ -65,7 +74,9 @@
             궁금하다면 아래 링크를 참고해주세요.
           </p>
           <p>
-            <a href="https://github.com/yatsumehole/tf-text-recognition"
+            <a
+              target="_blank"
+              href="https://github.com/yatsumehole/tf-text-recognition"
               >머신러닝 프로젝트 github 링크</a
             >
           </p>
@@ -90,6 +101,7 @@
           <ul>
             <li>
               <a
+                target="_blank"
                 href="https://namu.wiki/w/%EC%95%84%EC%8A%A4%ED%82%A4%20%EC%BD%94%EB%93%9C"
                 >Ascii</a
               ><br />
@@ -99,12 +111,14 @@
                 있을 때 사용하면 좋습니다.
               </p>
               <p>
-                ex) Hello world! -> Hello world! (왜 띄어쓰기가 다른 문자로
+                ex) Hello world! -> HelloΓworld! (왜 띄어쓰기가 다른 문자로
                 바뀌는지는 아래의 글자 바꾸기 항목을 참고해주세요.)
               </p>
             </li>
             <li>
-              <a href="https://namu.wiki/w/16%EC%A7%84%EB%B2%95">Hex</a><br />
+              <a target="_blank" href="https://namu.wiki/w/16%EC%A7%84%EB%B2%95"
+                >Hex</a
+              ><br />
               <p>
                 파일의 이진 데이터를 0부터 f까지 16개의 문자로 이루어진 16진수로
                 바꾸어 줍니다. 파일이 일반적인 텍스트 파일이 아닌 이미지파일
@@ -114,7 +128,9 @@
               <p>ex) Hello world! -> 48656c6c6f20776f726c6421</p>
             </li>
             <li>
-              <a href="https://namu.wiki/w/%EC%9C%A0%EB%8B%88%EC%BD%94%EB%93%9C"
+              <a
+                target="_blank"
+                href="https://namu.wiki/w/%EC%9C%A0%EB%8B%88%EC%BD%94%EB%93%9C"
                 >Unicode</a
               ><br />
               <p>
@@ -127,7 +143,8 @@
               <p>ex) Hi, 안녕! -> 00480069002C0020C548B1550021</p>
             </li>
             <li>
-              <a href="https://namu.wiki/w/BASE64">Base64</a><br />
+              <a target="_blank" href="https://namu.wiki/w/BASE64">Base64</a
+              ><br />
               <p>
                 파일의 이진 데이터를 64개의 Ascii문자로 표현하는 방식입니다.
                 Hex와 동일하게 파일이 이미지파일 같이 텍스트의 형태로 표현이
@@ -142,11 +159,7 @@
             <label for="convert-type">변환할 텍스트 종류</label>
             <select name="convert-type" id="convert-type"></select>
           </div>
-          <h2>
-            랜덤한 텍스트 생성하기<sub
-              ><a href="#file-convert">맨 위로↑</a></sub
-            >
-          </h2>
+          <h2>랜덤한 텍스트 생성하기</h2>
           <p>주어진 파일과 상관없이 랜덤한 텍스트를 생성합니다.</p>
           <div class="setting-div flex-col">
             <div>
@@ -169,15 +182,23 @@
             PDF에 인쇄될 때 가장자리에 얼마나 여백이 생기게 할지 설정합니다.
             단위는 전부 cm입니다.
           </p>
-          <div class="setting-div">
-            <label for="m-top">위</label>
-            <input type="text" name="m-top" id="m-top" size="2" />
-            <label for="m-right">오른쪽</label>
-            <input type="text" name="m-right" id="m-right" size="2" />
-            <label for="m-bottom">아래</label>
-            <input type="text" name="m-bottom" id="m-bottom" size="2" />
-            <label for="m-left">왼쪽</label>
-            <input type="text" name="m-left" id="m-left" size="2" />
+          <div class="setting-div flex-row">
+            <div>
+              <label for="m-top">위</label>
+              <input type="text" name="m-top" id="m-top" size="2" />
+            </div>
+            <div>
+              <label for="m-right">오른쪽</label>
+              <input type="text" name="m-right" id="m-right" size="2" />
+            </div>
+            <div>
+              <label for="m-bottom">아래</label>
+              <input type="text" name="m-bottom" id="m-bottom" size="2" />
+            </div>
+            <div>
+              <label for="m-left">왼쪽</label>
+              <input type="text" name="m-left" id="m-left" size="2" />
+            </div>
           </div>
           <h2>가이드라인 추가</h2>
           <p>
@@ -192,17 +213,13 @@
               >
               <input
                 type="checkbox"
-                name="make-first-page-guide"
-                id="make-first-page-guide"
+                name="first-page-guide"
+                id="first-page-guide"
               />
             </div>
             <div>
               <label for="make-line-guide">가장자리에 줄 번호 추가</label>
-              <input
-                type="checkbox"
-                name="make-line-guide"
-                id="make-line-guide"
-              />
+              <input type="checkbox" name="line-guide" id="line-guide" />
             </div>
           </div>
           <h2>상세 글자 설정</h2>
@@ -214,13 +231,23 @@
             <li>글자 크기: 포인트</li>
             <li>자간, 줄 높이: 글자 크기의 n배</li>
           </ul>
-          <div class="setting-div">
-            <label for="font">폰트</label>
-            <select name="font" id="font"></select>
-            <label for="kerning">자간</label>
-            <input type="text" name="kerning" id="kerning" size="3" />
-            <label for="line-height">줄 높이</label>
-            <input type="text" name="line-height" id="line-height" size="3" />
+          <div class="setting-div flex-row center-v">
+            <div>
+              <label for="font-type">폰트</label>
+              <select name="font-type" id="font-type"></select>
+            </div>
+            <div>
+              <label for="font-size">글자 크기</label>
+              <input type="text" name="font-size" id="font-size" size="3" />
+            </div>
+            <div>
+              <label for="kerning">자간</label>
+              <input type="text" name="kerning" id="kerning" size="3" />
+            </div>
+            <div>
+              <label for="line-height">줄 높이</label>
+              <input type="text" name="line-height" id="line-height" size="3" />
+            </div>
           </div>
           <h2>글자 바꾸기</h2>
           <p>
@@ -230,19 +257,20 @@
             존재하지 않을 경우 변환이 거부됩니다.
           </p>
           <p>
-            이럴 경우 <a href="https://fonts.google.com/">Google Fonts</a>에서
-            해당 폰트를 검색 후 Glyphs탭을 통해서 어떤 글자가 존재하는지 알아 볼
-            수 있습니다. 또한, 아래의 표에 특정 폰트에 존재하지 않는 글자를
-            입력하면 해당 글자는 표시되지 않습니다.
+            이럴 경우
+            <a target="_blank" href="https://fonts.google.com/">Google Fonts</a
+            >에서 해당 폰트를 검색 후 Glyphs탭을 통해서 어떤 글자가 존재하는지
+            알아 볼 수 있습니다. 또한, 아래의 표에 특정 폰트에 존재하지 않는
+            글자를 입력하면 해당 글자는 표시되지 않습니다.
           </p>
-          <div class="setting-div">
+          <div class="setting-div flex-col">
             <div>
               <label for="char-from">From</label
               ><input
                 type="text"
                 name="char-from"
                 id="char-from"
-                maxlengt="1"
+                maxlength="1"
                 size="1"
               />
               <label for="char-to">To</label>
@@ -256,10 +284,7 @@
               <button id="add-char">추가하기</button>
             </div>
             <div>
-              <table id="char-table">
-                <tr id="char-from-tr"></tr>
-                <tr id="char-to-tr"></tr>
-              </table>
+              <table id="char-table"></table>
             </div>
           </div>
         </section>
@@ -267,10 +292,5 @@
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="./js/script.js" type="module"></script>
-    <script src="./js/file-parsing.js" type="module"></script>
-    <script src="./js/text-parsing.js" type="module"></script>
-    <script src="./js/pdf-conversion.js" type="module"></script>
-    <script src="./js/type-conversion.js" type="module"></script>
-    <script src="./js/create-sample.js" type="module"></script>
   </body>
 </html>
