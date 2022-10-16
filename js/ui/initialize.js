@@ -1,8 +1,9 @@
 import Setting from "../setting/setting.js";
+import $ from "../global.js";
 
 function initializeSetting() {
   for (let [_, value] of Object.entries(Setting)) {
-    const elem = document.getElementById(value.id);
+    const elem = $(`#${value.id}`);
     const elemType = value.type;
     switch (elemType) {
       case "select":
