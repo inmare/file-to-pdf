@@ -22,11 +22,13 @@
 .flex-row {
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
 }
 
 .flex-col {
   display: flex;
   flex-direction: column;
+  flex-wrap: wrap;
 }
 
 .center-v {
@@ -107,6 +109,6 @@ section > h1 {
 
 @media screen and (max-width: 700px) {
   section {
-    padding: 10px 10px;
+    padding: 10px;
   }
 }
