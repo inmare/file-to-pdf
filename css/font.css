@@ -8,7 +8,7 @@
 }
 
 @font-face {
-  font-family: "UbuntuMono-Regular";
+  font-family: UbuntuMono-Regular;
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -16,11 +16,35 @@
 }
 
 @font-face {
-  font-family: "UbuntuMono-Bold";
+  font-family: UbuntuMono-Bold;
   font-weight: normal;
   font-style: normal;
   font-display: swap;
   src: url("../fonts/UbuntuMono-Bold.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: D2Coding-Bold;
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+  src: url("../fonts/D2Coding-Bold.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: JetBrainsMono-Bold;
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+  src: url("../fonts/JetBrainsMono-Bold.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: JetBrainsMono-ExtraBold;
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+  src: url("../fonts/JetBrainsMono-ExtraBold.ttf") format("truetype");
 }
 
 @font-face {
