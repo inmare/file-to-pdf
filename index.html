@@ -36,9 +36,9 @@
       <main>
         <section id="file-convert-section">
           <h1 id="file-convert">파일 변환하기</h1>
-          <div class="file-select">
-            <div class="file-label">
-              <label for="file-input">
+          <div class="flex-row center-h">
+            <div id="upload-btn" class="file-btn">
+              <label for="input-btn">
                 <i
                   class="fa-solid fa-file-arrow-up"
                   id="left-arrow"
@@ -46,15 +46,19 @@
                 ></i>
                 파일 업로드
               </label>
-              <input type="file" name="select-file" id="file-input" />
+              <input type="file" name="select-file" id="input-btn" />
             </div>
-            <div>파일 변환하기</div>
+            <div id="convert-btn" class="file-btn">
+              <i class="fa-solid fa-arrows-rotate"></i>변환하기
+            </div>
           </div>
-          <div>
-            <p>파일 이름: <span id="file-name"></span></p>
+          <div id="status">
             <p>현재 모드: <span id="current-mode"></span></p>
-            <p>로그</p>
-            <div></div>
+            <p>파일 이름: <span id="file-info"></span></p>
+            <div id="status-log">
+              <p>로그</p>
+              <div id="log-board"></div>
+            </div>
           </div>
         </section>
         <section id="about-section">
