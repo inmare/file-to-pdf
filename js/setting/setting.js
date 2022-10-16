@@ -58,9 +58,9 @@ const Setting = {
     value: [
       "UbuntuMono-Bold",
       "UbuntuMono-Regular",
-      "D2CodingBold",
-      "JetBrainsMono-SemiBold",
+      "D2Coding-Bold",
       "JetBrainsMono-Bold",
+      "JetBrainsMono-ExtraBold",
     ],
     default: "UbuntuMono-Bold",
   },
