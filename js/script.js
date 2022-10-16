@@ -4,10 +4,12 @@
 // import { zeroToO } from "./type-conversion.js";
 
 import UI from "./ui/ui.js";
+import Convert from "./file-convert/convert.js";
 import Preprocess from "./file-convert/preprocess.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   UI.initialize();
+  Convert.initialize();
   Preprocess.initialize();
 });
 
