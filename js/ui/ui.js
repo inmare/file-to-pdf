@@ -72,6 +72,16 @@ function changeTableFont(e) {
     }
   }
 }
+
+function setMode(e) {
+  const mode = $("#current-mode");
+  if (e.target.checked) {
+    mode.innerText = "랜덤한 글자 생성 (업로드 된 파일은 무시됩니다.)";
+  } else {
+    mode.innerText = "파일 변환";
+  }
+}
+
 export default class UI {
   static initialize() {
     Initialize.setting().then(
@@ -97,6 +107,11 @@ export default class UI {
 
     const fontSelect = $("#font-type");
     fontSelect.addEventListener("change", changeTableFont);
+
+    const randomTextBtn = $("#make-random-text");
+    const event = new Event("change");
+    randomTextBtn.addEventListener("change", setMode);
+    randomTextBtn.dispatchEvent(event);
   }
 
   static addScrollToTopBtn() {
