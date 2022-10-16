@@ -84,19 +84,14 @@ function setMode(e) {
 
 export default class UI {
   static initialize() {
-    Initialize.setting().then(
-      (_) => {
-        this.addListener();
-      },
-      (error) => {
-        console.log(`${error.name}: ${error.message}`);
-      }
-    );
+    Initialize.setting().then((_) => {
+      this.initListener();
+    });
 
     this.addScrollToTopBtn();
   }
 
-  static addListener() {
+  static initListener() {
     const addCharBtn = $("#add-char");
     addCharBtn.addEventListener("click", addChar);
 
@@ -125,5 +120,10 @@ export default class UI {
     btn.addEventListener("click", () => {
       window.scrollTo(0, 0);
     });
+  }
+
+  static displayFileInfo(name, size) {
+    const fileInfo = $("#file-info");
+    fileInfo.innerText = `${name} (${size}kb)`;
   }
 }
