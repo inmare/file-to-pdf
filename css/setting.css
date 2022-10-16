@@ -42,6 +42,7 @@
   border-radius: 10px;
   border: 1px solid var(--color-gray);
 }
+
 .setting-div > div {
   padding: 0px 5px;
 }
@@ -116,4 +117,10 @@
 
 #char-table tr:nth-child(3) > td i {
   cursor: pointer;
+}
+
+@media screen and (max-width: 700px) {
+  .setting-div {
+    margin: 10px 0px;
+  }
 }

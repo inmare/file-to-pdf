@@ -108,8 +108,30 @@ section > h1 {
   margin: 10px 0px;
 }
 
+#scroll-to-top {
+  position: fixed;
+  background-color: var(--color-blue);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  left: calc(100% - 60px);
+  top: calc(100% - 60px);
+}
+
 @media screen and (max-width: 700px) {
+  header {
+    flex-direction: column;
+  }
+
   section {
-    padding: 10px;
+    padding: 20px;
+  }
+
+  #scroll-to-top {
+    width: 20px;
+    height: 20px;
+    left: calc(100% - 30px);
+    top: calc(100% - 30px);
   }
 }

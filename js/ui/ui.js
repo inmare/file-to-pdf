@@ -82,6 +82,8 @@ export default class UI {
         console.log(`${error.name}: ${error.message}`);
       }
     );
+
+    this.addScrollToTopBtn();
   }
 
   static addListener() {
@@ -95,5 +97,18 @@ export default class UI {
 
     const fontSelect = $("#font-type");
     fontSelect.addEventListener("change", changeTableFont);
+  }
+
+  static addScrollToTopBtn() {
+    const app = $("#app");
+    const btn = document.createElement("div");
+    btn.innerHTML = '<i class="fa-solid fa-chevron-up"></i>';
+    btn.id = "scroll-to-top";
+    btn.classList.add("flex-row", "center-h", "center-v");
+    app.append(btn);
+
+    btn.addEventListener("click", () => {
+      window.scrollTo(0, 0);
+    });
   }
 }

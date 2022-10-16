@@ -111,7 +111,7 @@
                 있을 때 사용하면 좋습니다.
               </p>
               <p>
-                ex) Hello world! -> HelloΓworld! (왜 띄어쓰기가 다른 문자로
+                ex) Hello world! -> HelloΓworld!<br />(왜 띄어쓰기가 다른 문자로
                 바뀌는지는 아래의 글자 바꾸기 항목을 참고해주세요.)
               </p>
             </li>
@@ -170,11 +170,15 @@
                 id="make-random-text"
               />
             </div>
-            <div>
-              <label for="text-type">텍스트 종류</label>
-              <select name="text-type" id="text-type"></select>
-              <label for="page-num">페이지 수</label>
-              <select name="page-num" id="page-num"></select>
+            <div class="flex-row">
+              <div>
+                <label for="text-type">텍스트 종류</label>
+                <select name="text-type" id="text-type"></select>
+              </div>
+              <div>
+                <label for="page-num">페이지 수</label>
+                <select name="page-num" id="page-num"></select>
+              </div>
             </div>
           </div>
           <h2>파일 여백</h2>
@@ -288,6 +292,8 @@
                 maxlength="1"
                 size="1"
               />
+            </div>
+            <div>
               <button id="add-char">추가하기</button>
             </div>
             <div>
