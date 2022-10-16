@@ -4,9 +4,11 @@
 // import { zeroToO } from "./type-conversion.js";
 
 import UI from "./ui/ui.js";
+import Preprocess from "./file-convert/preprocess.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   UI.initialize();
+  Preprocess.initialize();
 });
 
 // 페이지 수에 옵션 더해주기 (10페이지까지)
