@@ -1,9 +1,16 @@
-import { fileToText } from "./file-parsing.js";
-import { seedRandom } from "./random-generation.js";
-import { textToPDF } from "./pdf-conversion.js";
-import { zeroToO } from "./type-conversion.js";
+// import { fileToText } from "./file-parsing.js";
+// import { seedRandom } from "./random-generation.js";
+// import { textToPDF } from "./pdf-conversion.js";
+// import { zeroToO } from "./type-conversion.js";
+
+import UI from "./ui/ui.js";
+
+document.addEventListener("DOMContentLoaded", () => {
+  UI.initialize();
+});
 
 // 페이지 수에 옵션 더해주기 (10페이지까지)
+/*
 const defaultPages = document.getElementById("random-pages");
 for (let i = 0; i < 10; i++) {
   const option = document.createElement("option");
@@ -130,3 +137,4 @@ function makeRandomText() {
   // 랜덤한 텍스트라는 의미로 마지막 인수에 false를 넣음
   textToPDF(randomText, fileName, true);
 }
+*/
