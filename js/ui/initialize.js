@@ -1,4 +1,5 @@
 import Setting from "../setting/setting.js";
+import Util from "./util.js";
 import $ from "../global.js";
 
 function initializeSetting() {
@@ -62,18 +63,10 @@ function createTable(table, setting) {
   delTr.append(delTd);
 
   for (let i = 0; i < setting.from.length; i++) {
-    const fromTd = document.createElement("td");
-    fromTd.innerText = setting.from[i];
-    // fromTd.addEventListener("click", copyText);
-    fromTr.append(fromTd);
-    const toTd = document.createElement("td");
-
-    toTd.innerText = setting.to[i];
-    toTr.append(toTd);
-    const delTd = document.createElement("td");
-    delTd.classList.add("delete-char");
-    delTd.innerHTML = '<i class="fa-solid fa-xmark"></i>';
-    delTr.append(delTd);
+    const fromChar = setting.from[i];
+    const toChar = setting.to[i];
+    const font = Setting.font.default;
+    Util.appendCharToTable(fromChar, toChar, font);
   }
 }
 
