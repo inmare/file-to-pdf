@@ -1,30 +1,25 @@
-.file-select {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-}
-
-.file-label {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 7px 15px 7px 15px;
+.file-btn {
+  padding: 7px 15px;
+  margin: 10px;
   border-radius: 5px;
-  background-color: var(--color-blue);
-  color: white;
-}
-
-.file-label label {
   font-size: 1.5rem;
+  color: white;
   cursor: pointer;
 }
 
-.file-label label i {
+.file-btn i {
   padding-right: 5px;
 }
 
-.file-label input[type="file"] {
+#upload-btn {
+  background-color: var(--color-blue);
+}
+
+#upload-btn label {
+  cursor: pointer;
+}
+
+#upload-btn input[type="file"] {
   position: absolute;
   width: 0;
   height: 0;
@@ -33,22 +28,30 @@
   border: 0;
 }
 
-.generate-button {
-  background-color: rgb(32, 32, 32);
-  color: white;
-  font-size: 1.5rem;
-  padding: 5px 10px 5px 10px;
-  margin: 20px 0 20px 0;
-  border-radius: 5px;
-  box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.11);
-  transition: transform 0.5s cubic-bezier(0, 0, 0, 1);
-  cursor: pointer;
+#convert-btn {
+  background-color: var(--color-green);
 }
 
-.generate-button i {
-  padding-right: 10px;
+#status {
+  max-width: 600px;
+  margin: 10px auto;
 }
 
-.generate-button.hover:hover {
-  transform: scale(105%);
+#status > p {
+  text-align: center;
+}
+
+#status-log {
+  padding: 10px;
+  margin-top: 20px;
+  background-color: var(--color-black);
+  border: 1px solid var(--color-gray);
+  border-radius: 10px;
+}
+
+#log-board {
+  background-color: var(--color-gray);
+  margin-top: 10px;
+  padding: 10px 5px;
+  height: 100px;
 }
