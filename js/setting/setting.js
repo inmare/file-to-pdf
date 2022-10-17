@@ -3,7 +3,7 @@ const Setting = {
     id: "convert-type",
     type: "select",
     value: ["자동", "Ascii", "Hex", "Unicode", "Base64"],
-    default: "자동",
+    default: "Ascii",
   },
   makeRandomText: {
     id: "make-random-text",
