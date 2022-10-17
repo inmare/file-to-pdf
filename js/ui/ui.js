@@ -124,6 +124,18 @@ export default class UI {
 
   static displayFileInfo(name, size) {
     const fileInfo = $("#file-info");
-    fileInfo.innerText = `${name} (${size}kb)`;
+    let clippedFileName;
+    if (name.length > 20) {
+      const extRegex = /\..*$/;
+      const match = name.match(extRegex);
+      let clippedName = name.slice(0, match.index);
+      clippedName =
+        clippedName.length > 12 ? clippedName.slice(0, 12) : clippedName;
+      const extension = name.slice(match.index + 1);
+      clippedFileName = clippedName + "\u2026" + extension;
+    } else {
+      clippedFileName = name;
+    }
+    fileInfo.innerText = `${clippedFileName} (${size}kb)`;
   }
 }
