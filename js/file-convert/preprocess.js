@@ -21,7 +21,7 @@ export default class Preprocess {
       return alert(`${maxSize}kb 이상의 파일은 업로드 할 수 없습니다!`);
     }
 
-    const sizeKb = Math.round(size / 1000);
+    const sizeKb = Math.round(size / 10) / 100;
     UI.displayFileInfo(name, sizeKb);
   }
 
@@ -129,26 +129,5 @@ export default class Preprocess {
         return false;
       }
     }
-  }
-
-  static readTextFromFile(file) {
-    return new Promise((resolve, reject) => {
-      const fileReader = new FileReader();
-      fileReader.readAsText(file);
-
-      fileReader.onload = () => {
-        resolve(fileReader.result);
-      };
-      fileReader.onerror = () => {
-        reject(fileReader.error);
-      };
-    });
-  }
-
-  static checkNonAsciiText(text) {
-    const textRegex = /[^\u0020-\u007f]+/u;
-    const hasNonAscii = textRegex.test(text);
-
-    return hasNonAscii;
   }
 }
