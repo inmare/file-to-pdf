@@ -32,23 +32,16 @@ export default class Type {
       // https://stackoverflow.com/questions/43418812/check-whether-a-string-contains-japanese-chinese-characters
       const CJKregex =
         /[\u3040-\u30ff\u3400-\u4dbf\u4e00-\u9fff\uf900-\ufaff\uff66-\uff9f\u3131-\uD79D]+/u;
-
       const hasCJK = CJKregex.test(text);
 
-      if (hasCJK) {
-        return true;
-      } else {
-        return false;
-      }
+      return hasCJK;
     }
 
     // 파일이 20kb보다 작으면 true 반환
     function _isFileSmall(fileSize) {
-      if (fileSize / 1000 < 20) {
-        return true;
-      } else {
-        return false;
-      }
+      const isSmall = fileSize / 1000 < 20;
+
+      return isSmall;
     }
   }
 
@@ -76,7 +69,7 @@ export default class Type {
     });
   }
 
-  // 공백을 제외한 나머지 공백문자들(\n, \t 등)을 \\n, \\t의 형태로 바꿔줌
+  // 공백을 제외한 나머지 공백문자들(\n, \t)을 \\n, \\t의 형태로 바꿔줌
   // 이때 OS별 개행문자는 모두 \\n으로 통일
   static removeBlankFromText(text) {
     // 공백문자 변환 코드 출처
