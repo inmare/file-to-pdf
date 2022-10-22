@@ -4,10 +4,11 @@
 // import { zeroToO } from "./type-conversion.js";
 
 import UI from "./ui/ui.js";
-import Convert from "./file-convert/convert.js";
-import Preprocess from "./file-convert/preprocess.js";
+import Convert from "./fileConvert/convert.js";
+import Preprocess from "./fileConvert/preprocess.js";
 
 document.addEventListener("DOMContentLoaded", () => {
+  window.jsPDF = window.jspdf.jsPDF;
   UI.initialize();
   Convert.initialize();
   Preprocess.initialize();
