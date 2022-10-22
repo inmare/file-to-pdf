@@ -25,7 +25,7 @@ const Setting = {
   mTop: {
     id: "m-top",
     type: "text",
-    default: 2,
+    default: 1.8,
   },
   mRight: {
     id: "m-right",
