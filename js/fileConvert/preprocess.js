@@ -134,23 +134,24 @@ export default class Preprocess {
 
   /**
    * 유니코드화 된 파일이름, 파일이름의 길이, 변환된 문자열의 종류를 16진수로 반환하는 함수
-   * @param {String} fileName
+   * @param {Objedt} file File 객체
    * @returns 파일과 관련된 정보가 객체 형태로 반환됨
    */
-  static getMetadata(fileName) {
-    const fileNameUnicode = Text.textToUnicode(fileName);
+  static getMetadata(file) {
+    const fileNameUnicode = Text.textToUnicode(file.name);
     const convertType = Setting.convertType.default;
-    const fileNameLengthHex = fileNameUnicode.length
-      .toString(16)
-      .padStart(2, "0");
-    const convertTypeHex = Setting.convertType.value
-      .indexOf(convertType)
-      .toString(16);
+    const fileNameLength = String(fileNameUnicode.length).padStart(2, "0");
+    // Setting에서 해당 설정이 값들이 들어있는 Array의 몇번째 index에 있는지로 변환모드 숫자 설정
+    // 만약 Setting값들이 변경된다면 이 값 또한 변경됨
+    const convertTypeValue = String(
+      Setting.convertType.value.indexOf(convertType)
+    );
     const metadata = {
-      fileName: fileName,
+      fileName: file.name,
+      fileSize: file.size,
       fileNameUnicode: fileNameUnicode,
-      nameLengthHex: fileNameLengthHex,
-      convertType: convertTypeHex,
+      nameLength: fileNameLength,
+      convertType: convertTypeValue,
     };
 
     return metadata;
