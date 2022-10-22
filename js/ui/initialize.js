@@ -1,5 +1,5 @@
 import Setting from "../setting/setting.js";
-import Util from "./util.js";
+import Table from "./table.js";
 import $ from "../global.js";
 
 function initializeSetting() {
@@ -66,7 +66,7 @@ function createTable(table, setting) {
     const fromChar = setting.from[i];
     const toChar = setting.to[i];
     const font = Setting.fontType.default;
-    Util.appendCharToTable(fromChar, toChar, font);
+    Table.appendCharToTable(fromChar, toChar, font);
   }
 }
 

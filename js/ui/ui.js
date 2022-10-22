@@ -1,15 +1,15 @@
 import Initialize from "./initialize.js";
-import Util from "./util.js";
+import Table from "./table.js";
 import $ from "../global.js";
 
 function removeChar(e) {
   const delTd = e.target.parentElement;
-  const charTd = Util.getAllTd(3);
+  const charTd = Table.getAllTd(3);
 
   const idx = Array.from(charTd).indexOf(delTd) + 1;
 
-  const targetFromTd = Util.getTargetTd(1, idx);
-  const targetToTd = Util.getTargetTd(2, idx);
+  const targetFromTd = Table.getTargetTd(1, idx);
+  const targetToTd = Table.getTargetTd(2, idx);
 
   targetFromTd.remove();
   targetToTd.remove();
@@ -24,8 +24,8 @@ function addChar() {
     return alert("글자를 입력해주세요.");
   }
 
-  const fromTd = Util.getAllTd(1);
-  const toTd = Util.getAllTd(2);
+  const fromTd = Table.getAllTd(1);
+  const toTd = Table.getAllTd(2);
 
   let charList = "";
 
@@ -47,7 +47,7 @@ function addChar() {
     );
   } else {
     const font = $("#font-type").value;
-    const [_fromTd, _toTd, delTd] = Util.appendCharToTable(
+    const [_fromTd, _toTd, delTd] = Table.appendCharToTable(
       fromText,
       toText,
       font
@@ -59,8 +59,8 @@ function addChar() {
 
 function changeTableFont(e) {
   const font = e.target.value;
-  const fromTd = Util.getAllTd(1);
-  const toTd = Util.getAllTd(2);
+  const fromTd = Table.getAllTd(1);
+  const toTd = Table.getAllTd(2);
   for (let [idx, td] of fromTd.entries()) {
     if (idx != 0) {
       td.style.fontFamily = `'${font}', 'Adobe Blank`;
@@ -125,17 +125,17 @@ export default class UI {
   static displayFileInfo(name, size) {
     const fileInfo = $("#file-info");
     let clippedFileName;
-    if (name.length > 20) {
-      const extRegex = /\..*$/;
-      const match = name.match(extRegex);
-      let clippedName = name.slice(0, match.index);
-      clippedName =
-        clippedName.length > 12 ? clippedName.slice(0, 12) : clippedName;
-      const extension = name.slice(match.index + 1);
-      clippedFileName = clippedName + "\u2026" + extension;
-    } else {
-      clippedFileName = name;
-    }
+
+    const extRegex = /\..*$/;
+    const match = name.match(extRegex);
+    let clippedName = name.slice(0, match.index);
+    clippedName =
+      clippedName.length > 20
+        ? clippedName.slice(0, 20) + "\u2026"
+        : clippedName;
+    const extension = name.slice(match.index);
+    clippedFileName = clippedName + extension;
+
     fileInfo.innerText = `${clippedFileName} (${size}kb)`;
   }
 }
