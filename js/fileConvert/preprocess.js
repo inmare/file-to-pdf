@@ -147,6 +147,7 @@ export default class Preprocess {
       .indexOf(convertType)
       .toString(16);
     const metadata = {
+      fileName: fileName,
       fileNameUnicode: fileNameUnicode,
       nameLengthHex: fileNameLengthHex,
       convertType: convertTypeHex,
