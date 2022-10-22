@@ -1,4 +1,4 @@
-import Setting from "../setting/setting";
+import Setting from "../setting/setting.js";
 
 export default class Text {
   // 공백을 제외한 나머지 공백문자들(\n, \t)을 \\n, \\t의 형태로 바꿔줌
