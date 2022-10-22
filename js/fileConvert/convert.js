@@ -2,6 +2,7 @@ import Preprocess from "./preprocess.js";
 import Setting from "../setting/setting.js";
 import PDF from "../pdfGenerate/pdf.js";
 import Type from "./type.js";
+import Text from "../util/text.js";
 import $ from "../global.js";
 
 export default class Convert {
@@ -31,7 +32,7 @@ export default class Convert {
       }
 
       const convertText = await Convert.convertToText(file);
-      const replacedText = Type.replaceCharTable(convertText);
+      const replacedText = Text.replaceCharTable(convertText);
 
       const metadata = Preprocess.getMetadata(replacedText, file.name);
 
@@ -45,22 +46,22 @@ export default class Convert {
     switch (convertType) {
       case "Ascii": {
         const text = await Type.fileToType(file, "Text");
-        resultText = Type.removeBlankFromText(text);
+        resultText = Text.removeBlankFromText(text);
         break;
       }
       case "Hex": {
         const arrayBuffer = await Type.fileToType(file, "ArrayBuffer");
-        resultText = Type.arrayBufferToHex(arrayBuffer);
+        resultText = Text.arrayBufferToHex(arrayBuffer);
         break;
       }
       case "Unicode": {
         const text = await Type.fileToType(file, "Text");
-        resultText = Type.textToUnicode(text);
+        resultText = Text.textToUnicode(text);
         break;
       }
       case "Base64": {
         const dataURL = await Type.fileToType(file, "DataURL");
-        resultText = Type.removeMimeFromDataURL(dataURL);
+        resultText = Text.removeMimeFromDataURL(dataURL);
         break;
       }
       default:
