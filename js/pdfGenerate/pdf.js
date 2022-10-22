@@ -7,6 +7,12 @@ export default class PDF {
     const doc = new jsPDF("p", "pt", "a4");
     await PDF.setFontSetting(doc);
     const charInfo = this.getCharLengthInfo(doc);
+    metadata.dummyTextLength = this.getDummyTextLength(
+      text,
+      metadata,
+      charInfo
+    );
+    console.table(metadata);
     const textWithData = this.comebineTextAndData(text, metadata, charInfo);
     const makeFirstPageGuide = Setting.firstPageGuide.default;
     if (makeFirstPageGuide) {
@@ -19,7 +25,7 @@ export default class PDF {
   }
 
   static createFirstPageGuide(doc, metadata, charInfo) {
-    doc.addPage()
+    doc.addPage();
   }
 
   static async setFontSetting(doc) {
@@ -85,35 +91,32 @@ export default class PDF {
       width: contextWidth,
       height: contextHeight,
     };
-
-    return contextInfo;
   }
 
   static comebineTextAndData(text, metadata, charInfo) {
-    // 메타 데이터 형식 : ABBCC
-    // 텍스트 길이 + 메타 데이터 길이(5자로 고정)
-    const dummyTextLength = this.getDummyTextLength(text, metadata, charInfo);
-
     let metadataText =
       metadata.convertType +
-      metadata.nameLengthHex +
-      dummyTextLength.toString(16).padStart(2, "0") +
+      metadata.nameLength +
+      metadata.dummyTextLength +
       metadata.fileNameUnicode;
 
     metadataText = Text.replaceCharTable(metadataText);
 
     const lastChar = text.slice(-1);
-    const combinedText = metadataText + text + lastChar.repeat(dummyTextLength);
+    const combinedText =
+      metadataText + text + lastChar.repeat(metadata.dummyTextLength);
 
     return combinedText;
   }
 
   static getDummyTextLength(text, metadata, charInfo) {
-    const wholeTextLength = 5 + metadata.fileNameUnicode.length + text.length;
+    // 메타 데이터 형식 : ABBCCC
+    // 텍스트 길이 + 메타 데이터 길이(6자로 고정)
+    const wholeTextLength = 6 + metadata.fileNameUnicode.length + text.length;
 
     const lastLineCharLength = wholeTextLength % charInfo.charPerLine;
     const dummyTextLength = charInfo.charPerLine - lastLineCharLength;
 
-    return dummyTextLength;
+    return String(dummyTextLength).padStart(3, "0");
   }
 }
