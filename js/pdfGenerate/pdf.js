@@ -4,23 +4,34 @@ import Unit from "./unit.js";
 
 export default class PDF {
   static async createPDF(text, metadata) {
-    this.doc = new jsPDF("p", "pt", "a4");
-    await PDF.setFontSetting();
-    const charInfo = this.getCharLengthInfo();
+    const doc = new jsPDF("p", "pt", "a4");
+    await PDF.setFontSetting(doc);
+    const charInfo = this.getCharLengthInfo(doc);
     const textWithData = this.comebineTextAndData(text, metadata, charInfo);
-    
+    const makeFirstPageGuide = Setting.firstPageGuide.default;
+    if (makeFirstPageGuide) {
+      this.createFirstPageGuide(doc, metadata, charInfo);
+    }
   }
 
-  static async setFontSetting() {
+  static async createRandomTextPDF() {
+    // 랜덤한 텍스트로 구성된 pdf만들기
+  }
+
+  static createFirstPageGuide(doc, metadata, charInfo) {
+    doc.addPage()
+  }
+
+  static async setFontSetting(doc) {
     const font = Setting.fontType.default;
     const fontDatURL = await this.getFontDataURL(font);
     const fontSize = Setting.fontSize.default;
 
-    this.doc.addFileToVFS(`${font}.ttf`, fontDatURL);
-    this.doc.addFont(`${font}.ttf`, font, "normal");
-    this.doc.setFont(font);
-    this.doc.setFontSize(fontSize);
-    this.doc.setTextColor("0");
+    doc.addFileToVFS(`${font}.ttf`, fontDatURL);
+    doc.addFont(`${font}.ttf`, font, "normal");
+    doc.setFont(font);
+    doc.setFontSize(fontSize);
+    doc.setTextColor("0");
   }
 
   static async getFontDataURL(font) {
@@ -39,13 +50,13 @@ export default class PDF {
     return rawDataURL;
   }
 
-  static getCharLengthInfo() {
-    const contextSize = this.getContextSize();
+  static getCharLengthInfo(doc) {
+    const contextSize = this.getContextSize(doc);
 
     const kerning = Setting.kerning.default;
     const lineHeight = Setting.lineHeight.default;
 
-    const charSize = this.doc.getTextDimensions("A");
+    const charSize = doc.getTextDimensions("A");
     const charWidth = charSize.w + kerning;
     const charHeight = charSize.h * lineHeight;
 
@@ -60,13 +71,13 @@ export default class PDF {
     return charInfo;
   }
 
-  static getContextSize() {
+  static getContextSize(doc) {
     const mTop = Unit.cmToPoint(Setting.mTop.default);
     const mRight = Unit.cmToPoint(Setting.mRight.default);
     const mBottom = Unit.cmToPoint(Setting.mBottom.default);
     const mLeft = Unit.cmToPoint(Setting.mLeft.default);
-    const pageWidth = this.doc.internal.pageSize.getWidth();
-    const pageHeight = this.doc.internal.pageSize.getHeight();
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const pageHeight = doc.internal.pageSize.getHeight();
 
     const contextWidth = pageWidth - mRight - mLeft;
     const contextHeight = pageHeight - mTop - mBottom;
@@ -81,10 +92,8 @@ export default class PDF {
   static comebineTextAndData(text, metadata, charInfo) {
     // 메타 데이터 형식 : ABBCC
     // 텍스트 길이 + 메타 데이터 길이(5자로 고정)
-    const wholeTextLength = 5 + metadata.fileNameUnicode.length + text.length;
+    const dummyTextLength = this.getDummyTextLength(text, metadata, charInfo);
 
-    const lastLineCharLength = wholeTextLength % charInfo.charPerLine;
-    const dummyTextLength = charInfo.charPerLine - lastLineCharLength;
     let metadataText =
       metadata.convertType +
       metadata.nameLengthHex +
@@ -93,9 +102,18 @@ export default class PDF {
 
     metadataText = Text.replaceCharTable(metadataText);
 
-    const lastChar = text[-1];
+    const lastChar = text.slice(-1);
     const combinedText = metadataText + text + lastChar.repeat(dummyTextLength);
 
     return combinedText;
+  }
+
+  static getDummyTextLength(text, metadata, charInfo) {
+    const wholeTextLength = 5 + metadata.fileNameUnicode.length + text.length;
+
+    const lastLineCharLength = wholeTextLength % charInfo.charPerLine;
+    const dummyTextLength = charInfo.charPerLine - lastLineCharLength;
+
+    return dummyTextLength;
   }
 }
