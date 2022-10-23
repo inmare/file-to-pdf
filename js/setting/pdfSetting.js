@@ -1,4 +1,4 @@
-const PDFsetting = {
+const pdfSetting = {
   metadataLength: {
     convertType: 1,
     fileNameLength: 2,
@@ -6,4 +6,4 @@ const PDFsetting = {
   },
 };
 
-export default PDFsetting;
+export default pdfSetting;
