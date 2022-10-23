@@ -14,15 +14,27 @@ const pdfSetting = {
       convertTypeTable: ["Ascii", "Hex", "Unicode", "Base64"],
       convertTypeDec: {
         value: null,
-        str: null,
+        get str() {
+          const valueStr = String(value);
+          const maxLength = pdfSetting.metadataLength.convertTypeDec;
+          return valueStr.padStart(maxLength, "0");
+        },
       },
       fileNameLength: {
         value: null,
-        str: null,
+        get str() {
+          const valueStr = String(value);
+          const maxLength = pdfSetting.metadataLength.fileNameLength;
+          return valueStr.padStart(maxLength, "0");
+        },
       },
       lastLineLength: {
         value: null,
-        str: null,
+        get str() {
+          const valueStr = String(value);
+          const maxLength = pdfSetting.metadataLength.lastLineLength;
+          return valueStr.padStart(maxLength, "0");
+        },
       },
     },
     charInfo: {
