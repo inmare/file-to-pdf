@@ -1,18 +1,17 @@
 import Setting from "../setting/setting.js";
+import Metadata from "./metadata.js";
+import Font from "./font.js";
 import Text from "../util/text.js";
 import Unit from "./unit.js";
 
 export default class PDF {
-  static async createPDF(text, metadata) {
+  static async createPDF(text, file) {
     const doc = new jsPDF("p", "pt", "a4");
-    await PDF.setFontSetting(doc);
+    // 메인 텍스트용 폰트 추가
+    await Font.addFont(doc, Setting.fontType.default);
+    // 메인 텍스트용 메타 데이터 추가
+    Metadata.addFileData(file);
     const charInfo = this.getCharLengthInfo(doc);
-    metadata.dummyTextLength = this.getDummyTextLength(
-      text,
-      metadata,
-      charInfo
-    );
-    console.table(metadata);
     const textWithData = this.comebineTextAndData(text, metadata, charInfo);
     const makeFirstPageGuide = Setting.firstPageGuide.default;
     if (makeFirstPageGuide) {
@@ -28,72 +27,7 @@ export default class PDF {
     doc.addPage();
   }
 
-  static async setFontSetting(doc) {
-    const font = Setting.fontType.default;
-    const fontDatURL = await this.getFontDataURL(font);
-    const fontSize = Setting.fontSize.default;
-
-    doc.addFileToVFS(`${font}.ttf`, fontDatURL);
-    doc.addFont(`${font}.ttf`, font, "normal");
-    doc.setFont(font);
-    doc.setFontSize(fontSize);
-    doc.setTextColor("0");
-  }
-
-  static async getFontDataURL(font) {
-    const response = await fetch(`./fonts/${font}.ttf`);
-    const blob = await response.blob();
-    const fileReader = new FileReader();
-    const promise = new Promise((resolve, _) => {
-      fileReader.readAsDataURL(blob);
-      fileReader.onload = () => {
-        resolve(fileReader.result);
-      };
-    });
-    const dataURL = await promise;
-    const rawDataURL = Text.removeMimeFromDataURL(dataURL);
-
-    return rawDataURL;
-  }
-
-  static getCharLengthInfo(doc) {
-    const contextSize = this.getContextSize(doc);
-
-    const kerning = Setting.kerning.default;
-    const lineHeight = Setting.lineHeight.default;
-
-    const charSize = doc.getTextDimensions("A");
-    const charWidth = charSize.w + kerning;
-    const charHeight = charSize.h * lineHeight;
-
-    const charPerLine = Math.ceil(contextSize.width / charWidth);
-    const linePerPage = Math.ceil(contextSize.height / charHeight);
-    const charInfo = {
-      charPerLine: charPerLine,
-      linePerPage: linePerPage,
-      textPerPage: charPerLine * linePerPage,
-    };
-
-    return charInfo;
-  }
-
-  static getContextSize(doc) {
-    const mTop = Unit.cmToPoint(Setting.mTop.default);
-    const mRight = Unit.cmToPoint(Setting.mRight.default);
-    const mBottom = Unit.cmToPoint(Setting.mBottom.default);
-    const mLeft = Unit.cmToPoint(Setting.mLeft.default);
-    const pageWidth = doc.internal.pageSize.getWidth();
-    const pageHeight = doc.internal.pageSize.getHeight();
-
-    const contextWidth = pageWidth - mRight - mLeft;
-    const contextHeight = pageHeight - mTop - mBottom;
-    const contextInfo = {
-      width: contextWidth,
-      height: contextHeight,
-    };
-  }
-
-  static comebineTextAndData(text, metadata, charInfo) {
+  static comebineTextAndData(text, metadata) {
     let metadataText =
       metadata.convertType +
       metadata.nameLength +
@@ -107,16 +41,5 @@ export default class PDF {
       metadataText + text + lastChar.repeat(metadata.dummyTextLength);
 
     return combinedText;
-  }
-
-  static getDummyTextLength(text, metadata, charInfo) {
-    // 메타 데이터 형식 : ABBCCC
-    // 텍스트 길이 + 메타 데이터 길이(6자로 고정)
-    const wholeTextLength = 6 + metadata.fileNameUnicode.length + text.length;
-
-    const lastLineCharLength = wholeTextLength % charInfo.charPerLine;
-    const dummyTextLength = charInfo.charPerLine - lastLineCharLength;
-
-    return String(dummyTextLength).padStart(3, "0");
   }
 }
