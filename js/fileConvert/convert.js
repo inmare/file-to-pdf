@@ -34,9 +34,7 @@ export default class Convert {
       const convertText = await Convert.convertToText(file);
       const replacedText = Text.replaceCharTable(convertText);
 
-      const metadata = Preprocess.getMetadata(file);
-
-      PDF.createPDF(replacedText, metadata);
+      PDF.createPDF(replacedText, file);
     }
   }
 
