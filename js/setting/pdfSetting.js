@@ -1,17 +1,39 @@
 const pdfSetting = {
   metadataLength: {
-    convertType: 1,
+    convertTypeDec: 1,
     fileNameLength: 2,
-    lastLineCharLength: 3,
+    lastLineLength: 3,
   },
   metadata: {
-    fileName: null,
-    fileSize: null,
-    fileNameUnicode: null,
-    convertTypeTable: ["Ascii", "Hex", "Unicode", "Base64"],
-    convertTypeDec: null,
-    fileNameLength: null,
-    dummyTextLength: null,
+    file: {
+      name: null,
+      size: null,
+    },
+    text: {
+      fileNameUnicode: null,
+      convertTypeTable: ["Ascii", "Hex", "Unicode", "Base64"],
+      convertTypeDec: {
+        value: null,
+        str: null,
+      },
+      fileNameLength: {
+        value: null,
+        str: null,
+      },
+      lastLineLength: {
+        value: null,
+        str: null,
+      },
+    },
+    charInfo: {
+      charPerLine: null,
+      linePerPage: null,
+      textPerPage: null,
+    },
+  },
+  firstPage: {
+    font: "Pretendard-Medium",
+    fontSize: 12,
   },
 };
 
