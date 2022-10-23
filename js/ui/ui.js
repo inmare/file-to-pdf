@@ -1,6 +1,6 @@
 import Initialize from "./initialize.js";
 import Table from "./table.js";
-import $ from "../global.js";
+import $ from "../util/global.js";
 
 function removeChar(e) {
   const delTd = e.target.parentElement;

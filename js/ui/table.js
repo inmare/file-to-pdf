@@ -1,4 +1,4 @@
-import $ from "../global.js";
+import $ from "../util/global.js";
 
 export default class Table {
   static getAllTd(trIdx) {

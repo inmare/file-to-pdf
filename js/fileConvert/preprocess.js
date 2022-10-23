@@ -2,7 +2,7 @@ import Setting from "../setting/setting.js";
 import Table from "../ui/table.js";
 import Text from "../util/text.js";
 import UI from "../ui/ui.js";
-import $ from "../global.js";
+import $ from "../util/global.js";
 
 export default class Preprocess {
   static initialize() {
