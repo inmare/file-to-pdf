@@ -1,8 +1,7 @@
+import pdfSetting from "../setting/pdfSetting.js";
 import Setting from "../setting/setting.js";
 import Metadata from "./metadata.js";
 import Font from "./font.js";
-import Text from "../util/text.js";
-import Unit from "./unit.js";
 
 export default class PDF {
   static async createPDF(text, file) {
@@ -10,13 +9,10 @@ export default class PDF {
     // 메인 텍스트용 폰트 추가
     await Font.addFont(doc, Setting.fontType.default);
     // 메인 텍스트용 메타 데이터 추가
-    Metadata.addFileData(file);
-    const charInfo = this.getCharLengthInfo(doc);
-    const textWithData = this.comebineTextAndData(text, metadata, charInfo);
-    const makeFirstPageGuide = Setting.firstPageGuide.default;
-    if (makeFirstPageGuide) {
-      this.createFirstPageGuide(doc, metadata, charInfo);
-    }
+    Metadata.setMetadata(doc, file, text);
+    const textWithData = Metadata.comebineTextAndData(text);
+    // const makeFirstPageGuide = Setting.firstPageGuide.default;
+    this.createPage(doc, textWithData);
   }
 
   static async createRandomTextPDF() {
@@ -27,19 +23,32 @@ export default class PDF {
     doc.addPage();
   }
 
-  static comebineTextAndData(text, metadata) {
-    let metadataText =
-      metadata.convertType +
-      metadata.nameLength +
-      metadata.dummyTextLength +
-      metadata.fileNameUnicode;
+  static createPage(doc, text) {
+    const font = Setting.fontType.default;
+    const fontSize = Setting.fontType.default;
+    const kerning = Setting.kerning.default;
+    const lineHeight = Setting.lineHeight.default;
 
-    metadataText = Text.replaceCharTable(metadataText);
+    const options = {
+      charSpace: kerning,
+      lineHeightFactor: lineHeight,
+    };
 
-    const lastChar = text.slice(-1);
-    const combinedText =
-      metadataText + text + lastChar.repeat(metadata.dummyTextLength);
+    doc.setFont(font);
+    doc.setFontSize(fontSize);
 
-    return combinedText;
+    const charInfo = pdfSetting.metadata.charInfo;
+    const textPerPage = charInfo.textPerPage;
+    const wholePage = Math.ceil(textPerPage / text.length);
+
+    for (let i = 0; i < wholePage; i++) {
+      doc.addPage();
+      const startIdx = textPerPage * i;
+      let endIdx = textPerPage * (i + 1);
+      endIdx = text.length > endIdx ? text.length : endIdx;
+
+      const pageText = text.slice(startIdx, endIdx);
+      
+    }
   }
 }
