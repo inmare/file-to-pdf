@@ -2,6 +2,7 @@ import pdfSetting from "../setting/pdfSetting.js";
 import Setting from "../setting/setting.js";
 import Metadata from "./metadata.js";
 import Font from "./font.js";
+import Text from "../util/text.js";
 
 export default class PDF {
   static async createPDF(text, file) {
@@ -10,12 +11,11 @@ export default class PDF {
     await Font.addFont(doc, Setting.fontType.default);
     // 메인 텍스트용 메타 데이터 추가
     Metadata.setMetadata(doc, file, text);
-    console.table(pdfSetting);
     const textWithData = Metadata.comebineTextAndData(text);
     // const makeFirstPageGuide = Setting.firstPageGuide.default;
     this.createPage(doc, textWithData);
 
-    // doc.save("test.pdf");
+    doc.save(`${file.name}.pdf`);
   }
 
   static async createRandomTextPDF() {
@@ -48,12 +48,14 @@ export default class PDF {
     const y = Setting.mTop.pt;
 
     for (let i = 0; i < wholePage; i++) {
+      if (i != 0) doc.addPage();
       const startIdx = textPerPage * i;
       let endIdx = textPerPage * (i + 1);
-      endIdx = text.length > endIdx ? text.length : endIdx;
+      endIdx = text.length < endIdx ? text.length : endIdx;
 
       const pageText = text.slice(startIdx, endIdx);
-      doc.text(pageText, x, y, options);
+      const linebreakPageText = Text.addLinebreak(pageText);
+      doc.text(linebreakPageText, x, y, options);
     }
   }
 }
