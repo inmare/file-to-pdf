@@ -14,7 +14,7 @@ const pdfSetting = {
     convertTypeDec: {
       value: null,
       get str() {
-        const valueStr = String(value);
+        const valueStr = String(this.value);
         const maxLength = pdfSetting.dataLength.convertTypeDec;
         return valueStr.padStart(maxLength, "0");
       },
@@ -22,7 +22,7 @@ const pdfSetting = {
     fileNameLength: {
       value: null,
       get str() {
-        const valueStr = String(value);
+        const valueStr = String(this.value);
         const maxLength = pdfSetting.dataLength.fileNameLength;
         return valueStr.padStart(maxLength, "0");
       },
@@ -30,7 +30,7 @@ const pdfSetting = {
     lastLineLength: {
       value: null,
       get str() {
-        const valueStr = String(value);
+        const valueStr = String(this.value);
         const maxLength = pdfSetting.dataLength.lastLineLength;
         return valueStr.padStart(maxLength, "0");
       },
