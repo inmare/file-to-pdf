@@ -2,7 +2,10 @@ import pdfSetting from "../setting/pdfSetting.js";
 import Setting from "../setting/setting.js";
 
 export default class CharInfo {
-  static getCharLengthInfo(doc) {
+  static getCharLengthInfo(doc, font, fontSize) {
+    doc.setFont(font);
+    doc.setFontSize(fontSize);
+
     const contextSize = this.getContextSize(doc);
 
     const kerning = Setting.kerning.default;
@@ -43,13 +46,13 @@ export default class CharInfo {
 
   static getLastLineLength(text) {
     // 메타 데이터 형식 : ABBCCC (6글자)
-    const metadataLen = 0;
-    for (let [_, value] of pdfSetting.metadataLength) {
+    let metadataLen = 0;
+    for (let [_, value] of Object.entries(pdfSetting.dataLength)) {
       metadataLen += value;
     }
 
-    const textData = pdfSetting.metadata.text;
-    const charInfo = pdfSetting.metadata.charInfo;
+    const textData = pdfSetting.text;
+    const charInfo = pdfSetting.charInfo;
 
     const wholeTextLength =
       metadataLen + textData.fileNameLength.value + text.length;
