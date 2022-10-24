@@ -1,3 +1,5 @@
+import cmToPoint from "../util/unit.js";
+
 const Setting = {
   convertType: {
     id: "convert-type",
@@ -26,21 +28,33 @@ const Setting = {
     id: "m-top",
     type: "text",
     default: 1.8,
+    get pt() {
+      return cmToPoint(this.default);
+    },
   },
   mRight: {
     id: "m-right",
     type: "text",
     default: 1,
+    get pt() {
+      return cmToPoint(this.default);
+    },
   },
   mBottom: {
     id: "m-bottom",
     type: "text",
     default: 1,
+    get pt() {
+      return cmToPoint(this.default);
+    },
   },
   mLeft: {
     id: "m-left",
     type: "text",
     default: 1,
+    get pt() {
+      return cmToPoint(this.default);
+    },
   },
   firstPageGuide: {
     id: "first-page-guide",

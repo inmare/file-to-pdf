@@ -1,6 +1,5 @@
 import pdfSetting from "../setting/pdfSetting.js";
 import Setting from "../setting/setting.js";
-import Unit from "./unit.js";
 
 export default class CharInfo {
   static getCharLengthInfo(doc) {
@@ -25,10 +24,10 @@ export default class CharInfo {
   }
 
   static getContextSize(doc) {
-    const mTop = Unit.cmToPoint(Setting.mTop.default);
-    const mRight = Unit.cmToPoint(Setting.mRight.default);
-    const mBottom = Unit.cmToPoint(Setting.mBottom.default);
-    const mLeft = Unit.cmToPoint(Setting.mLeft.default);
+    const mTop = Setting.mTop.pt;
+    const mRight = Setting.mRight.pt;
+    const mBottom = Setting.mBottom.pt;
+    const mLeft = Setting.mLeft.pt;
     const pageWidth = doc.internal.pageSize.getWidth();
     const pageHeight = doc.internal.pageSize.getHeight();
 
@@ -43,7 +42,7 @@ export default class CharInfo {
   }
 
   static getLastLineLength(text) {
-    // 메타 데이터 형식 : ABBCCC
+    // 메타 데이터 형식 : ABBCCC (6글자)
     const metadataLen = 0;
     for (let [_, value] of pdfSetting.metadataLength) {
       metadataLen += value;
