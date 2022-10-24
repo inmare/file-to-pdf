@@ -1,4 +1,5 @@
 import Setting from "../setting/setting.js";
+import pdfSetting from "../setting/pdfSetting.js";
 
 export default class Text {
   // 공백을 제외한 나머지 공백문자들(\n, \t)을 \\n, \\t의 형태로 바꿔줌
@@ -66,5 +67,22 @@ export default class Text {
         return { from: item, to: b[idx] };
       });
     }
+  }
+
+  static addLinebreak(text) {
+    const charPerLine = pdfSetting.charInfo.charPerLine;
+    const lineLength = text.length / charPerLine;
+
+    let linebreakText = "";
+
+    for (let i = 0; i < lineLength; i++) {
+      const startIdx = charPerLine * i;
+      const endIdx = charPerLine * (i + 1);
+      const line = text.slice(startIdx, endIdx);
+      linebreakText += line + "\n";
+    }
+
+    // 마지막 줄바꿈은 제거
+    return linebreakText.slice(0, -1);
   }
 }
