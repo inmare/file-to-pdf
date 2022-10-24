@@ -11,8 +11,8 @@ export default class Metadata {
   }
 
   static comebineTextAndData(text) {
-    const textData = pdfSetting.metadata.text;
-    const charInfo = pdfSetting.metadata.charInfo;
+    const textData = pdfSetting.text;
+    const charInfo = pdfSetting.charInfo;
 
     let metadataText =
       textData.convertTypeDec.str +
@@ -32,26 +32,26 @@ export default class Metadata {
   }
 
   static addFileData(file) {
-    const fileData = pdfSetting.metadata.file;
-    const sizeKb = Math.round(size / 10) / 100;
+    const fileData = pdfSetting.file;
+    const sizeKb = Math.round(file.size / 10) / 100;
 
     fileData.name = file.name;
     fileData.size = `${sizeKb}kb`;
   }
 
   static addCharInfoData(doc) {
-    const fontName = Setting.fontType.default;
-    doc.setFont(fontName);
+    const font = Setting.fontType.default;
+    const fontSize = Setting.fontSize.default;
+    const charInfo = CharInfo.getCharLengthInfo(doc, font, fontSize);
 
-    const charInfo = CharInfo.getCharLengthInfo(doc);
-    for (let [key, value] of charInfo.entries()) {
-      pdfSetting.metadata.charInfo[key] = value;
+    for (let [key, value] of Object.entries(charInfo)) {
+      pdfSetting.charInfo[key] = value;
     }
   }
 
   static addTextData(text) {
-    const textData = pdfSetting.metadata.text;
-    const fileName = pdfSetting.metadata.file.name;
+    const textData = pdfSetting.text;
+    const fileName = pdfSetting.file.name;
 
     // 파일 이름 유니코드 및 길이 정보 추가
     const fileNameUnicode = Text.textToUnicode(fileName);
