@@ -21,6 +21,8 @@ export default class CharInfo {
       charPerLine: charPerLine,
       linePerPage: linePerPage,
       textPerPage: charPerLine * linePerPage,
+      charWidth: charWidth,
+      charHeight: charHeight,
     };
 
     return charInfo;
