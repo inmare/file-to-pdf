@@ -3,7 +3,6 @@ import Setting from "../setting/setting.js";
 import PDF from "../pdfGenerate/pdf.js";
 import Type from "./type.js";
 import Text from "../util/text.js";
-import $ from "../util/global.js";
 
 export default class Convert {
   static initialize() {

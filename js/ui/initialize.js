@@ -1,6 +1,5 @@
 import Setting from "../setting/setting.js";
 import Table from "./table.js";
-import $ from "../util/global.js";
 
 function initializeSetting() {
   for (let [_, value] of Object.entries(Setting)) {

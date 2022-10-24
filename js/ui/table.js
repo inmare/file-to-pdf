@@ -1,5 +1,3 @@
-import $ from "../util/global.js";
-
 export default class Table {
   static getAllTd(trIdx) {
     return $(`#char-table tr:nth-child(${trIdx}) > td`);
