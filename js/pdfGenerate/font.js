@@ -1,3 +1,5 @@
+import Text from "../util/text.js";
+
 export default class Font {
   static async addFont(doc, fontName) {
     const fontDatURL = await this.getFontDataURL(fontName);
