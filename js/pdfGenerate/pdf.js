@@ -43,21 +43,38 @@ export default class PDF {
     doc.setTextColor("0");
 
     const textHeight = doc.getTextDimensions("A").h * doc.getLineHeightFactor();
-    let height = margin;
+    let totalHeight = margin;
 
-    doc.text("PDF 정보", margin, height);
-    height += textHeight;
+    doc.text("PDF 정보", margin, totalHeight);
+    totalHeight += textHeight;
+    console.log(margin, totalHeight);
 
-    let infoTable = 1;
+    let infoTableHeight = 0;
     doc.autoTable({
       body: [
         {
           title: "파일 이름",
-          data: "FileName",
+          data: pdfSetting.file.name,
         },
         {
           title: "파일 크기",
-          data: "FileSize kb",
+          data: pdfSetting.file.size,
+        },
+        {
+          title: "변경 모드",
+          data: Setting.convertType.default,
+        },
+        {
+          title: "줄 당 글자 수",
+          data: pdfSetting.charInfo.charPerLine,
+        },
+        {
+          title: "페이지 당 줄 수",
+          data: pdfSetting.charInfo.linePerPage,
+        },
+        {
+          title: "페이지 당 글자 수",
+          data: pdfSetting.charInfo.textPerPage,
         },
       ],
       columns: [
@@ -82,7 +99,13 @@ export default class PDF {
       },
       willDrawCell: (data) => {
         if (data.section == "head") {
+          data.row.height = 0;
           return false;
+        }
+      },
+      didDrawPage: (data) => {
+        for (let [_, row] of Object.entries(data.table.body)) {
+          infoTableHeight += row.height;
         }
       },
       styles: {
@@ -96,8 +119,19 @@ export default class PDF {
         lineColor: 0,
       },
       tableWidth: "wrap",
-      margin: { top: cmToPoint(3) + 10, left: cmToPoint(3) },
+      margin: { top: totalHeight, left: margin },
     });
+
+    totalHeight += infoTableHeight;
+    totalHeight += textHeight * 2;
+
+    doc.text("변경된 텍스트", margin, totalHeight);
+    totalHeight += textHeight;
+    doc.autoTable({
+      head: {
+        
+      }
+    })
   }
 
   static createPage(doc, text) {
