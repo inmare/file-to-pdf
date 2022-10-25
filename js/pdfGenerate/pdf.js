@@ -47,9 +47,8 @@ export default class PDF {
 
     doc.text("PDF 정보", margin, totalHeight);
     totalHeight += textHeight;
-    console.log(margin, totalHeight);
 
-    let infoTableHeight = 0;
+    let infoTableFinalY;
     doc.autoTable({
       body: [
         {
@@ -64,6 +63,7 @@ export default class PDF {
           title: "변경 모드",
           data: Setting.convertType.default,
         },
+        // 랜덤 텍스트 생성시에는 위의 정보들은 넣지 말기
         {
           title: "줄 당 글자 수",
           data: pdfSetting.charInfo.charPerLine,
@@ -104,9 +104,8 @@ export default class PDF {
         }
       },
       didDrawPage: (data) => {
-        for (let [_, row] of Object.entries(data.table.body)) {
-          infoTableHeight += row.height;
-        }
+        // 각 줄의 높이를 전부 infoTableHeight에 더하기
+        infoTableFinalY = data.cursor.y;
       },
       styles: {
         font: firstPageFont,
@@ -114,24 +113,63 @@ export default class PDF {
         fontStyle: "normal",
         cellWidth: "auto",
         halign: "center",
+        valign: "middle",
         textColor: 0,
         lineWidth: 1,
         lineColor: 0,
       },
       tableWidth: "wrap",
-      margin: { top: totalHeight, left: margin },
+      startY: totalHeight,
+      margin: { left: margin },
     });
 
-    totalHeight += infoTableHeight;
+    totalHeight = infoTableFinalY;
     totalHeight += textHeight * 2;
 
     doc.text("변경된 텍스트", margin, totalHeight);
     totalHeight += textHeight;
+
+    const charTableHead = ["글자", ...Setting.charTable.from];
+    const originalChar = ["변환된 글자", ...Setting.charTable.to];
+    const unicodeChar = ["유니코드", ...Setting.charTable.toUnicode];
+    let charTableFinalY;
     doc.autoTable({
-      head: {
-        
-      }
-    })
+      head: [charTableHead],
+      body: [originalChar, unicodeChar],
+      headStyles: {
+        fillColor: [210, 210, 210],
+      },
+      bodyStyles: {
+        fillColor: [255, 255, 255],
+      },
+      styles: {
+        font: firstPageFont,
+        fontSize: pdfSetting.firstPage.fontSize,
+        fontStyle: "normal",
+        halign: "center",
+        valign: "middle",
+        textColor: 0,
+        lineWidth: 1,
+        lineColor: 0,
+      },
+      willDrawCell: (data) => {
+        if (data.section == "body" && data.column.index == 0) {
+          data.cell.styles.fillColor = [210, 210, 210];
+        }
+      },
+      didDrawPage: (data) => {
+        charTableFinalY = data.cursor.y;
+      },
+      tableWidth: "wrap",
+      startY: totalHeight,
+      margin: { left: margin },
+    });
+
+    totalHeight = charTableFinalY;
+    totalHeight += textHeight * 2;
+
+    doc.text("메타데이터", margin, totalHeight);
+    totalHeight += textHeight;
   }
 
   static createPage(doc, text) {
