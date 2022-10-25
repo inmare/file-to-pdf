@@ -3,6 +3,7 @@ import Setting from "../setting/setting.js";
 import Metadata from "./metadata.js";
 import Font from "./font.js";
 import Text from "../util/text.js";
+import cmToPoint from "../util/cmToPoint.js";
 
 export default class PDF {
   static async createPDF(text, file) {
@@ -12,10 +13,20 @@ export default class PDF {
     // 메인 텍스트용 메타 데이터 추가
     Metadata.setMetadata(doc, file, text);
     const textWithData = Metadata.comebineTextAndData(text);
-    // const makeFirstPageGuide = Setting.firstPageGuide.default;
+    const makeFirstPageGuide = Setting.firstPageGuide.default;
+
+    if (makeFirstPageGuide) {
+      const firstPageFont = pdfSetting.firstPage.fontType;
+      await Font.addFont(doc, firstPageFont);
+      this.createFirstPageGuide(doc);
+      doc.addPage();
+    }
+
     this.createPage(doc, textWithData);
 
-    doc.save(`${file.name}.pdf`);
+    doc.output("dataurlnewwindow", {
+      filename: `${file.name}.pdf`,
+    });
   }
 
   static async createRandomTextPDF() {
@@ -23,7 +34,70 @@ export default class PDF {
   }
 
   static createFirstPageGuide(doc) {
-    doc.addPage();
+    const firstPageFont = pdfSetting.firstPage.fontType;
+    const firstPageFontSize = pdfSetting.firstPage.fontSize;
+    const margin = pdfSetting.firstPage.margin.pt;
+
+    doc.setFont(firstPageFont);
+    doc.setFontSize(firstPageFontSize);
+    doc.setTextColor("0");
+
+    const textHeight = doc.getTextDimensions("A").h * doc.getLineHeightFactor();
+    let height = margin;
+
+    doc.text("PDF 정보", margin, height);
+    height += textHeight;
+
+    let infoTable = 1;
+    doc.autoTable({
+      body: [
+        {
+          title: "파일 이름",
+          data: "FileName",
+        },
+        {
+          title: "파일 크기",
+          data: "FileSize kb",
+        },
+      ],
+      columns: [
+        {
+          header: "제목",
+          dataKey: "title",
+        },
+        {
+          header: "값",
+          dataKey: "data",
+        },
+      ],
+      columnStyles: {
+        title: {
+          fillColor: [210, 210, 210],
+          minCellWidth: cmToPoint(3),
+        },
+        data: {
+          fillColor: [255, 255, 255],
+          minCellWidth: cmToPoint(3),
+        },
+      },
+      willDrawCell: (data) => {
+        if (data.section == "head") {
+          return false;
+        }
+      },
+      styles: {
+        font: firstPageFont,
+        fontSize: pdfSetting.firstPage.fontSize,
+        fontStyle: "normal",
+        cellWidth: "auto",
+        halign: "center",
+        textColor: 0,
+        lineWidth: 1,
+        lineColor: 0,
+      },
+      tableWidth: "wrap",
+      margin: { top: cmToPoint(3) + 10, left: cmToPoint(3) },
+    });
   }
 
   static createPage(doc, text) {
