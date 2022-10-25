@@ -1,3 +1,5 @@
+import cmToPoint from "../util/cmToPoint.js";
+
 const pdfSetting = {
   dataLength: {
     convertTypeDec: 1,
@@ -45,8 +47,14 @@ const pdfSetting = {
     charHeight: null,
   },
   firstPage: {
-    font: "Pretendard-Medium",
-    fontSize: 12,
+    fontType: "Pretendard-Medium",
+    fontSize: 13,
+    margin: {
+      value: 3,
+      get pt() {
+        return cmToPoint(this.value);
+      },
+    },
   },
 };
 
