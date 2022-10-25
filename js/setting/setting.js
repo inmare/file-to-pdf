@@ -1,4 +1,5 @@
 import cmToPoint from "../util/cmToPoint.js";
+import Text from "../util/text.js";
 
 const Setting = {
   convertType: {
@@ -98,6 +99,9 @@ const Setting = {
     type: "table",
     from: [" ", "0", "8", "5", "$", "`", "~", "Q", "D"],
     to: ["Γ", "Δ", "δ", "Σ", "§", "Я", "Ξ", "¶", "Ю"],
+    get toUnicode() {
+      return this.to.map((char) => Text.textToUnicode(char));
+    },
   },
 };
 

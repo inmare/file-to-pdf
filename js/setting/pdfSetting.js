@@ -50,7 +50,7 @@ const pdfSetting = {
     fontType: "Pretendard-Medium",
     fontSize: 13,
     margin: {
-      value: 3,
+      value: 2.5,
       get pt() {
         return cmToPoint(this.value);
       },
