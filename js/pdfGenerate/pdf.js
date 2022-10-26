@@ -1,9 +1,9 @@
+import firstPageTable from "../setting/firstPageSetting.js";
 import pdfSetting from "../setting/pdfSetting.js";
 import Setting from "../setting/setting.js";
 import Metadata from "./metadata.js";
 import Font from "./font.js";
 import Text from "../util/text.js";
-import cmToPoint from "../util/cmToPoint.js";
 
 export default class PDF {
   static async createPDF(text, file) {
@@ -48,146 +48,63 @@ export default class PDF {
     doc.text("PDF 정보", margin, totalHeight);
     totalHeight += textHeight;
 
-    let infoTableFinalY;
-    doc.autoTable({
-      body: [
-        {
-          title: "파일 이름",
-          data: pdfSetting.file.name,
-        },
-        {
-          title: "파일 크기",
-          data: pdfSetting.file.size,
-        },
-        {
-          title: "변경 모드",
-          data: Setting.convertType.default,
-        },
-        // 랜덤 텍스트 생성시에는 위의 정보들은 넣지 말기
-        {
-          title: "줄 당 글자 수",
-          data: pdfSetting.charInfo.charPerLine,
-        },
-        {
-          title: "페이지 당 줄 수",
-          data: pdfSetting.charInfo.linePerPage,
-        },
-        {
-          title: "페이지 당 글자 수",
-          data: pdfSetting.charInfo.textPerPage,
-        },
-      ],
-      columns: [
-        {
-          header: "제목",
-          dataKey: "title",
-        },
-        {
-          header: "값",
-          dataKey: "data",
-        },
-      ],
-      columnStyles: {
-        title: {
-          fillColor: [210, 210, 210],
-          minCellWidth: cmToPoint(3),
-        },
-        data: {
-          fillColor: [255, 255, 255],
-          minCellWidth: cmToPoint(3),
-        },
-      },
-      willDrawCell: (data) => {
-        if (data.section == "head") {
-          data.row.height = 0;
-          return false;
-        }
-      },
-      didDrawPage: (data) => {
-        // 각 줄의 높이를 전부 infoTableHeight에 더하기
-        infoTableFinalY = data.cursor.y;
-      },
-      styles: {
-        font: firstPageFont,
-        fontSize: pdfSetting.firstPage.fontSize,
-        fontStyle: "normal",
-        cellWidth: "auto",
-        halign: "center",
-        valign: "middle",
-        textColor: 0,
-        lineWidth: 1,
-        lineColor: 0,
-      },
-      tableWidth: "wrap",
-      startY: totalHeight,
-      margin: { left: margin },
-    });
+    const fileTable = firstPageTable.vertical;
+    fileTable.body = [
+      { title: "파일 이름", data: pdfSetting.file.name },
+      { title: "파일 크기", data: pdfSetting.file.size },
+      { title: "변경 모드", data: Setting.convertType.default },
+      { title: "줄 당 글자 수", data: pdfSetting.charInfo.charPerLine },
+      { title: "페이지 당 줄 수", data: pdfSetting.charInfo.linePerPage },
+      { title: "페이지 당 글자 수", data: pdfSetting.charInfo.textPerPage },
+    ];
+    fileTable.startY = totalHeight;
+    fileTable.didDrawPage = function (data) {
+      // 표가 그려진 후 cursor y좌표를 totalHeight에 할당하기
+      totalHeight = data.cursor.y;
+    };
+    doc.autoTable(fileTable);
 
-    totalHeight = infoTableFinalY;
+    // 한 줄 공백 생성
     totalHeight += textHeight * 2;
 
     doc.text("변경된 텍스트", margin, totalHeight);
     totalHeight += textHeight;
 
-    const charTableHead = ["글자", ...Setting.charTable.from];
-    const originalChar = ["변환된 글자", ...Setting.charTable.to];
-    const unicodeChar = ["유니코드", ...Setting.charTable.toUnicode];
-    let charTableFinalY;
-    doc.autoTable({
-      head: [charTableHead],
-      body: [originalChar, unicodeChar],
-      headStyles: {
-        fillColor: [210, 210, 210],
-      },
-      bodyStyles: {
-        fillColor: [255, 255, 255],
-      },
-      styles: {
-        font: firstPageFont,
-        fontSize: pdfSetting.firstPage.fontSize,
-        fontStyle: "normal",
-        halign: "center",
-        valign: "middle",
-        textColor: 0,
-        lineWidth: 1,
-        lineColor: 0,
-      },
-      didParseCell: (data) => {
-        if (data.section == "body" && data.column.index == 0) {
-          data.cell.styles.fillColor = [210, 210, 210];
-        }
-      },
-      didDrawPage: (data) => {
-        charTableFinalY = data.cursor.y;
-      },
-      tableWidth: "wrap",
-      startY: totalHeight,
-      margin: { left: margin },
-    });
+    const charListTable = firstPageTable.horizontal;
+    charListTable.head = [["글자", ...Setting.charTable.from]];
+    charListTable.body = [
+      ["변환된 글자", ...Setting.charTable.to],
+      ["유니코드", ...Setting.charTable.toUnicode],
+    ];
+    charListTable.startY = totalHeight;
+    charListTable.didDrawPage = function (data) {
+      totalHeight = data.cursor.y;
+    };
+    doc.autoTable(charListTable);
 
-    totalHeight = charTableFinalY;
     totalHeight += textHeight * 2;
 
     doc.text("메타데이터", margin, totalHeight);
     totalHeight += textHeight;
-    doc.text(
-      `변경 모드: ${pdfSetting.text.convertTypeDec.str}`,
-      margin,
-      totalHeight
-    );
-    totalHeight += textHeight;
-    doc.text(
-      `파일 이름(유니코드)의 길이: ${pdfSetting.text.fileNameLength.str}`,
-      margin,
-      totalHeight
-    );
-    totalHeight += textHeight;
-    doc.text(
-      `마지막 줄의 실제 길이: ${pdfSetting.text.lastLineLength.str}`,
-      margin,
-      totalHeight
-    );
-    totalHeight += textHeight;
+
+    const metadataTable = firstPageTable.vertical;
+    metadataTable.body = [
+      { title: "변경 모드", data: pdfSetting.text.convertTypeDec.str },
+      {
+        title: "파일 이름(유니코드)의 길이",
+        data: pdfSetting.text.fileNameLength.str,
+      },
+      {
+        title: "마지막 줄의 실제 길이",
+        data: pdfSetting.text.lastLineLength.str,
+      },
+    ];
+    metadataTable.startY = totalHeight;
+    metadataTable.didDrawPage = function (data) {
+      // 표가 그려진 후 cursor y좌표를 totalHeight에 할당하기
+      totalHeight = data.cursor.y;
+    };
+    doc.autoTable(metadataTable);
   }
 
   static createPage(doc, text) {
