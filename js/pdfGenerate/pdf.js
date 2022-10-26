@@ -152,7 +152,7 @@ export default class PDF {
         lineWidth: 1,
         lineColor: 0,
       },
-      willDrawCell: (data) => {
+      didParseCell: (data) => {
         if (data.section == "body" && data.column.index == 0) {
           data.cell.styles.fillColor = [210, 210, 210];
         }
@@ -169,6 +169,24 @@ export default class PDF {
     totalHeight += textHeight * 2;
 
     doc.text("메타데이터", margin, totalHeight);
+    totalHeight += textHeight;
+    doc.text(
+      `변경 모드: ${pdfSetting.text.convertTypeDec.str}`,
+      margin,
+      totalHeight
+    );
+    totalHeight += textHeight;
+    doc.text(
+      `파일 이름(유니코드)의 길이: ${pdfSetting.text.fileNameLength.str}`,
+      margin,
+      totalHeight
+    );
+    totalHeight += textHeight;
+    doc.text(
+      `마지막 줄의 실제 길이: ${pdfSetting.text.lastLineLength.str}`,
+      margin,
+      totalHeight
+    );
     totalHeight += textHeight;
   }
 
