@@ -46,65 +46,80 @@ export default class PDF {
     let totalHeight = margin;
 
     doc.text("PDF 정보", margin, totalHeight);
-    totalHeight += textHeight;
+    addLineBreak(1);
+    addInfoTable();
 
-    const fileTable = firstPageTable.vertical;
-    fileTable.body = [
-      { title: "파일 이름", data: pdfSetting.file.name },
-      { title: "파일 크기", data: pdfSetting.file.size },
-      { title: "변경 모드", data: Setting.convertType.default },
-      { title: "줄 당 글자 수", data: pdfSetting.charInfo.charPerLine },
-      { title: "페이지 당 줄 수", data: pdfSetting.charInfo.linePerPage },
-      { title: "페이지 당 글자 수", data: pdfSetting.charInfo.textPerPage },
-    ];
-    fileTable.startY = totalHeight;
-    fileTable.didDrawPage = function (data) {
-      // 표가 그려진 후 cursor y좌표를 totalHeight에 할당하기
-      totalHeight = data.cursor.y;
-    };
-    doc.autoTable(fileTable);
-
-    // 한 줄 공백 생성
-    totalHeight += textHeight * 2;
+    addLineBreak(2);
 
     doc.text("변경된 텍스트", margin, totalHeight);
-    totalHeight += textHeight;
+    addLineBreak(1);
+    addCharListTable();
 
-    const charListTable = firstPageTable.horizontal;
-    charListTable.head = [["글자", ...Setting.charTable.from]];
-    charListTable.body = [
-      ["변환된 글자", ...Setting.charTable.to],
-      ["유니코드", ...Setting.charTable.toUnicode],
-    ];
-    charListTable.startY = totalHeight;
-    charListTable.didDrawPage = function (data) {
-      totalHeight = data.cursor.y;
-    };
-    doc.autoTable(charListTable);
-
-    totalHeight += textHeight * 2;
+    addLineBreak(2);
 
     doc.text("메타데이터", margin, totalHeight);
-    totalHeight += textHeight;
+    addLineBreak(1);
+    addMetadataTable();
 
-    const metadataTable = firstPageTable.vertical;
-    metadataTable.body = [
-      { title: "변경 모드", data: pdfSetting.text.convertTypeDec.str },
-      {
-        title: "파일 이름(유니코드)의 길이",
-        data: pdfSetting.text.fileNameLength.str,
-      },
-      {
-        title: "마지막 줄의 실제 길이",
-        data: pdfSetting.text.lastLineLength.str,
-      },
-    ];
-    metadataTable.startY = totalHeight;
-    metadataTable.didDrawPage = function (data) {
-      // 표가 그려진 후 cursor y좌표를 totalHeight에 할당하기
-      totalHeight = data.cursor.y;
-    };
-    doc.autoTable(metadataTable);
+    function addLineBreak(lineNum) {
+      totalHeight += textHeight * lineNum;
+    }
+
+    function addMetadataTable() {
+      const metadataTable = firstPageTable.vertical;
+      metadataTable.body = [
+        {
+          title: "변경 모드",
+          data: pdfSetting.text.convertTypeDec.str,
+        },
+        {
+          title: "파일 이름(유니코드)의 길이",
+          data: pdfSetting.text.fileNameLength.str,
+        },
+        {
+          title: "마지막 줄의 실제 길이",
+          data: pdfSetting.text.lastLineLength.str,
+        },
+      ];
+      metadataTable.startY = totalHeight;
+      metadataTable.didDrawPage = function (data) {
+        // 표가 그려진 후 cursor y좌표를 totalHeight에 할당하기
+        totalHeight = data.cursor.y;
+      };
+      doc.autoTable(metadataTable);
+    }
+
+    function addCharListTable() {
+      const charListTable = firstPageTable.horizontal;
+      charListTable.head = [["글자", ...Setting.charTable.from]];
+      charListTable.body = [
+        ["변환된 글자", ...Setting.charTable.to],
+        ["유니코드", ...Setting.charTable.toUnicode],
+      ];
+      charListTable.startY = totalHeight;
+      charListTable.didDrawPage = function (data) {
+        totalHeight = data.cursor.y;
+      };
+      doc.autoTable(charListTable);
+    }
+
+    function addInfoTable() {
+      const infoTable = firstPageTable.vertical;
+      infoTable.body = [
+        { title: "파일 이름", data: pdfSetting.file.name },
+        { title: "파일 크기", data: pdfSetting.file.size },
+        { title: "변경 모드", data: Setting.convertType.default },
+        { title: "줄 당 글자 수", data: pdfSetting.charInfo.charPerLine },
+        { title: "페이지 당 줄 수", data: pdfSetting.charInfo.linePerPage },
+        { title: "페이지 당 글자 수", data: pdfSetting.charInfo.textPerPage },
+      ];
+      infoTable.startY = totalHeight;
+      infoTable.didDrawPage = function (data) {
+        // 표가 그려진 후 cursor y좌표를 totalHeight에 할당하기
+        totalHeight = data.cursor.y;
+      };
+      doc.autoTable(infoTable);
+    }
   }
 
   static createPage(doc, text) {
