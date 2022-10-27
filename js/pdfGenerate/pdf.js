@@ -19,8 +19,8 @@ export default class PDF {
       outputFileName = `${file.name}.pdf`;
     } else {
       Metadata.setMetadata(doc, null, null, isRandomText);
-      processedText = text;
-      const textType = Setting.randomTextType;
+      processedText = Text.createRandomText();
+      const textType = Setting.randomTextType.default;
       outputFileName = `Random${textType}.pdf`;
     }
 
@@ -29,7 +29,7 @@ export default class PDF {
     if (makeFirstPageGuide) {
       const firstPageFont = pdfSetting.firstPage.fontType;
       await Font.addFont(doc, firstPageFont);
-      this.createFirstPageGuide(doc);
+      this.createFirstPageGuide(doc, isRandomText);
       doc.addPage();
     }
 
@@ -68,7 +68,7 @@ export default class PDF {
     doc.autoTable(charListTable);
     addLineBreak(2);
 
-    if (isRandomText) {
+    if (!isRandomText) {
       doc.text("메타데이터", margin, totalHeight);
       addLineBreak(1);
 
