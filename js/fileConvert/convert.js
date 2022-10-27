@@ -12,12 +12,13 @@ export default class Convert {
 
   static async convertFile() {
     const fileInput = $("#input-btn");
-    console.log(fileInput);
     Preprocess.changeSetting();
 
-    const makeRandom = Setting.makeRandomText.default;
-    if (makeRandom) {
-      // make random text
+    const isRandomText = Setting.makeRandomText.default;
+    if (isRandomText) {
+      // 랜덤한 텍스트 pdf 생성
+      const randomText = Text.creatRandomText();
+      PDF.createPDF(randomText, null, isRandomText);
     } else {
       if (!fileInput.files.length) {
         return alert("파일이 없습니다!");
@@ -34,7 +35,7 @@ export default class Convert {
       const convertText = await Convert.convertToText(file);
       const replacedText = Text.replaceCharTable(convertText);
 
-      PDF.createPDF(replacedText, file);
+      PDF.createPDF(replacedText, file, isRandomText);
     }
   }
 

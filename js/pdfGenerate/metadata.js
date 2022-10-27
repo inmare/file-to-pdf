@@ -4,10 +4,12 @@ import Text from "../util/text.js";
 import CharInfo from "./charInfo.js";
 
 export default class Metadata {
-  static setMetadata(doc, file, text) {
-    this.addFileData(file);
+  static setMetadata(doc, text, file, isRandomText) {
     this.addCharInfoData(doc);
-    this.addTextData(text);
+    if (!isRandomText) {
+      this.addFileData(file);
+      this.addTextData(text);
+    }
   }
 
   static comebineTextAndData(text) {
@@ -31,14 +33,6 @@ export default class Metadata {
     return combinedText;
   }
 
-  static addFileData(file) {
-    const fileData = pdfSetting.file;
-    const sizeKb = Math.round(file.size / 10) / 100;
-
-    fileData.name = file.name;
-    fileData.size = `${sizeKb}kb`;
-  }
-
   static addCharInfoData(doc) {
     const font = Setting.fontType.default;
     const fontSize = Setting.fontSize.default;
@@ -47,6 +41,14 @@ export default class Metadata {
     for (let [key, value] of Object.entries(charInfo)) {
       pdfSetting.charInfo[key] = value;
     }
+  }
+
+  static addFileData(file) {
+    const fileData = pdfSetting.file;
+    const sizeKb = Math.round(file.size / 10) / 100;
+
+    fileData.name = file.name;
+    fileData.size = `${sizeKb}kb`;
   }
 
   static addTextData(text) {
