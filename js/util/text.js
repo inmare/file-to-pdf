@@ -1,5 +1,6 @@
 import Setting from "../setting/setting.js";
 import pdfSetting from "../setting/pdfSetting.js";
+import SeedRandom from "./randomText.js";
 
 export default class Text {
   // 공백을 제외한 나머지 공백문자들(\n, \t)을 \\n, \\t의 형태로 바꿔줌
@@ -84,5 +85,19 @@ export default class Text {
 
     // 마지막 줄바꿈은 제거
     return linebreakText.slice(0, -1);
+  }
+
+  static createRandomText() {
+    const wholePage = Setting.randomPageNum.default;
+    const textPerPage = pdfSetting.charInfo.textPerPage;
+    const textLength = wholePage * textPerPage;
+
+    const textType = Setting.randomTextType.default;
+
+    const seedRandom = new SeedRandom();
+    const randomText = seedRandom.makeRandomText(textType, textLength);
+    const processedText = this.replaceCharTable(randomText);
+
+    return processedText;
   }
 }
