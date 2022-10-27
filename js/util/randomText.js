@@ -14,6 +14,15 @@ class seedRandom {
     const arrIdx = Math.round(this.random() * array.length - 0.5);
     return array[arrIdx];
   }
+
+  makeRandomText(array, length) {
+    let text = "";
+    for (let i = 0; i < length; i++) {
+      text += this.choice(array);
+    }
+
+    return text;
+  }
 }
 
-export { seedRandom };
+export default seedRandom;
