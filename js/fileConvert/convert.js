@@ -17,8 +17,7 @@ export default class Convert {
     const isRandomText = Setting.makeRandomText.default;
     if (isRandomText) {
       // 랜덤한 텍스트 pdf 생성
-      const randomText = Text.creatRandomText();
-      PDF.createPDF(randomText, null, isRandomText);
+      PDF.createPDF(null, null, isRandomText);
     } else {
       if (!fileInput.files.length) {
         return alert("파일이 없습니다!");
