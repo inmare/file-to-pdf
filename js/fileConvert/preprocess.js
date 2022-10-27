@@ -11,6 +11,12 @@ export default class Preprocess {
   static getFileInfo(e) {
     const input = e.target;
     const file = input.files[0];
+    if (!file) {
+      // 만약 파일이 아무것도 없을 때는 name에 null을 보냄
+      UI.displayFileInfo(null);
+      return;
+    }
+
     const name = file.name;
     const size = file.size;
 

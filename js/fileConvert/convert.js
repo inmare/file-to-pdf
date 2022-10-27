@@ -12,6 +12,7 @@ export default class Convert {
 
   static async convertFile() {
     const fileInput = $("#input-btn");
+    console.log(fileInput);
     Preprocess.changeSetting();
 
     const makeRandom = Setting.makeRandomText.default;

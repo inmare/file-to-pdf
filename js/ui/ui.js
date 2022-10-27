@@ -123,6 +123,13 @@ export default class UI {
 
   static displayFileInfo(name, size) {
     const fileInfo = $("#file-info");
+
+    // 파일이 아무것도 없을 때는 빈 문자열 표시
+    if (name === null) {
+      fileInfo.innerText = "";
+      return;
+    }
+
     let clippedFileName;
 
     const extRegex = /\..*$/;
