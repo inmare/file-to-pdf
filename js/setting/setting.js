@@ -13,14 +13,14 @@ const Setting = {
     type: "checkbox",
     default: false,
   },
-  textType: {
-    id: "text-type",
+  randomTextType: {
+    id: "random-text-type",
     type: "select",
     value: ["Ascii", "Hex", "Base64"],
     default: "Ascii",
   },
-  pageNum: {
-    id: "page-num",
+  randomPageNum: {
+    id: "random-page-num",
     type: "select",
     value: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
     default: 4,
@@ -98,7 +98,7 @@ const Setting = {
     id: "char-table",
     type: "table",
     from: [" ", "0", "8", "5", "$", "`", "~", "Q", "D"],
-    to: ["Γ", "Δ", "δ", "Σ", "§", "Я", "Ξ", "¶", "Ю"],
+    to: ["Γ", "Δ", "Ɣ", "Σ", "§", "Я", "Ξ", "¶", "Ю"],
     get toUnicode() {
       return this.to.map((char) => Text.textToUnicode(char));
     },
