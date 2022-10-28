@@ -46,11 +46,19 @@ const pdfSetting = {
     charWidth: null,
     charHeight: null,
   },
+  guideFont: "Pretendard-Medium",
   firstPage: {
-    fontType: "Pretendard-Medium",
     fontSize: 13,
     margin: {
       value: 2.5,
+      get pt() {
+        return cmToPoint(this.value);
+      },
+    },
+  },
+  lineGuide: {
+    margin: {
+      value: 0.5,
       get pt() {
         return cmToPoint(this.value);
       },
