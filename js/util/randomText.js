@@ -56,13 +56,14 @@ class SeedRandom {
   }
 
   makeRandomText(type, length) {
+    // 배열 자체의 길이가 변함에 따라 랜덤한 텍스트의 종류 또한 달라지게 됨
+    // 이에 따른 파이썬 코드의 수정이 필요함
     const array = this._makeRandomArray(type);
 
     this._random();
 
     let text = "";
     for (let i = 0; i < length; i++) {
-      if (i < 10) console.log(this.seed);
       text += this._choice(array);
     }
 
