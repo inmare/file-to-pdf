@@ -66,14 +66,15 @@ const firstPageTable = {
     tableWidth: "wrap",
     margin: { left: pdfSetting.firstPage.margin.pt },
   },
-  infoTable: function (makeRandomText) {
+  infoTable: function (isRandomText) {
     const config = this._vertical;
     let body = [
       { title: "줄 당 글자 수", data: pdfSetting.charInfo.charPerLine },
       { title: "페이지 당 줄 수", data: pdfSetting.charInfo.linePerPage },
       { title: "페이지 당 글자 수", data: pdfSetting.charInfo.textPerPage },
     ];
-    if (!makeRandomText) {
+    if (!isRandomText) {
+      // 랜덤한 글자를 생성하는 것이 아닐 경우 아래의 정보들 또한 추가
       body = [
         { title: "파일 이름", data: pdfSetting.file.name },
         { title: "파일 크기", data: pdfSetting.file.size },

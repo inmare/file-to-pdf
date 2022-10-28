@@ -60,7 +60,7 @@ const Setting = {
   firstPageGuide: {
     id: "first-page-guide",
     type: "checkbox",
-    default: true,
+    default: false,
   },
   lineGuide: {
     id: "line-guide",
@@ -98,7 +98,7 @@ const Setting = {
     id: "char-table",
     type: "table",
     from: [" ", "0", "8", "5", "$", "`", "~", "Q", "D"],
-    to: ["Γ", "Δ", "Ɣ", "Σ", "§", "Я", "Ξ", "¶", "Ю"],
+    to: ["Γ", "Δ", "δ", "Σ", "§", "Я", "Ξ", "¶", "Ю"],
     get toUnicode() {
       return this.to.map((char) => Text.textToUnicode(char));
     },
