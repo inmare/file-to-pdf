@@ -34,9 +34,11 @@ export default class PDF {
 
     this.createPage(doc, processedText, isRandomText);
 
-    doc.output("dataurlnewwindow", {
-      filename: outputFileName,
-    });
+    doc.save(outputFileName);
+
+    // doc.output("dataurlnewwindow", {
+    //   filename: outputFileName,
+    // });
   }
 
   static createFirstPageGuide(doc, isRandomText) {
@@ -95,40 +97,50 @@ export default class PDF {
   static createPage(doc, text, isRandomText) {
     const font = Setting.fontType.default;
     const fontSize = Setting.fontSize.default;
-    const kerning = Setting.kerning.default;
-    const lineHeight = Setting.lineHeight.default;
-
-    const options = {
-      charSpace: kerning,
-      lineHeightFactor: lineHeight,
-    };
 
     doc.setFont(font);
     doc.setFontSize(fontSize);
     doc.setTextColor("0");
 
+    const charPerLine = pdfSetting.charInfo.charPerLine;
     const textPerPage = pdfSetting.charInfo.textPerPage;
-    const wholePage = Math.ceil(text.length / textPerPage);
 
-    const x = Setting.mLeft.pt;
-    const y = Setting.mTop.pt;
+    const charHeight = pdfSetting.charInfo.charHeight;
+    const charWidth = pdfSetting.charInfo.charWidth;
 
-    for (let i = 0; i < wholePage; i++) {
+    const pageLength = Math.ceil(text.length / textPerPage);
+    let x = Setting.mLeft.pt;
+    let y = Setting.mTop.pt;
+
+    for (let i = 0; i < pageLength; i++) {
       if (i != 0) doc.addPage();
-      const startIdx = textPerPage * i;
-      let endIdx = textPerPage * (i + 1);
-      endIdx = text.length < endIdx ? text.length : endIdx;
 
+      const startIdx = i * textPerPage;
+      let endIdx = (i + 1) * textPerPage;
+      endIdx = endIdx > text.length ? text.length : endIdx;
       const pageText = text.slice(startIdx, endIdx);
-      const linebreakPageText = Text.addLinebreak(pageText);
-      console.log(linebreakPageText[21][2], linebreakPageText[21][3]);
-      doc.text(linebreakPageText, x, y, options);
 
-      // 가이드 라인 생성
+      // 원래 jspdf에서는 text를 담고 있는 array로도 텍스트를 표시할 수 있지만,
+      // 그렇게 글자를 표시할 시 이상한 글자를 표시하지 못 하는 이유를 알 수 없는 버그가 발생해서
+      // 아래의 코드처럼 글자를 하나하나 입력하는 방식을 사용함
+      for (const [idx, char] of pageText.split("").entries()) {
+        doc.text(char, x, y);
+        if ((idx + 1) % charPerLine == 0) {
+          // 줄 바꿈
+          x = Setting.mLeft.pt;
+          y += charHeight;
+          continue;
+        }
+        x += charWidth;
+      }
+
       const makeLineGuide = Setting.lineGuide.default;
       if (makeLineGuide) {
         this.createLineGuide(doc, pageText, i + 1, isRandomText);
       }
+
+      x = Setting.mLeft.pt;
+      y = Setting.mTop.pt;
     }
   }
 
@@ -153,7 +165,7 @@ export default class PDF {
       const lineNumStr = Text.getTensFromDec(lineNum);
       const xLeft = lineGuideMargin;
       const xRight = pageWidth - lineGuideMargin;
-      const y = mTop + textHeight * lineNum;
+      const y = mTop + textHeight * (lineNum - 1);
 
       doc.text(lineNumStr, xLeft, y);
       doc.text(lineNumStr, xRight, y);
@@ -162,7 +174,7 @@ export default class PDF {
     for (let i = 1; i * 10 <= charLength; i++) {
       const charNum = i * 10;
       const charNumStr = Text.getTensFromDec(charNum);
-      const x = mLeft + textWidth * charNum;
+      const x = mLeft + textWidth * (charNum - 1);
       const yTop = lineGuideMargin;
       const yBottom = pageHeight - lineGuideMargin;
 
