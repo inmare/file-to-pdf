@@ -60,7 +60,7 @@ const Setting = {
   firstPageGuide: {
     id: "first-page-guide",
     type: "checkbox",
-    default: false,
+    default: true,
   },
   lineGuide: {
     id: "line-guide",
