@@ -48,7 +48,7 @@ const pdfSetting = {
   },
   guideFont: "Pretendard-Medium",
   firstPage: {
-    fontSize: 13,
+    fontSize: 11,
     margin: {
       value: 2.5,
       get pt() {
