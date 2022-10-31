@@ -34,11 +34,10 @@ export default class PDF {
 
     this.createPage(doc, processedText, isRandomText);
 
-    doc.save(outputFileName);
-
-    // doc.output("dataurlnewwindow", {
-    //   filename: outputFileName,
-    // });
+    doc.setProperties({
+      title: outputFileName,
+    });
+    window.open(doc.output("bloburl"));
   }
 
   static createFirstPageGuide(doc, isRandomText) {
