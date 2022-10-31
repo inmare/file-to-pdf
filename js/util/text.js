@@ -54,11 +54,24 @@ export default class Text {
     for (let dict of zip(fromArray, toArray)) {
       // 현재 문자가 띄어쓰기면 그냥 빈 문자열로 인식되는 문제가 있음
       // 일단 문자열이 빈 문자열일시 그냥 공백으로 생각하고 문자열을 변환하는 코드를 작성함
-      let fromRegex = new RegExp(dict.from, "g");
-      if (dict.from == "") {
-        fromRegex = /\s/g;
-      } else if (specialChars.includes(dict.from)) {
-        fromRegex = new RegExp(`\\${dict.from}`, "g");
+      let fromRegex;
+      switch (dict.from) {
+        case "":
+          fromRegex = / /g;
+          break;
+        case "\\n":
+          fromRegex = /(?:\r\n|\r|\n)/g;
+          break;
+        case "\\t":
+          fromRegex = /\t/g;
+          break;
+        default:
+          if (specialChars.includes(dict.from)) {
+            fromRegex = new RegExp(`\\${dict.from}`, "g");
+          } else {
+            fromRegex = new RegExp(dict.from, "g");
+          }
+          break;
       }
       replacedText = replacedText.replace(fromRegex, dict.to);
     }
@@ -73,7 +86,7 @@ export default class Text {
     }
   }
 
-  static addLinebreak(text) {
+  static splitTextToArray(text) {
     const charPerLine = pdfSetting.charInfo.charPerLine;
     const lineLength = text.length / charPerLine;
 
