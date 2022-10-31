@@ -19,41 +19,67 @@ function addChar() {
   const fromText = $("#char-from").value;
   const toText = $("#char-to").value;
 
+  const resultObj = checkCharIsProper(fromText, toText);
+
+  if (!resultObj.isProper) {
+    return alert(resultObj.msg);
+  }
+
+  const font = $("#font-type").value;
+  const [_fromTd, _toTd, delTd] = Table.appendCharToTable(
+    fromText,
+    toText,
+    font
+  );
+  const delBtn = delTd.querySelector("i");
+  delBtn.addEventListener("click", removeChar);
+}
+
+function checkCharIsProper(fromText, toText) {
+  let resultObj = {
+    isProper: true,
+    msg: null,
+  };
+
   if (fromText === "" || toText === "") {
-    return alert("글자를 입력해주세요.");
+    resultObj.isProper = true;
+    resultObj.msg = "글자를 입력해주세요.";
+    return resultObj;
+  }
+
+  const fromRegex = /^([\u0020-\u007e]|\\n|\\t)$/u;
+
+  if (!fromText.match(fromRegex)) {
+    resultObj.isProper = false;
+    resultObj.msg =
+      "From 항목에는 Ascii문자(1글자), 줄바꿈, 탭만 입력할 수 있습니다.";
   }
 
   const fromTd = Table.getAllTd(1);
   const toTd = Table.getAllTd(2);
 
-  let charList = "";
+  let charList = [];
 
   for (let [idx, td] of fromTd.entries()) {
     if (idx != 0) {
-      charList += td.innerText;
+      charList.push(td.innerText);
     }
   }
 
   for (let [idx, td] of toTd.entries()) {
     if (idx != 0) {
-      charList += td.innerText;
+      charList.push(td.innerText);
     }
   }
 
   if (charList.includes(fromText) || charList.includes(toText)) {
-    return alert(
-      "이미 표에 포함된 글자입니다.\n표의 글자를 삭제하거나 다른 글자를 넣어주세요."
-    );
-  } else {
-    const font = $("#font-type").value;
-    const [_fromTd, _toTd, delTd] = Table.appendCharToTable(
-      fromText,
-      toText,
-      font
-    );
-    const delBtn = delTd.querySelector("i");
-    delBtn.addEventListener("click", removeChar);
+    resultObj.isProper = false;
+    resultObj.msg =
+      "이미 표에 포함된 글자입니다.\n표의 글자를 삭제하거나 다른 글자를 넣어주세요.";
+    return resultObj;
   }
+
+  return resultObj;
 }
 
 function changeTableFont(e) {
