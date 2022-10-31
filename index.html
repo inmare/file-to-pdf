@@ -84,6 +84,13 @@
               >머신러닝 프로젝트 github 링크</a
             >
           </p>
+          <p>
+            만약 변환과정이나 프로그램 자체에 대해서 궁금한게 있다면 소스코드의
+            <a target="_blank" href="https://github.com/yatsumehole/file-to-pdf"
+              >github 저장소</a
+            >를 봐주세요. 또한 기능 추가, 버그 제보도 github issue탭에서 할 수
+            있습니다.
+          </p>
         </section>
         <section id="setting-section">
           <h1 id="setting">설정</h1>
@@ -281,12 +288,21 @@
             사이트입니다. 이 폰트에서 지원되는 글자들은 대부분이 목록에 있는
             다른 폰트들에서도 지원됩니다.
           </p>
-          <p>
-            <span style="color: var(--color-red)">주의사항</span><br />한글,
-            일본어, 일부 특수 문자와 같이 영어에 비해 넓이가 넓은 문자들은
-            머신러닝 프로그램에서 제대로 읽을 수 없습니다. 반드시 변환하기 전
-            글자의 넓이를 확인해주세요!
-          </p>
+          <h2><span style="color: var(--color-red)">주의사항</span></h2>
+          <ol>
+            <li>
+              한글, 일본어, 일부 특수 문자와 같이 영어에 비해 넓이가 넓은
+              문자들은 머신러닝 프로그램에서 제대로 읽을 수 없습니다. 반드시
+              변환하기 전 글자의 넓이를 확인해주세요!
+            </li>
+            <li>
+              예시로 있는 표에서 아무것도 안 보이는 칸은 띄어쓰기를, \n은
+              줄바꿈을, \t는 탭을 의미합니다. 변환하려고 하는 모드가 Ascii일 때,
+              이 3가지 문자를 표에 지정하지 않고 변경하려고 하면 높은 확률로
+              결과물에 오류가 생기므로 꼭 변환될 문자들을 정해놓는 걸
+              추천합니다.
+            </li>
+          </ol>
           <div class="setting-div flex-col">
             <div class="flex-row">
               <div class="setting-chunk">
@@ -295,7 +311,7 @@
                   type="text"
                   name="char-from"
                   id="char-from"
-                  maxlength="1"
+                  maxlength="2"
                   size="1"
                 />
               </div>
