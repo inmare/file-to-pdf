@@ -23,7 +23,7 @@ const Setting = {
     id: "random-page-num",
     type: "select",
     value: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-    default: 4,
+    default: 5,
   },
   mTop: {
     id: "m-top",
@@ -97,8 +97,8 @@ const Setting = {
   charTable: {
     id: "char-table",
     type: "table",
-    from: [" ", "0", "8", "5", "$", "`", "~", "Q", "D"],
-    to: ["Γ", "Δ", "δ", "Σ", "§", "Я", "Ξ", "¶", "Ю"],
+    from: [" ", "\\n", "\\t", "0", "8", "5", "$", "`", "~", "Q", "D"],
+    to: ["Γ", "»", "«", "Δ", "ф", "Σ", "§", "Я", "Ξ", "¶", "Ю"],
     get toUnicode() {
       return this.to.map((char) => Text.textToUnicode(char));
     },
