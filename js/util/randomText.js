@@ -21,6 +21,8 @@ class SeedRandom {
       ascii: [
         // ascii 문자열 범위
         { start: 0x20, end: 0x7e },
+        // tab, new line
+        { start: 0x09, end: 0x0a },
       ],
       hex: [
         // 0~9
@@ -36,7 +38,7 @@ class SeedRandom {
         // 0~9
         { start: 0x30, end: 0x39 },
         // +
-        { start: 0x2b, end: 0x2f },
+        { start: 0x2b, end: 0x2b },
         // /
         { start: 0x2f, end: 0x2f },
       ],
