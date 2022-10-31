@@ -3,21 +3,6 @@ import pdfSetting from "../setting/pdfSetting.js";
 import SeedRandom from "./randomText.js";
 
 export default class Text {
-  // 공백을 제외한 나머지 공백문자들(\n, \t)을 \\n, \\t의 형태로 바꿔줌
-  // 이때 OS별 개행문자는 모두 \\n으로 통일
-  static removeBlankFromText(text) {
-    // 공백문자 변환 코드 출처
-    // https://stackoverflow.com/questions/784539/how-do-i-replace-all-line-breaks-in-a-string-with-br-elements
-    const compText = text
-      // 공백문자를 바꿀 때 단순히 \n, \t로 입력한다면 나중에 변환할 때 이게 \n을 친 건지, \\n을 친건지 모른다.
-      // 따라서 줄바꿈과 탭은 별개의 문자로 치환해야 한다.
-      // 나중에 문자 목록에 줄바꿈, 탭을 추가하고 이를 정하지 않고 바꿀시 변환이 불가능하게 하기
-      .replace(/(?:\r\n|\r|\n)/g, "└")
-      .replace(/\t/g, "┘");
-
-    return compText;
-  }
-
   static arrayBufferToHex(arrayBuffer) {
     const view = new Uint8Array(arrayBuffer);
     const hexText = Array.from(view)
@@ -60,6 +45,8 @@ export default class Text {
           fromRegex = / /g;
           break;
         case "\\n":
+          // 공백문자 변환 코드 출처
+          // https://stackoverflow.com/questions/784539/how-do-i-replace-all-line-breaks-in-a-string-with-br-elements
           fromRegex = /(?:\r\n|\r|\n)/g;
           break;
         case "\\t":
