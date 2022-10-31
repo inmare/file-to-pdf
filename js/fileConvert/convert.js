@@ -44,7 +44,7 @@ export default class Convert {
     switch (convertType) {
       case "Ascii": {
         const text = await Type.fileToType(file, "Text");
-        resultText = Text.removeBlankFromText(text);
+        resultText = text;
         break;
       }
       case "Hex": {
