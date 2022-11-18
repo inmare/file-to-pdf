@@ -41,6 +41,8 @@ class SeedRandom {
         { start: 0x2b, end: 0x2b },
         // /
         { start: 0x2f, end: 0x2f },
+        // =
+        { start: 0x3d, end: 0x3d }
       ],
     };
 
