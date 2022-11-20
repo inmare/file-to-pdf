@@ -7,7 +7,7 @@ import Text from "../util/text.js";
 
 export default class PDF {
   static async createPDF(text, file, isRandomText) {
-    const doc = new jsPDF("p", "pt", "a4");
+    const doc = new jsPDF("p", "pt", "a4", true);
 
     await Font.addFont(doc, Setting.fontType.default);
     await Font.addFont(doc, pdfSetting.guideFont);
