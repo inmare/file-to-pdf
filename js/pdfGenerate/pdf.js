@@ -37,7 +37,8 @@ export default class PDF {
     doc.setProperties({
       title: outputFileName,
     });
-    window.open(doc.output("bloburl"));
+    doc.save(outputFileName);
+    // window.open(doc.output("bloburl"));
   }
 
   static createFirstPageGuide(doc, isRandomText) {
