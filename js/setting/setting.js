@@ -5,8 +5,9 @@ const Setting = {
   convertType: {
     id: "convert-type",
     type: "select",
+    // 임시로 Ascii 모드 삭제
     value: ["자동", "Ascii", "Hex", "Unicode", "Base64"],
-    default: "Ascii",
+    default: "Base64",
   },
   makeRandomText: {
     id: "make-random-text",
@@ -16,8 +17,9 @@ const Setting = {
   randomTextType: {
     id: "random-text-type",
     type: "select",
+    // 임시로 Ascii 모드 삭제
     value: ["Ascii", "Hex", "Base64"],
-    default: "Ascii",
+    default: "Base64",
   },
   randomPageNum: {
     id: "random-page-num",
@@ -97,8 +99,12 @@ const Setting = {
   charTable: {
     id: "char-table",
     type: "table",
-    from: [" ", "\\n", "\\t", "0", "8", "5", "$", "`", "~", "Q", "D"],
-    to: ["Γ", "»", "«", "Δ", "ф", "Σ", "§", "Я", "Ξ", "¶", "Ю"],
+    from: ["0", "8", "5", "I", "Q", "D"],
+    to: ["\u0393", "\u0444", "\u03a3", "\u00a7", "\u00b6", "\u042e"],
+    // 실제 글자 ["Γ", "ф", "Σ", "§", "¶", "Ю"]
+    // 오래된 설정
+    // from: [" ", "\\n", "\\t", "0", "8", "5", "$", "`", "~", "Q", "D"],
+    // to: ["Γ", "»", "«", "Δ", "ф", "Σ", "§", "Я", "Ξ", "¶", "Ю"],
     get toUnicode() {
       return this.to.map((char) => Text.textToUnicode(char));
     },
