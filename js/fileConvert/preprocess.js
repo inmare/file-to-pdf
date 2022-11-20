@@ -20,8 +20,8 @@ export default class Preprocess {
     const name = file.name;
     const size = file.size;
 
-    // 파일의 크기가 4메가 이상일 경우 업로드 불가
-    const maxSize = 4000;
+    // 파일의 크기가 1메가 이상일 경우 업로드 불가
+    const maxSize = 1000;
     if (size / 1000 > maxSize) {
       return alert(`${maxSize}kb 이상의 파일은 업로드 할 수 없습니다!`);
     }
