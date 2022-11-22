@@ -6,7 +6,7 @@ export default class Text {
   static arrayBufferToHex(arrayBuffer) {
     const view = new Uint8Array(arrayBuffer);
     const hexText = Array.from(view)
-      .map((dec) => dec.toString(16))
+      .map((dec) => dec.toString(16).padStart(2, "0"))
       .join("");
 
     return hexText;
